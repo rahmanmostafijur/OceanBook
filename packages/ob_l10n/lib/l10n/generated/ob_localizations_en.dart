@@ -559,4 +559,156 @@ class ObLocalizationsEn extends ObLocalizations {
   String bookCardLabel(String title, String authors) {
     return '$title, $authors';
   }
+
+  @override
+  String get adminColumnTitle => 'Title';
+
+  @override
+  String get adminColumnStatus => 'Status';
+
+  @override
+  String get adminColumnAccess => 'Access';
+
+  @override
+  String get adminColumnEditions => 'Editions';
+
+  @override
+  String get adminColumnUpdated => 'Updated';
+
+  @override
+  String get adminColumnName => 'Name';
+
+  @override
+  String get adminColumnSlug => 'Slug';
+
+  @override
+  String get adminAllStatuses => 'All statuses';
+
+  @override
+  String get adminStatusDraft => 'Draft';
+
+  @override
+  String get adminStatusInReview => 'In review';
+
+  @override
+  String get adminStatusPublished => 'Published';
+
+  @override
+  String get adminStatusUnpublished => 'Unpublished';
+
+  @override
+  String get adminStatusArchived => 'Archived';
+
+  @override
+  String get adminStatusWithdrawn => 'Withdrawn';
+
+  @override
+  String get adminActionSubmit => 'Submit for review';
+
+  @override
+  String get adminActionRequestChanges => 'Request changes';
+
+  @override
+  String get adminActionPublish => 'Publish';
+
+  @override
+  String get adminActionUnpublish => 'Unpublish';
+
+  @override
+  String get adminActionArchive => 'Archive';
+
+  @override
+  String get adminActionCreate => 'Create';
+
+  @override
+  String get adminNewBook => 'New book';
+
+  @override
+  String get adminReason => 'Reason';
+
+  @override
+  String get adminReasonHint => 'Recorded in the audit log';
+
+  @override
+  String get adminSourceLanguage => 'Source language';
+
+  @override
+  String get adminAccessFree => 'Free';
+
+  @override
+  String get adminAccessRegistered => 'Registered users';
+
+  @override
+  String get adminAccessEntitled => 'Premium (entitlement)';
+
+  @override
+  String get adminTranslations => 'Translations';
+
+  @override
+  String get adminEditions => 'Editions';
+
+  @override
+  String get adminContributors => 'Contributors';
+
+  @override
+  String get adminGateReady => 'Provenance verified: ready to publish';
+
+  @override
+  String get adminGateBlocked => 'Publishing blocked';
+
+  @override
+  String get adminGateNoProvenance => 'No provenance recorded';
+
+  @override
+  String get adminGateNotVerified => 'Provenance awaits a second person\'s verification';
+
+  @override
+  String get adminGateRightsNotCleared => 'Rights are not cleared';
+
+  @override
+  String get adminGateOutsideWindow => 'Outside the licence window';
+
+  @override
+  String get adminGateTerritory => 'Launch territory not covered';
+
+  @override
+  String get adminGateDisputed => 'Rights are disputed';
+
+  @override
+  String adminChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chapters',
+      one: '1 chapter',
+      zero: 'No table of contents',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count results',
+      one: '1 result',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get errorNotPublishable => 'This can\'t be published until its provenance is verified and rights are clear.';
+
+  @override
+  String get errorInvalidTransition => 'That action isn\'t available in the current status.';
+
+  @override
+  String get errorSelfVerification => 'Someone else must verify what you recorded.';
+
+  @override
+  String get errorRecordLocked => 'Submitted records are locked. Record a new entry instead.';
+
+  @override
+  String get errorSlugTaken => 'This slug is already used.';
 }

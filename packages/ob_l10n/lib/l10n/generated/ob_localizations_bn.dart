@@ -552,4 +552,154 @@ class ObLocalizationsBn extends ObLocalizations {
   String bookCardLabel(String title, String authors) {
     return '$title, $authors';
   }
+
+  @override
+  String get adminColumnTitle => 'শিরোনাম';
+
+  @override
+  String get adminColumnStatus => 'অবস্থা';
+
+  @override
+  String get adminColumnAccess => 'অ্যাক্সেস';
+
+  @override
+  String get adminColumnEditions => 'সংস্করণ';
+
+  @override
+  String get adminColumnUpdated => 'হালনাগাদ';
+
+  @override
+  String get adminColumnName => 'নাম';
+
+  @override
+  String get adminColumnSlug => 'স্লাগ';
+
+  @override
+  String get adminAllStatuses => 'সব অবস্থা';
+
+  @override
+  String get adminStatusDraft => 'খসড়া';
+
+  @override
+  String get adminStatusInReview => 'পর্যালোচনায়';
+
+  @override
+  String get adminStatusPublished => 'প্রকাশিত';
+
+  @override
+  String get adminStatusUnpublished => 'অপ্রকাশিত';
+
+  @override
+  String get adminStatusArchived => 'আর্কাইভ';
+
+  @override
+  String get adminStatusWithdrawn => 'প্রত্যাহৃত';
+
+  @override
+  String get adminActionSubmit => 'পর্যালোচনায় পাঠান';
+
+  @override
+  String get adminActionRequestChanges => 'সংশোধন চান';
+
+  @override
+  String get adminActionPublish => 'প্রকাশ করুন';
+
+  @override
+  String get adminActionUnpublish => 'প্রকাশ বন্ধ করুন';
+
+  @override
+  String get adminActionArchive => 'আর্কাইভ করুন';
+
+  @override
+  String get adminActionCreate => 'তৈরি করুন';
+
+  @override
+  String get adminNewBook => 'নতুন বই';
+
+  @override
+  String get adminReason => 'কারণ';
+
+  @override
+  String get adminReasonHint => 'অডিট লগে সংরক্ষিত হবে';
+
+  @override
+  String get adminSourceLanguage => 'মূল ভাষা';
+
+  @override
+  String get adminAccessFree => 'ফ্রি';
+
+  @override
+  String get adminAccessRegistered => 'নিবন্ধিত ব্যবহারকারী';
+
+  @override
+  String get adminAccessEntitled => 'প্রিমিয়াম (এনটাইটেলমেন্ট)';
+
+  @override
+  String get adminTranslations => 'অনুবাদ';
+
+  @override
+  String get adminEditions => 'সংস্করণসমূহ';
+
+  @override
+  String get adminContributors => 'লেখক ও সহযোগী';
+
+  @override
+  String get adminGateReady => 'উৎস যাচাই সম্পন্ন: প্রকাশের জন্য প্রস্তুত';
+
+  @override
+  String get adminGateBlocked => 'প্রকাশ আটকে আছে';
+
+  @override
+  String get adminGateNoProvenance => 'কোনো উৎস-তথ্য নেই';
+
+  @override
+  String get adminGateNotVerified => 'উৎস-তথ্য দ্বিতীয় ব্যক্তির যাচাইয়ের অপেক্ষায়';
+
+  @override
+  String get adminGateRightsNotCleared => 'স্বত্ব নিশ্চিত হয়নি';
+
+  @override
+  String get adminGateOutsideWindow => 'লাইসেন্সের মেয়াদের বাইরে';
+
+  @override
+  String get adminGateTerritory => 'প্রকাশের অঞ্চল অন্তর্ভুক্ত নয়';
+
+  @override
+  String get adminGateDisputed => 'স্বত্ব নিয়ে বিরোধ আছে';
+
+  @override
+  String adminChapters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি অধ্যায়',
+      zero: 'সূচিপত্র নেই',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি ফলাফল',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get errorNotPublishable => 'উৎস যাচাই ও স্বত্ব নিশ্চিত না হওয়া পর্যন্ত এটি প্রকাশ করা যাবে না।';
+
+  @override
+  String get errorInvalidTransition => 'বর্তমান অবস্থায় এই কাজটি করা যায় না।';
+
+  @override
+  String get errorSelfVerification => 'আপনার লেখা তথ্য অন্য কাউকে যাচাই করতে হবে।';
+
+  @override
+  String get errorRecordLocked => 'জমা দেওয়া তথ্য সম্পাদনা করা যায় না। নতুন তথ্য যোগ করুন।';
+
+  @override
+  String get errorSlugTaken => 'এই স্লাগটি আগেই ব্যবহৃত হয়েছে।';
 }

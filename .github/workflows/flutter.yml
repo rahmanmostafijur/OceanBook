@@ -39,7 +39,7 @@ jobs:
           done
       - name: Tests
         run: |
-          for p in packages/design_system packages/ob_core apps/mobile apps/admin; do
+          for p in packages/design_system packages/ob_core packages/reader_core apps/mobile apps/admin; do
             (cd "$p" && flutter test) || exit 1
           done
 

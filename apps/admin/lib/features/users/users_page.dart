@@ -96,9 +96,8 @@ class UsersPage extends ConsumerWidget {
         children: [
           SizedBox(
             width: 420,
-            child: SearchBar(
+            child: AppSearchBar(
               hintText: l10n.adminNavUsers,
-              leading: const Icon(Icons.search),
               onSubmitted: (q) => ref.read(_userQueryProvider.notifier).set(q.trim()),
             ),
           ),

@@ -89,7 +89,15 @@ class AccessChip extends StatelessWidget {
         children: [
           Icon(icon, size: AppSizes.iconSmall - 4, color: fg), // icon + text: status never relies on colour
           const SizedBox(width: AppSpacing.xxs),
-          Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: fg)),
+          // Narrow tiles (rails at 140 dp, 200 % text) ellipsize rather than overflow.
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: fg),
+            ),
+          ),
         ],
       ),
     );

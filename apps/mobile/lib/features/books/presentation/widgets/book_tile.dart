@@ -47,22 +47,35 @@ class BookTile extends StatelessWidget {
           width: width,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.xxs),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BookCover(title: book.title, imageUrl: book.coverUrl),
-                const SizedBox(height: AppSpacing.xs),
-                Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
-                if (authors.isNotEmpty)
-                  Text(
-                    authors,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                const SizedBox(height: AppSpacing.xxs),
-                AccessChip(badge: badge, label: badgeLabel),
-              ],
+            // In a fixed-height grid cell the cover takes whatever height the text leaves, so large text
+            // scales never overflow; in rails (unbounded height) the tile takes its natural height.
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final cover = BookCover(title: book.title, imageUrl: book.coverUrl);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (constraints.hasBoundedHeight)
+                      Expanded(
+                        child: Align(alignment: AlignmentDirectional.topStart, child: cover),
+                      )
+                    else
+                      cover,
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                    if (authors.isNotEmpty)
+                      Text(
+                        authors,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                    const SizedBox(height: AppSpacing.xxs),
+                    AccessChip(badge: badge, label: badgeLabel),
+                  ],
+                );
+              },
             ),
           ),
         ),

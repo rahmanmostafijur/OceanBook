@@ -1135,6 +1135,276 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'{title}, {authors}'**
   String bookCardLabel(String title, String authors);
+
+  /// No description provided for @adminColumnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get adminColumnTitle;
+
+  /// No description provided for @adminColumnStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get adminColumnStatus;
+
+  /// No description provided for @adminColumnAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Access'**
+  String get adminColumnAccess;
+
+  /// No description provided for @adminColumnEditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Editions'**
+  String get adminColumnEditions;
+
+  /// No description provided for @adminColumnUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get adminColumnUpdated;
+
+  /// No description provided for @adminColumnName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get adminColumnName;
+
+  /// No description provided for @adminColumnSlug.
+  ///
+  /// In en, this message translates to:
+  /// **'Slug'**
+  String get adminColumnSlug;
+
+  /// No description provided for @adminAllStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get adminAllStatuses;
+
+  /// No description provided for @adminStatusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get adminStatusDraft;
+
+  /// No description provided for @adminStatusInReview.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get adminStatusInReview;
+
+  /// No description provided for @adminStatusPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Published'**
+  String get adminStatusPublished;
+
+  /// No description provided for @adminStatusUnpublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpublished'**
+  String get adminStatusUnpublished;
+
+  /// No description provided for @adminStatusArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get adminStatusArchived;
+
+  /// No description provided for @adminStatusWithdrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn'**
+  String get adminStatusWithdrawn;
+
+  /// No description provided for @adminActionSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for review'**
+  String get adminActionSubmit;
+
+  /// No description provided for @adminActionRequestChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Request changes'**
+  String get adminActionRequestChanges;
+
+  /// No description provided for @adminActionPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get adminActionPublish;
+
+  /// No description provided for @adminActionUnpublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpublish'**
+  String get adminActionUnpublish;
+
+  /// No description provided for @adminActionArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get adminActionArchive;
+
+  /// No description provided for @adminActionCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get adminActionCreate;
+
+  /// No description provided for @adminNewBook.
+  ///
+  /// In en, this message translates to:
+  /// **'New book'**
+  String get adminNewBook;
+
+  /// No description provided for @adminReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get adminReason;
+
+  /// No description provided for @adminReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded in the audit log'**
+  String get adminReasonHint;
+
+  /// No description provided for @adminSourceLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Source language'**
+  String get adminSourceLanguage;
+
+  /// No description provided for @adminAccessFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get adminAccessFree;
+
+  /// No description provided for @adminAccessRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered users'**
+  String get adminAccessRegistered;
+
+  /// No description provided for @adminAccessEntitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium (entitlement)'**
+  String get adminAccessEntitled;
+
+  /// No description provided for @adminTranslations.
+  ///
+  /// In en, this message translates to:
+  /// **'Translations'**
+  String get adminTranslations;
+
+  /// No description provided for @adminEditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Editions'**
+  String get adminEditions;
+
+  /// No description provided for @adminContributors.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributors'**
+  String get adminContributors;
+
+  /// No description provided for @adminGateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Provenance verified: ready to publish'**
+  String get adminGateReady;
+
+  /// No description provided for @adminGateBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishing blocked'**
+  String get adminGateBlocked;
+
+  /// No description provided for @adminGateNoProvenance.
+  ///
+  /// In en, this message translates to:
+  /// **'No provenance recorded'**
+  String get adminGateNoProvenance;
+
+  /// No description provided for @adminGateNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Provenance awaits a second person\'s verification'**
+  String get adminGateNotVerified;
+
+  /// No description provided for @adminGateRightsNotCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights are not cleared'**
+  String get adminGateRightsNotCleared;
+
+  /// No description provided for @adminGateOutsideWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside the licence window'**
+  String get adminGateOutsideWindow;
+
+  /// No description provided for @adminGateTerritory.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch territory not covered'**
+  String get adminGateTerritory;
+
+  /// No description provided for @adminGateDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights are disputed'**
+  String get adminGateDisputed;
+
+  /// No description provided for @adminChapters.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No table of contents} =1{1 chapter} other{{count} chapters}}'**
+  String adminChapters(int count);
+
+  /// No description provided for @adminResults.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 result} other{{count} results}}'**
+  String adminResults(int count);
+
+  /// No description provided for @errorNotPublishable.
+  ///
+  /// In en, this message translates to:
+  /// **'This can\'t be published until its provenance is verified and rights are clear.'**
+  String get errorNotPublishable;
+
+  /// No description provided for @errorInvalidTransition.
+  ///
+  /// In en, this message translates to:
+  /// **'That action isn\'t available in the current status.'**
+  String get errorInvalidTransition;
+
+  /// No description provided for @errorSelfVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else must verify what you recorded.'**
+  String get errorSelfVerification;
+
+  /// No description provided for @errorRecordLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted records are locked. Record a new entry instead.'**
+  String get errorRecordLocked;
+
+  /// No description provided for @errorSlugTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This slug is already used.'**
+  String get errorSlugTaken;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

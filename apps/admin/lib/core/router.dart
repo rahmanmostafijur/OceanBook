@@ -6,6 +6,9 @@ import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../features/auth/admin_sign_in_page.dart';
+import '../features/catalog/book_detail_page.dart';
+import '../features/catalog/books_page.dart';
+import '../features/catalog/taxonomy_pages.dart';
 import '../features/users/users_page.dart';
 import '../shell/admin_shell.dart';
 import 'navigation.dart';
@@ -23,6 +26,10 @@ String? adminRedirect({required AuthState? auth, required Uri location}) {
 
 Widget _pageFor(AdminNavItem item) => switch (item.path) {
   '/users' => const UsersPage(),
+  '/books' => const BooksPage(),
+  '/authors' => const PeoplePage(kind: PeopleKind.authors),
+  '/publishers' => const PeoplePage(kind: PeopleKind.publishers),
+  '/categories' => const CategoriesPage(),
   '/' => const _Dashboard(),
   _ => PlannedPage(item: item),
 };
@@ -43,6 +50,10 @@ final adminRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state, child) => AdminShell(location: state.uri.path, child: child),
         routes: [
           for (final item in allAdminItems) GoRoute(path: item.path, builder: (_, _) => _pageFor(item)),
+          GoRoute(
+            path: '/books/:id',
+            builder: (_, state) => BookDetailPage(bookId: state.pathParameters['id']!),
+          ),
         ],
       ),
     ],

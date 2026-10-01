@@ -74,10 +74,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     AppSpacing.gutter(MediaQuery.sizeOf(context).width),
                     AppSpacing.xs,
                   ),
-                  child: SearchBar(
-                    key: const Key('catalog-search'),
+                  child: AppSearchBar(
+                    fieldKey: const Key('catalog-search'),
                     hintText: l10n.searchHint,
-                    leading: const Icon(Icons.search),
                     onChanged: _onSearchChanged,
                     onSubmitted: controller.search,
                   ),

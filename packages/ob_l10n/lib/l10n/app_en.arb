@@ -232,5 +232,64 @@
         "type": "String"
       }
     }
-  }
+  },
+  "adminColumnTitle": "Title",
+  "adminColumnStatus": "Status",
+  "adminColumnAccess": "Access",
+  "adminColumnEditions": "Editions",
+  "adminColumnUpdated": "Updated",
+  "adminColumnName": "Name",
+  "adminColumnSlug": "Slug",
+  "adminAllStatuses": "All statuses",
+  "adminStatusDraft": "Draft",
+  "adminStatusInReview": "In review",
+  "adminStatusPublished": "Published",
+  "adminStatusUnpublished": "Unpublished",
+  "adminStatusArchived": "Archived",
+  "adminStatusWithdrawn": "Withdrawn",
+  "adminActionSubmit": "Submit for review",
+  "adminActionRequestChanges": "Request changes",
+  "adminActionPublish": "Publish",
+  "adminActionUnpublish": "Unpublish",
+  "adminActionArchive": "Archive",
+  "adminActionCreate": "Create",
+  "adminNewBook": "New book",
+  "adminReason": "Reason",
+  "adminReasonHint": "Recorded in the audit log",
+  "adminSourceLanguage": "Source language",
+  "adminAccessFree": "Free",
+  "adminAccessRegistered": "Registered users",
+  "adminAccessEntitled": "Premium (entitlement)",
+  "adminTranslations": "Translations",
+  "adminEditions": "Editions",
+  "adminContributors": "Contributors",
+  "adminGateReady": "Provenance verified: ready to publish",
+  "adminGateBlocked": "Publishing blocked",
+  "adminGateNoProvenance": "No provenance recorded",
+  "adminGateNotVerified": "Provenance awaits a second person's verification",
+  "adminGateRightsNotCleared": "Rights are not cleared",
+  "adminGateOutsideWindow": "Outside the licence window",
+  "adminGateTerritory": "Launch territory not covered",
+  "adminGateDisputed": "Rights are disputed",
+  "adminChapters": "{count, plural, =0{No table of contents} =1{1 chapter} other{{count} chapters}}",
+  "@adminChapters": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminResults": "{count, plural, =1{1 result} other{{count} results}}",
+  "@adminResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNotPublishable": "This can't be published until its provenance is verified and rights are clear.",
+  "errorInvalidTransition": "That action isn't available in the current status.",
+  "errorSelfVerification": "Someone else must verify what you recorded.",
+  "errorRecordLocked": "Submitted records are locked. Record a new entry instead.",
+  "errorSlugTaken": "This slug is already used."
 }

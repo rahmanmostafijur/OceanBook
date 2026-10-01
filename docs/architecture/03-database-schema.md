@@ -260,6 +260,8 @@ CREATE INDEX ix_import_errors_job ON content_import_errors (job_id, row_number);
 ## 4. Catalog
 
 > **Revised 2026-10-01:** Localized metadata moves to `book_translations` (§4); rights/licence fields move to `provenance_records`, and `book_rights` becomes `edition_usage_rights` (§5). See [12-phase0-revisions](12-phase0-revisions.md).
+>
+> **Implemented in migration 0004 (Phase 2, M10).** [14-phase2-plan](14-phase2-plan.md) C14–C21 lists the differences from the DDL below: `books.source_locale` replaces `language`; `book_translations`; `LocalizedText` names on categories and tags; `edition_chapters` / `edition_sections` added; `product_id` has no FK until Phase 5; `book_subjects` and `reviews` arrive with their domains.
 
 ```sql
 CREATE TABLE categories (

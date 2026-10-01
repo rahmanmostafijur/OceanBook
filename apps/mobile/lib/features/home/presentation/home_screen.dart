@@ -110,13 +110,17 @@ class _PopularRail extends ConsumerWidget {
     final hint = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
     return switch (ref.watch(bookRailProvider(_popular))) {
       AsyncData(:final value) when value.isEmpty => Text(l10n.emptyBooks, style: hint),
-      AsyncData(:final value) => SizedBox(
-        height: 330,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemCount: value.length,
-          separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-          itemBuilder: (_, index) => BookTile(book: value[index], width: _railTileWidth),
+      // Sized by its content (not a fixed height), so the rail grows with the user's text scale.
+      AsyncData(:final value) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final (index, book) in value.indexed) ...[
+              if (index > 0) const SizedBox(width: AppSpacing.sm),
+              BookTile(book: book, width: _railTileWidth),
+            ],
+          ],
         ),
       ),
       AsyncError(:final error) => Text(failureMessage(l10n, error), style: hint),
