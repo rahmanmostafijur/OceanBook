@@ -1,0 +1,37 @@
+name: oceanbook_mobile
+description: OceanBook mobile app (Android, iOS).
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.4
+  flutter: 3.47.5
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  design_system:
+  ob_core:
+  ob_l10n:
+  reader_core:
+  dio: ^5.11.1
+  flutter_riverpod: ^3.4.3
+  flutter_secure_storage: ^11.2.0
+  go_router: ^18.0.2
+  intl: ^0.20.2
+  uuid: ^4.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5
+
+flutter:
+  uses-material-design: true

@@ -8,6 +8,8 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.catalog.api import admin as catalog_admin
+from app.catalog.api import public as catalog_public
 from app.core.config import Environment, Settings, get_settings
 from app.core.errors import register_error_handlers
 from app.core.health import router as health_router
@@ -16,6 +18,7 @@ from app.core.middleware import BodySizeLimitMiddleware, RequestContextMiddlewar
 from app.core.resources import Resources
 from app.identity.api import admin, auth, me
 from app.identity.providers.registry import IdentityProviders
+from app.provenance import api as provenance_api
 
 API_PREFIX = "/api/v1"
 
@@ -90,5 +93,8 @@ def create_app(
     api.include_router(auth.router)
     api.include_router(me.router)
     api.include_router(admin.router)
+    api.include_router(catalog_public.router)
+    api.include_router(catalog_admin.router)
+    api.include_router(provenance_api.router)
     app.include_router(api)
     return app

@@ -10,6 +10,7 @@ import uuid
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from datetime import datetime
+from enum import StrEnum
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -28,6 +29,11 @@ NAMING_CONVENTION = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
     "pk": "pk_%(table_name)s",
 }
+
+
+def check_in(column: str, values: type[StrEnum]) -> str:
+    """SQL for `column IN (...)` over a StrEnum: enumerations are text + CHECK (03 §1)."""
+    return f"{column} IN ({', '.join(repr(v.value) for v in values)})"
 
 
 class Base(DeclarativeBase):

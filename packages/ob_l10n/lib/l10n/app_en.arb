@@ -1,0 +1,236 @@
+{
+  "@@locale": "en",
+  "appTitle": "OceanBook",
+  "adminTitle": "OceanBook Admin",
+  "navHome": "Home",
+  "navExplore": "Explore",
+  "navStudy": "Study",
+  "navLibrary": "Library",
+  "navProfile": "Profile",
+  "actionRetry": "Try again",
+  "actionCancel": "Cancel",
+  "actionContinue": "Continue",
+  "actionSignIn": "Sign in",
+  "actionSignOut": "Sign out",
+  "actionCreateAccount": "Create account",
+  "actionSeeAll": "See all",
+  "actionReadPreview": "Read preview",
+  "actionReadNow": "Read now",
+  "readingComingSoon": "Reading opens soon. You can browse book details and previews now.",
+  "authWelcome": "Welcome to OceanBook",
+  "authSubtitle": "Read, study and practise for SSC and HSC.",
+  "authEmail": "Email",
+  "authPassword": "Password",
+  "authDisplayName": "Your name",
+  "authPhone": "Mobile number",
+  "authPhoneHint": "01XXXXXXXXX",
+  "authOtpCode": "6-digit code",
+  "authSendCode": "Send code",
+  "authResendIn": "Resend in {seconds}s",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authContinueWithGoogle": "Continue with Google",
+  "authContinueWithApple": "Continue with Apple",
+  "authUsePhone": "Use mobile number",
+  "authUseEmail": "Use email",
+  "authNoAccount": "New here?",
+  "authMfaTitle": "Two-step verification",
+  "authMfaPrompt": "Enter the 6-digit code from your authenticator app.",
+  "authMfaUseRecovery": "Use a recovery code instead",
+  "authRecoveryCode": "Recovery code",
+  "authGuestBrowse": "Browse without an account",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "settingsTheme": "Theme",
+  "settingsLanguage": "Language",
+  "languageBangla": "বাংলা",
+  "languageEnglish": "English",
+  "homeGreetingMorning": "Good morning",
+  "homeGreetingAfternoon": "Good afternoon",
+  "homeGreetingEvening": "Good evening",
+  "homeContinueReading": "Continue reading",
+  "homeStudyProgress": "Your study progress",
+  "homePopularBooks": "Popular books",
+  "homeFreeBooks": "Free books",
+  "homeSscPrep": "SSC preparation",
+  "homeHscPrep": "HSC preparation",
+  "booksTitle": "Books",
+  "bookFree": "Free",
+  "bookPremium": "Premium",
+  "bookPreviewAvailable": "Preview available",
+  "bookContents": "Contents",
+  "bookAbout": "About this book",
+  "bookDetails": "Book details",
+  "bookIsbn": "ISBN",
+  "bookLanguage": "Language",
+  "bookPages": "Pages",
+  "bookPublished": "Published",
+  "bookEdition": "Edition",
+  "bookBy": "by {authors}",
+  "@bookBy": {
+    "placeholders": {
+      "authors": {
+        "type": "String"
+      }
+    }
+  },
+  "authorsTitle": "Authors",
+  "publishersTitle": "Publishers",
+  "categoriesTitle": "Categories",
+  "searchHint": "Search books, authors, questions",
+  "studyTitle": "Study",
+  "studySsc": "SSC",
+  "studyHsc": "HSC",
+  "studySubjects": "Subjects",
+  "studyQuestionBank": "Question bank",
+  "studyPreviousPapers": "Previous papers",
+  "questionShowAnswer": "Show answer",
+  "questionHideAnswer": "Hide answer",
+  "questionExplanation": "Explanation",
+  "questionCorrectAnswer": "Correct answer",
+  "questionStimulus": "Read the passage",
+  "questionMarks": "{marks, plural, =1{1 mark} other{{marks} marks}}",
+  "@questionMarks": {
+    "placeholders": {
+      "marks": {
+        "type": "num"
+      }
+    }
+  },
+  "questionAppearedIn": "Appeared in {papers}",
+  "@questionAppearedIn": {
+    "placeholders": {
+      "papers": {
+        "type": "String"
+      }
+    }
+  },
+  "filterBoard": "Board",
+  "filterYear": "Year",
+  "filterChapter": "Chapter",
+  "filterType": "Type",
+  "filterDifficulty": "Difficulty",
+  "filterClear": "Clear filters",
+  "libraryTitle": "Library",
+  "profileTitle": "Profile",
+  "notificationsTitle": "Notifications",
+  "emptyBooks": "No books found",
+  "emptyBooksHint": "Try another category or clear your filters.",
+  "emptyQuestions": "No questions match these filters",
+  "emptyQuestionsHint": "Remove a filter to see more questions.",
+  "emptyLibrary": "Your library is empty",
+  "emptyLibraryHint": "Books you read and save will appear here.",
+  "emptyNotifications": "You're all caught up",
+  "errorTitle": "Something went wrong",
+  "errorNetwork": "You're offline. Check your connection and try again.",
+  "errorServer": "We're having trouble right now. Please try again shortly.",
+  "errorSessionExpired": "Your session has ended. Please sign in again.",
+  "errorInvalidCredentials": "Email or password is incorrect.",
+  "errorRateLimited": "Too many attempts. Please wait a moment and try again.",
+  "errorForbidden": "You don't have access to this.",
+  "errorNotFound": "We couldn't find that.",
+  "errorValidation": "Please check the highlighted fields.",
+  "errorEmailTaken": "An account with this email already exists.",
+  "errorOtpInvalid": "That code is not correct.",
+  "errorOtpExpired": "This code has expired. Request a new one.",
+  "errorOtpCooldown": "Please wait before requesting another code.",
+  "errorPhoneNotSupported": "Phone sign-in isn't available for this number.",
+  "errorAccountLinkRequired": "This email already has an account. Sign in to it, then link this sign-in method from Profile.",
+  "errorProviderUnavailable": "This sign-in option isn't available yet.",
+  "errorMfaInvalid": "That code is not valid.",
+  "errorMfaRequired": "Two-step verification is required for this action.",
+  "errorReauthRequired": "Please confirm it's you to continue.",
+  "errorAccountSuspended": "This account is not active.",
+  "errorDeviceLimit": "Too many signed-in devices. Sign out of one first.",
+  "adminNavDashboard": "Dashboard",
+  "adminNavPeople": "People",
+  "adminNavUsers": "Users",
+  "adminNavRoles": "Roles",
+  "adminNavCatalog": "Catalog",
+  "adminNavBooks": "Books",
+  "adminNavAuthors": "Authors",
+  "adminNavPublishers": "Publishers",
+  "adminNavCategories": "Categories",
+  "adminNavRights": "Content & rights",
+  "adminNavContentSources": "Content sources",
+  "adminNavRightsVerification": "Rights verification",
+  "adminNavQuestionBank": "Question bank",
+  "adminNavQuestions": "Questions",
+  "adminNavSubjects": "Subjects",
+  "adminNavChapters": "Chapters",
+  "adminNavTopics": "Topics",
+  "adminNavQuestionPapers": "Question papers",
+  "adminNavAssessment": "Assessment",
+  "adminNavQuizzes": "Quizzes",
+  "adminNavExams": "Exam management",
+  "adminNavCommerce": "Commerce",
+  "adminNavSubscriptions": "Subscriptions",
+  "adminNavEntitlements": "Entitlements",
+  "adminNavPayments": "Payments",
+  "adminNavOperations": "Operations",
+  "adminNavAnalytics": "Analytics",
+  "adminNavNotifications": "Notifications",
+  "adminNavAuditLogs": "Audit logs",
+  "adminNavSystemHealth": "System health",
+  "adminComingInPhase": "Available in phase {phase}",
+  "@adminComingInPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "int"
+      }
+    }
+  },
+  "adminStaffOnly": "This console is for OceanBook staff.",
+  "adminSignInTitle": "Staff sign-in",
+  "catalogAll": "All",
+  "catalogSortNewest": "Newest",
+  "catalogSortPopular": "Popular",
+  "catalogSortRating": "Top rated",
+  "catalogSortLabel": "Sort books",
+  "bookRegistered": "Free with account",
+  "bookSignInToRead": "Sign in to read this book.",
+  "bookPremiumRequired": "Included with Premium.",
+  "bookRightsRestricted": "Online reading isn't available for this edition.",
+  "bookNotAvailable": "This book isn't available to read yet.",
+  "bookShownInLanguage": "Shown in {language}: no translation in your language yet.",
+  "@bookShownInLanguage": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "bookPublisher": "Publisher",
+  "bookPreviewBadge": "Preview",
+  "bookCredits": "Credits",
+  "bookRoleEditor": "Editor",
+  "bookRoleTranslator": "Translator",
+  "bookRoleIllustrator": "Illustrator",
+  "bookRoleContributor": "Contributor",
+  "bookChapterCount": "{count, plural, =1{1 chapter} other{{count} chapters}}",
+  "@bookChapterCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authorBooks": "Books",
+  "bookCardLabel": "{title}, {authors}",
+  "@bookCardLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "authors": {
+        "type": "String"
+      }
+    }
+  }
+}

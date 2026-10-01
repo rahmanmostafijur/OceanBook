@@ -46,6 +46,14 @@ TRUNCATE = (
     "audit_logs",
     "outbox_events",
     "processed_events",
+    # catalog and provenance (seeded entitlement definitions are kept)
+    "books",
+    "categories",
+    "authors",
+    "publishers",
+    "tags",
+    "content_sources",
+    "media_assets",
 )
 
 _SIGNING_KEY_PEM = (

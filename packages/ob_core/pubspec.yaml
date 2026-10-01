@@ -1,0 +1,23 @@
+name: ob_core
+description: Typed /api/v1 client (envelope, errors, auth refresh, request ids, retries) and shared value types.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.4
+  flutter: 3.47.5
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.11.1
+  meta: ^1.16.0
+  uuid: ^4.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5

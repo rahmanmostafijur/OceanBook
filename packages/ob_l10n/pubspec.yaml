@@ -1,0 +1,25 @@
+name: ob_l10n
+description: Bangla and English UI strings (ARB, gen-l10n) shared by both apps.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.4
+  flutter: 3.47.5
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  generate: true

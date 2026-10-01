@@ -42,6 +42,11 @@ def create_celery() -> Celery:
                 "task": "app.worker.tasks.purge_events",
                 "schedule": crontab(minute=27, hour=3),
             },
+            # Hourly, so licence windows that end at Dhaka midnight (18:00 UTC) lapse by 18:05 UTC.
+            "enforce-content-rights": {
+                "task": "app.worker.tasks.enforce_content_rights",
+                "schedule": crontab(minute=5),
+            },
         },
     )
     return app

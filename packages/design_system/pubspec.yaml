@@ -1,0 +1,31 @@
+name: design_system
+description: OceanBook Material 3 design system shared by the mobile app and the web admin.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.4
+  flutter: 3.47.5
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: fonts/NotoSans-Variable.ttf
+    - family: NotoSansBengali
+      fonts:
+        - asset: fonts/NotoSansBengali-Variable.ttf
+    - family: NotoSerifBengali
+      fonts:
+        - asset: fonts/NotoSerifBengali-Variable.ttf

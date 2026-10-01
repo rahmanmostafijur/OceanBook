@@ -6,10 +6,12 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 import pytest
+from httpx import AsyncClient
 from sqlalchemy import text
 
 from app.core.resources import Resources
-from tests.conftest import TRUNCATE
+from tests.conftest import TRUNCATE, bearer, staff
+from tests.integration.catalog_support import Team
 
 
 @pytest.fixture(scope="session")
@@ -37,3 +39,11 @@ async def _clean_database(resources: Resources, seeded_settings: list[dict[str, 
                 row,
             )
     await resources.redis.flushdb()
+
+
+@pytest.fixture
+async def team(client: AsyncClient, resources: Resources) -> Team:
+    editor = await staff(client, resources, "content_editor", "editor@example.org")
+    reviewer = await staff(client, resources, "reviewer", "reviewer@example.org")
+    admin = await staff(client, resources, "admin", "catalog-admin@example.org")
+    return Team(bearer(editor), bearer(reviewer), bearer(admin))

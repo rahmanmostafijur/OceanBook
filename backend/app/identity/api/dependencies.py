@@ -46,6 +46,26 @@ async def get_principal(
 PrincipalDep = Annotated[Principal, Depends(get_principal)]
 
 
+async def get_optional_principal(
+    request: Request,
+    resources: ResourcesDep,
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
+) -> Principal | None:
+    """Public endpoints that personalise for signed-in callers (e.g. the catalog `access` block).
+
+    No token means a guest, and no primary-database session is opened (guest reads stay on the
+    replica). A token that is present but invalid or expired is still a 401, so the client refreshes
+    instead of silently seeing guest results.
+    """
+    if credentials is None:
+        return None
+    async with resources.db.write_sessionmaker() as session:  # authorisation never reads a replica
+        return await get_principal(request, session, resources, credentials)
+
+
+OptionalPrincipalDep = Annotated[Principal | None, Depends(get_optional_principal)]
+
+
 def require_permission(*required: Permission) -> Callable[..., Awaitable[Principal]]:
     """Dependency factory: the principal must hold every listed permission. Staff APIs are rate-limited."""
 

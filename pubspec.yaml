@@ -1,0 +1,15 @@
+# Dart pub workspace: one resolution for both apps and all shared packages (Dart >= 3.6).
+# Toolchain pins: docs/development/toolchain.md
+name: oceanbook_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.13.4
+
+workspace:
+  - apps/mobile
+  - apps/admin
+  - packages/design_system
+  - packages/ob_core
+  - packages/ob_l10n
+  - packages/reader_core

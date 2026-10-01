@@ -113,6 +113,11 @@ class Settings(BaseSettings):
     supported_locales: Annotated[list[str], NoDecode] = Field(default_factory=lambda: ["bn", "en"])
     default_locale: str = "bn"
 
+    # Content (Phase 2): provenance must cover the launch territory for content to be publishable.
+    content_launch_territory: str = Field(default="BD", pattern=r"^[A-Z]{2}$")
+    # Public CDN base for covers and photos; None in development (clients show placeholders).
+    media_public_base_url: str | None = None
+
     @field_validator("cors_allow_origins", "supported_locales", mode="before")
     @classmethod
     def _split_csv(cls, value: object) -> object:

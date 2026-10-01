@@ -252,6 +252,12 @@ PUBLIC_ROUTES = {
     ("POST", "/api/v1/auth/phone/verify"),
     ("POST", "/api/v1/auth/oauth/{provider}"),
     ("POST", "/api/v1/auth/mfa/verify"),
+    # Public catalog taxonomy (books/{id} accept an optional bearer token, so they declare security)
+    ("GET", "/api/v1/categories"),
+    ("GET", "/api/v1/authors"),
+    ("GET", "/api/v1/authors/{slug}"),
+    ("GET", "/api/v1/publishers"),
+    ("GET", "/api/v1/publishers/{slug}"),
 }
 
 

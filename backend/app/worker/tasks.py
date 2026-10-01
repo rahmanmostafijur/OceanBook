@@ -9,6 +9,7 @@ from typing import Any
 from app.core.logging import get_logger
 from app.platform import maintenance
 from app.platform.outbox import DomainEvent, run_handlers
+from app.provenance.enforcement import enforce_published_rights
 from app.worker import runtime
 from app.worker.celery_app import celery_app
 from app.worker.handlers import registry
@@ -70,5 +71,17 @@ def purge_events() -> int:
     async def job() -> int:
         async with runtime.resources().db.write_sessionmaker() as session:
             return await maintenance.purge_delivered_events(session)
+
+    return runtime.run(job())
+
+
+@celery_app.task(name="app.worker.tasks.enforce_content_rights")
+def enforce_content_rights() -> int:
+    async def job() -> int:
+        resources = runtime.resources()
+        async with resources.db.write_sessionmaker() as session:
+            return await enforce_published_rights(
+                session, territory=resources.settings.content_launch_territory
+            )
 
     return runtime.run(job())
