@@ -1405,6 +1405,258 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'This slug is already used.'**
   String get errorSlugTaken;
+
+  /// No description provided for @adminNewSource.
+  ///
+  /// In en, this message translates to:
+  /// **'New content source'**
+  String get adminNewSource;
+
+  /// No description provided for @adminColumnKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Kind'**
+  String get adminColumnKind;
+
+  /// No description provided for @adminColumnActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get adminColumnActive;
+
+  /// No description provided for @adminWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get adminWebsite;
+
+  /// No description provided for @adminSourceActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get adminSourceActive;
+
+  /// No description provided for @adminSourceRetired.
+  ///
+  /// In en, this message translates to:
+  /// **'Retired'**
+  String get adminSourceRetired;
+
+  /// No description provided for @adminSourceEducationBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Education board'**
+  String get adminSourceEducationBoard;
+
+  /// No description provided for @adminSourcePublisher.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher'**
+  String get adminSourcePublisher;
+
+  /// No description provided for @adminSourceAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Author'**
+  String get adminSourceAuthor;
+
+  /// No description provided for @adminSourceGovernment.
+  ///
+  /// In en, this message translates to:
+  /// **'Government'**
+  String get adminSourceGovernment;
+
+  /// No description provided for @adminSourceWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get adminSourceWebsite;
+
+  /// No description provided for @adminSourcePartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner'**
+  String get adminSourcePartner;
+
+  /// No description provided for @adminSourceInternal.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal'**
+  String get adminSourceInternal;
+
+  /// No description provided for @adminSourceOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get adminSourceOther;
+
+  /// No description provided for @adminLicenseCommercial.
+  ///
+  /// In en, this message translates to:
+  /// **'Commercial licence'**
+  String get adminLicenseCommercial;
+
+  /// No description provided for @adminLicensePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission granted'**
+  String get adminLicensePermission;
+
+  /// No description provided for @adminLicensePublicDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Public domain'**
+  String get adminLicensePublicDomain;
+
+  /// No description provided for @adminLicenseGovernmentOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Government open licence'**
+  String get adminLicenseGovernmentOpen;
+
+  /// No description provided for @adminLicenseOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Original work'**
+  String get adminLicenseOriginal;
+
+  /// No description provided for @adminLicenseUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown licence'**
+  String get adminLicenseUnknown;
+
+  /// No description provided for @adminRightsPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights pending'**
+  String get adminRightsPending;
+
+  /// No description provided for @adminRightsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights cleared'**
+  String get adminRightsCleared;
+
+  /// No description provided for @adminRightsRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights restricted'**
+  String get adminRightsRestricted;
+
+  /// No description provided for @adminRightsExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights expired'**
+  String get adminRightsExpired;
+
+  /// No description provided for @adminRightsDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights disputed'**
+  String get adminRightsDisputed;
+
+  /// No description provided for @adminVerificationUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Unverified'**
+  String get adminVerificationUnverified;
+
+  /// No description provided for @adminVerificationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting verification'**
+  String get adminVerificationPending;
+
+  /// No description provided for @adminVerificationVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get adminVerificationVerified;
+
+  /// No description provided for @adminVerificationRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get adminVerificationRejected;
+
+  /// No description provided for @adminQueueEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing awaits verification.'**
+  String get adminQueueEmpty;
+
+  /// No description provided for @adminActionVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get adminActionVerify;
+
+  /// No description provided for @adminActionReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get adminActionReject;
+
+  /// No description provided for @adminRejectNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'What needs fixing'**
+  String get adminRejectNotes;
+
+  /// No description provided for @adminProvenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Provenance and rights'**
+  String get adminProvenance;
+
+  /// No description provided for @adminRecordProvenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Record provenance'**
+  String get adminRecordProvenance;
+
+  /// No description provided for @adminChangeRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Change rights'**
+  String get adminChangeRights;
+
+  /// No description provided for @adminLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'Licence'**
+  String get adminLicense;
+
+  /// No description provided for @adminRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Rights status'**
+  String get adminRights;
+
+  /// No description provided for @adminTerritories.
+  ///
+  /// In en, this message translates to:
+  /// **'Territories'**
+  String get adminTerritories;
+
+  /// No description provided for @adminTerritoriesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Country codes such as BD, or * for worldwide'**
+  String get adminTerritoriesHint;
+
+  /// No description provided for @adminLicenseReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Licence reference'**
+  String get adminLicenseReference;
+
+  /// No description provided for @adminChangeRightsWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes effect at once and unpublishes content that is no longer cleared.'**
+  String get adminChangeRightsWarning;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

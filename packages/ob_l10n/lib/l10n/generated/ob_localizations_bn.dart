@@ -702,4 +702,131 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get errorSlugTaken => 'এই স্লাগটি আগেই ব্যবহৃত হয়েছে।';
+
+  @override
+  String get adminNewSource => 'নতুন কনটেন্টের উৎস';
+
+  @override
+  String get adminColumnKind => 'ধরন';
+
+  @override
+  String get adminColumnActive => 'সক্রিয়';
+
+  @override
+  String get adminWebsite => 'ওয়েবসাইট';
+
+  @override
+  String get adminSourceActive => 'সক্রিয়';
+
+  @override
+  String get adminSourceRetired => 'অবসরপ্রাপ্ত';
+
+  @override
+  String get adminSourceEducationBoard => 'শিক্ষা বোর্ড';
+
+  @override
+  String get adminSourcePublisher => 'প্রকাশক';
+
+  @override
+  String get adminSourceAuthor => 'লেখক';
+
+  @override
+  String get adminSourceGovernment => 'সরকারি';
+
+  @override
+  String get adminSourceWebsite => 'ওয়েবসাইট';
+
+  @override
+  String get adminSourcePartner => 'অংশীদার';
+
+  @override
+  String get adminSourceInternal => 'অভ্যন্তরীণ';
+
+  @override
+  String get adminSourceOther => 'অন্যান্য';
+
+  @override
+  String get adminLicenseCommercial => 'বাণিজ্যিক লাইসেন্স';
+
+  @override
+  String get adminLicensePermission => 'অনুমতি প্রাপ্ত';
+
+  @override
+  String get adminLicensePublicDomain => 'পাবলিক ডোমেইন';
+
+  @override
+  String get adminLicenseGovernmentOpen => 'সরকারি উন্মুক্ত লাইসেন্স';
+
+  @override
+  String get adminLicenseOriginal => 'নিজস্ব সৃষ্টি';
+
+  @override
+  String get adminLicenseUnknown => 'লাইসেন্স অজানা';
+
+  @override
+  String get adminRightsPending => 'স্বত্ব অপেক্ষমাণ';
+
+  @override
+  String get adminRightsCleared => 'স্বত্ব নিশ্চিত';
+
+  @override
+  String get adminRightsRestricted => 'স্বত্ব সীমিত';
+
+  @override
+  String get adminRightsExpired => 'স্বত্বের মেয়াদ শেষ';
+
+  @override
+  String get adminRightsDisputed => 'স্বত্ব নিয়ে বিরোধ';
+
+  @override
+  String get adminVerificationUnverified => 'যাচাই হয়নি';
+
+  @override
+  String get adminVerificationPending => 'যাচাইয়ের অপেক্ষায়';
+
+  @override
+  String get adminVerificationVerified => 'যাচাই সম্পন্ন';
+
+  @override
+  String get adminVerificationRejected => 'প্রত্যাখ্যাত';
+
+  @override
+  String get adminQueueEmpty => 'যাচাইয়ের জন্য কিছু অপেক্ষায় নেই।';
+
+  @override
+  String get adminActionVerify => 'যাচাই করুন';
+
+  @override
+  String get adminActionReject => 'প্রত্যাখ্যান করুন';
+
+  @override
+  String get adminRejectNotes => 'কী ঠিক করতে হবে';
+
+  @override
+  String get adminProvenance => 'উৎস ও স্বত্ব';
+
+  @override
+  String get adminRecordProvenance => 'উৎস-তথ্য যোগ করুন';
+
+  @override
+  String get adminChangeRights => 'স্বত্ব পরিবর্তন';
+
+  @override
+  String get adminLicense => 'লাইসেন্স';
+
+  @override
+  String get adminRights => 'স্বত্বের অবস্থা';
+
+  @override
+  String get adminTerritories => 'অঞ্চল';
+
+  @override
+  String get adminTerritoriesHint => 'দেশের কোড, যেমন BD, অথবা সারা বিশ্বের জন্য *';
+
+  @override
+  String get adminLicenseReference => 'লাইসেন্স নম্বর বা সূত্র';
+
+  @override
+  String get adminChangeRightsWarning =>
+      'সঙ্গে সঙ্গে কার্যকর হবে এবং যে কনটেন্টের স্বত্ব আর নিশ্চিত নয় তা প্রকাশ থেকে সরে যাবে।';
 }

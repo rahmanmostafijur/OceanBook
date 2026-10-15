@@ -5,12 +5,15 @@ import 'package:ob_core/ob_core.dart';
 import 'package:oceanbook_admin/core/providers.dart';
 import 'package:oceanbook_admin/core/router.dart';
 import 'package:oceanbook_admin/features/catalog/admin_catalog_api.dart';
+import 'package:oceanbook_admin/features/rights/rights_api.dart';
 import 'package:oceanbook_admin/features/users/users_page.dart';
 import 'package:oceanbook_admin/main.dart';
 
 import 'fake_admin_catalog.dart';
+import 'fake_rights.dart';
 
 export 'fake_admin_catalog.dart';
+export 'fake_rights.dart';
 
 const staffUser = AppUser(
   id: 's1',
@@ -72,6 +75,7 @@ Future<FakeAuth> pumpAdmin(
   Size size = const Size(1440, 900),
   AppUser? restored,
   AdminCatalogRepository? catalog,
+  RightsRepository? rights,
   String? location,
 }) async {
   tester.view.physicalSize = size;
@@ -84,6 +88,7 @@ Future<FakeAuth> pumpAdmin(
         adminAuthRepositoryProvider.overrideWithValue(auth),
         adminUsersRepositoryProvider.overrideWithValue(FakeUsers()),
         adminCatalogRepositoryProvider.overrideWithValue(catalog ?? FakeAdminCatalog()),
+        rightsRepositoryProvider.overrideWithValue(rights ?? FakeRights()),
       ],
       child: const AdminApp(),
     ),

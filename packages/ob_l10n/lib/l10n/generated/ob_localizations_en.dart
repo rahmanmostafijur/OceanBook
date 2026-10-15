@@ -711,4 +711,130 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get errorSlugTaken => 'This slug is already used.';
+
+  @override
+  String get adminNewSource => 'New content source';
+
+  @override
+  String get adminColumnKind => 'Kind';
+
+  @override
+  String get adminColumnActive => 'Active';
+
+  @override
+  String get adminWebsite => 'Website';
+
+  @override
+  String get adminSourceActive => 'Active';
+
+  @override
+  String get adminSourceRetired => 'Retired';
+
+  @override
+  String get adminSourceEducationBoard => 'Education board';
+
+  @override
+  String get adminSourcePublisher => 'Publisher';
+
+  @override
+  String get adminSourceAuthor => 'Author';
+
+  @override
+  String get adminSourceGovernment => 'Government';
+
+  @override
+  String get adminSourceWebsite => 'Website';
+
+  @override
+  String get adminSourcePartner => 'Partner';
+
+  @override
+  String get adminSourceInternal => 'Internal';
+
+  @override
+  String get adminSourceOther => 'Other';
+
+  @override
+  String get adminLicenseCommercial => 'Commercial licence';
+
+  @override
+  String get adminLicensePermission => 'Permission granted';
+
+  @override
+  String get adminLicensePublicDomain => 'Public domain';
+
+  @override
+  String get adminLicenseGovernmentOpen => 'Government open licence';
+
+  @override
+  String get adminLicenseOriginal => 'Original work';
+
+  @override
+  String get adminLicenseUnknown => 'Unknown licence';
+
+  @override
+  String get adminRightsPending => 'Rights pending';
+
+  @override
+  String get adminRightsCleared => 'Rights cleared';
+
+  @override
+  String get adminRightsRestricted => 'Rights restricted';
+
+  @override
+  String get adminRightsExpired => 'Rights expired';
+
+  @override
+  String get adminRightsDisputed => 'Rights disputed';
+
+  @override
+  String get adminVerificationUnverified => 'Unverified';
+
+  @override
+  String get adminVerificationPending => 'Awaiting verification';
+
+  @override
+  String get adminVerificationVerified => 'Verified';
+
+  @override
+  String get adminVerificationRejected => 'Rejected';
+
+  @override
+  String get adminQueueEmpty => 'Nothing awaits verification.';
+
+  @override
+  String get adminActionVerify => 'Verify';
+
+  @override
+  String get adminActionReject => 'Reject';
+
+  @override
+  String get adminRejectNotes => 'What needs fixing';
+
+  @override
+  String get adminProvenance => 'Provenance and rights';
+
+  @override
+  String get adminRecordProvenance => 'Record provenance';
+
+  @override
+  String get adminChangeRights => 'Change rights';
+
+  @override
+  String get adminLicense => 'Licence';
+
+  @override
+  String get adminRights => 'Rights status';
+
+  @override
+  String get adminTerritories => 'Territories';
+
+  @override
+  String get adminTerritoriesHint => 'Country codes such as BD, or * for worldwide';
+
+  @override
+  String get adminLicenseReference => 'Licence reference';
+
+  @override
+  String get adminChangeRightsWarning => 'Takes effect at once and unpublishes content that is no longer cleared.';
 }

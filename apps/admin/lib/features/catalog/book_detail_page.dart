@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
+import '../rights/edition_rights.dart';
 import 'admin_catalog_api.dart';
 import 'books_page.dart';
 
@@ -142,7 +143,7 @@ class _BookViewState extends ConsumerState<_BookView> {
         ],
         SectionHeader(title: l10n.adminEditions),
         for (final edition in book.editions)
-          _EditionCard(edition: edition, isDefault: edition.id == book.defaultEditionId),
+          _EditionCard(bookId: book.id, edition: edition, isDefault: edition.id == book.defaultEditionId),
       ],
     );
   }
@@ -195,8 +196,9 @@ class _ReasonDialogState extends State<_ReasonDialog> {
 }
 
 class _EditionCard extends StatelessWidget {
-  const _EditionCard({required this.edition, required this.isDefault});
+  const _EditionCard({required this.bookId, required this.edition, required this.isDefault});
 
+  final String bookId;
   final AdminEdition edition;
   final bool isDefault;
 
@@ -246,6 +248,8 @@ class _EditionCard extends StatelessWidget {
                 ),
               ],
             ),
+            const Divider(),
+            EditionRights(bookId: bookId, editionId: edition.id),
           ],
         ),
       ),

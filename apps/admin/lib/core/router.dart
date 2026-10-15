@@ -9,6 +9,8 @@ import '../features/auth/admin_sign_in_page.dart';
 import '../features/catalog/book_detail_page.dart';
 import '../features/catalog/books_page.dart';
 import '../features/catalog/taxonomy_pages.dart';
+import '../features/rights/content_sources_page.dart';
+import '../features/rights/rights_queue_page.dart';
 import '../features/users/users_page.dart';
 import '../shell/admin_shell.dart';
 import 'navigation.dart';
@@ -30,6 +32,8 @@ Widget _pageFor(AdminNavItem item) => switch (item.path) {
   '/authors' => const PeoplePage(kind: PeopleKind.authors),
   '/publishers' => const PeoplePage(kind: PeopleKind.publishers),
   '/categories' => const CategoriesPage(),
+  '/content-sources' => const ContentSourcesPage(),
+  '/rights' => const RightsQueuePage(),
   '/' => const _Dashboard(),
   _ => PlannedPage(item: item),
 };
