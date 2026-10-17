@@ -2,16 +2,39 @@ import 'package:flutter/material.dart';
 
 /// Colour system. Widgets use [ColorScheme] roles (and [AppSemanticColors]) only:
 /// no `Color(0x...)` literals outside this file.
+///
+/// The palette follows the 60-30-10 rule, so every screen has one clear hierarchy:
+///
+/// * **60 % dominant**: the calm neutrals (`surface`, `surfaceContainer*`, `onSurface`). Backgrounds,
+///   cards and body text. Tinted faintly toward the ocean so they feel part of the brand.
+/// * **30 % secondary**: the ocean-teal family (`primary`, `primaryContainer`, `secondaryContainer`).
+///   Hero areas, navigation indicators, selected chips, tonal tiles, progress.
+/// * **10 % accent**: warm coral (`tertiary`). Reserved for the one primary action on a screen and the
+///   odd small highlight. If a screen shows more than a couple of coral things, one is wrong.
 abstract final class AppColors {
   /// Brand seed: a deep ocean teal (calm, studious, distinct from success-green and error-red).
   /// Both light and dark schemes are generated from it with Material 3's tonal-spot variant.
   static const Color seed = Color(0xFF1E6A7A);
 
-  static ColorScheme scheme(Brightness brightness) => ColorScheme.fromSeed(
-    seedColor: seed,
-    brightness: brightness,
-    dynamicSchemeVariant: DynamicSchemeVariant.tonalSpot,
-  );
+  /// Accent: a burnt coral that reads as warm against the teal and keeps 4.5:1 with white text.
+  static const Color accentSeed = Color(0xFFC2410C);
+
+  static ColorScheme scheme(Brightness brightness) {
+    final base = ColorScheme.fromSeed(
+      seedColor: seed,
+      brightness: brightness,
+      dynamicSchemeVariant: DynamicSchemeVariant.tonalSpot,
+    );
+    // Explicit coral roles: a seeded tonal palette turns this hue into brown, and the accent must read as
+    // a distinct warm colour. White on [accentSeed] is 5.2:1; the dark pair is lighter coral with dark text.
+    final isLight = brightness == Brightness.light;
+    return base.copyWith(
+      tertiary: isLight ? accentSeed : const Color(0xFFFFB59A),
+      onTertiary: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF4A1500),
+      tertiaryContainer: isLight ? const Color(0xFFFFDBCF) : const Color(0xFF7A2E10),
+      onTertiaryContainer: isLight ? const Color(0xFF3B0A00) : const Color(0xFFFFDBCF),
+    );
+  }
 }
 
 /// Roles Material 3 does not define, derived from the same seed so they harmonise.

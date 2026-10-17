@@ -264,11 +264,9 @@ class _ExpandableSynopsisState extends State<ExpandableSynopsis> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AnimatedSize(
-              duration: AppMotion.of(context, AppMotion.medium2),
-              curve: AppMotion.standard,
-              alignment: Alignment.topCenter,
-              child: Text(
+            _maybeAnimated(
+              context,
+              Text(
                 widget.text,
                 style: style,
                 maxLines: _expanded ? null : _collapsedSynopsisLines,
@@ -286,6 +284,18 @@ class _ExpandableSynopsisState extends State<ExpandableSynopsis> {
           ],
         );
       },
+    );
+  }
+
+  /// AnimatedSize asserts in debug builds when given a zero duration, so under reduced motion the text
+  /// simply changes size without an animation wrapper.
+  Widget _maybeAnimated(BuildContext context, Widget child) {
+    if (AppMotion.reduced(context)) return child;
+    return AnimatedSize(
+      duration: AppMotion.medium2,
+      curve: AppMotion.standard,
+      alignment: Alignment.topCenter,
+      child: child,
     );
   }
 }

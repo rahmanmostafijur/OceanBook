@@ -74,10 +74,17 @@ Future<FakeAuthRepository> pumpApp(
   SessionEvents? events,
   FakeCatalog? catalog,
   String? location,
+  bool reduceMotion = true,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  // The home hero's waves never stop moving, so tests run with reduced motion (which it honours);
+  // otherwise pumpAndSettle would wait forever.
+  if (reduceMotion) {
+    tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+  }
   final repo = FakeAuthRepository()..restored = restored;
   await tester.pumpWidget(
     ProviderScope(

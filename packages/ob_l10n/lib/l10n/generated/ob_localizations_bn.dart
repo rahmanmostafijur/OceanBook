@@ -908,4 +908,22 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get readerPreviewNotice => 'নমুনা লেখা। পড়ার সুবিধা চালু হলে আসল বই এখানে খুলবে।';
+
+  @override
+  String get homeHeroTitle => 'আজ কী শিখবেন?';
+
+  @override
+  String get homeHeroSubtitle => 'বই, বিগত সালের প্রশ্ন আর অনুশীলন, সব এক জায়গায়।';
+
+  @override
+  String get homeHeroCta => 'খোঁজা শুরু করুন';
+
+  @override
+  String get homeQuickBooks => 'বই';
+
+  @override
+  String get homeQuickPapers => 'বিগত সালের প্রশ্ন';
+
+  @override
+  String get homeQuickPractice => 'অনুশীলন';
 }

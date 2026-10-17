@@ -5,6 +5,7 @@ export 'src/components/adaptive_navigation.dart';
 export 'src/components/app_search_bar.dart';
 export 'src/components/book_components.dart';
 export 'src/components/feedback_states.dart';
+export 'src/components/ocean_hero.dart';
 export 'src/theme/app_theme.dart';
 export 'src/tokens/app_breakpoints.dart';
 export 'src/tokens/app_colors.dart';

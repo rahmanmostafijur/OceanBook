@@ -1807,6 +1807,42 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Sample text. Real books open here once reading ships.'**
   String get readerPreviewNotice;
+
+  /// No description provided for @homeHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What will you learn today?'**
+  String get homeHeroTitle;
+
+  /// No description provided for @homeHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Books, past papers and practice, all in one place.'**
+  String get homeHeroSubtitle;
+
+  /// No description provided for @homeHeroCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Start exploring'**
+  String get homeHeroCta;
+
+  /// No description provided for @homeQuickBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get homeQuickBooks;
+
+  /// No description provided for @homeQuickPapers.
+  ///
+  /// In en, this message translates to:
+  /// **'Past papers'**
+  String get homeQuickPapers;
+
+  /// No description provided for @homeQuickPractice.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice'**
+  String get homeQuickPractice;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

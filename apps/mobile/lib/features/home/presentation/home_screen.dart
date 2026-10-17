@@ -26,39 +26,64 @@ class HomeScreen extends ConsumerWidget {
     final l10n = ObLocalizations.of(context);
     final auth = ref.watch(authControllerProvider).value;
     final name = auth is AuthSignedIn ? auth.user.displayName : null;
+    final width = MediaQuery.sizeOf(context).width;
+    final gutter = AppSpacing.gutter(width);
+    final greeting = name == null ? _greeting(l10n, DateTime.now()) : '${_greeting(l10n, DateTime.now())}, $name';
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar.large(
-            title: Text(name == null ? _greeting(l10n, DateTime.now()) : '${_greeting(l10n, DateTime.now())}, $name'),
-            actions: [
-              IconButton(
-                tooltip: l10n.notificationsTitle,
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_none),
-              ),
-            ],
+          SliverToBoxAdapter(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                OceanHero(
+                  bottomInset: 56,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(gutter, AppSpacing.sm, gutter, 0),
+                        child: _HeroContent(greeting: greeting),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: gutter,
+                  right: gutter,
+                  bottom: -28,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth - 2 * AppSpacing.xl),
+                      // Entry point to search (which lives in Explore): one full-size, labelled button for
+                      // assistive tech; the decorative bar inside is excluded from semantics.
+                      child: Semantics(
+                        container: true,
+                        button: true,
+                        label: l10n.searchHint,
+                        onTap: () => context.go('/explore'),
+                        child: ExcludeSemantics(
+                          child: SearchBar(
+                            hintText: l10n.searchHint,
+                            leading: const Icon(Icons.search),
+                            elevation: const WidgetStatePropertyAll(AppElevation.level3),
+                            onTap: () => context.go('/explore'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 28 + AppSpacing.md)),
           SliverToBoxAdapter(
             child: ConstrainedContent(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Entry point to search (which lives in Explore): one full-size, labelled button for
-                  // assistive tech; the decorative bar inside is excluded from semantics.
-                  Semantics(
-                    container: true,
-                    button: true,
-                    label: l10n.searchHint,
-                    onTap: () => context.go('/explore'),
-                    child: ExcludeSemantics(
-                      child: SearchBar(
-                        hintText: l10n.searchHint,
-                        leading: const Icon(Icons.search),
-                        onTap: () => context.go('/explore'),
-                      ),
-                    ),
-                  ),
+                  const _QuickActions(),
                   SectionHeader(title: l10n.homeStudyProgress),
                   Card(
                     child: ListTile(
@@ -91,6 +116,130 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Text and the one accent button, on the hero's teal. Colours are all [ColorScheme] roles.
+class _HeroContent extends StatelessWidget {
+  const _HeroContent({required this.greeting});
+
+  final String greeting;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = ObLocalizations.of(context);
+    final theme = Theme.of(context);
+    final onHero = theme.colorScheme.onPrimary;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                greeting,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleMedium?.copyWith(color: onHero.withValues(alpha: 0.9)),
+              ),
+            ),
+            IconButton(
+              tooltip: l10n.notificationsTitle,
+              color: onHero,
+              onPressed: () {},
+              icon: const Icon(Icons.notifications_none),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.xl),
+        Semantics(
+          header: true,
+          child: Text(
+            l10n.homeHeroTitle,
+            style: theme.textTheme.displaySmall?.copyWith(color: onHero, fontWeight: FontWeight.w700, height: 1.2),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(l10n.homeHeroSubtitle, style: theme.textTheme.bodyLarge?.copyWith(color: onHero.withValues(alpha: 0.88))),
+        const SizedBox(height: AppSpacing.xl),
+        FilledButton.icon(
+          onPressed: () => context.go('/explore'),
+          icon: const Icon(Icons.explore_outlined),
+          label: Text(l10n.homeHeroCta),
+        ),
+      ],
+    );
+  }
+}
+
+/// Three tonal tiles (the 30 % secondary colour) for the main places to go.
+class _QuickActions extends StatelessWidget {
+  const _QuickActions();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = ObLocalizations.of(context);
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _QuickTile(icon: Icons.menu_book_outlined, label: l10n.homeQuickBooks, route: '/explore'),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: _QuickTile(icon: Icons.history_edu_outlined, label: l10n.homeQuickPapers, route: '/study'),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: _QuickTile(icon: Icons.bolt_outlined, label: l10n.homeQuickPractice, route: '/study'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickTile extends StatelessWidget {
+  const _QuickTile({required this.icon, required this.label, required this.route});
+
+  final IconData icon;
+  final String label;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: Material(
+        color: scheme.secondaryContainer,
+        shape: AppShapes.card,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.go(route),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.md),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: scheme.onSecondaryContainer, size: AppSizes.icon + 4),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.onSecondaryContainer),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -285,5 +285,11 @@
   "readerAlignStart": "বামে",
   "readerAlignJustify": "সমান",
   "readerClose": "পাঠক বন্ধ করুন",
-  "readerPreviewNotice": "নমুনা লেখা। পড়ার সুবিধা চালু হলে আসল বই এখানে খুলবে।"
+  "readerPreviewNotice": "নমুনা লেখা। পড়ার সুবিধা চালু হলে আসল বই এখানে খুলবে।",
+  "homeHeroTitle": "আজ কী শিখবেন?",
+  "homeHeroSubtitle": "বই, বিগত সালের প্রশ্ন আর অনুশীলন, সব এক জায়গায়।",
+  "homeHeroCta": "খোঁজা শুরু করুন",
+  "homeQuickBooks": "বই",
+  "homeQuickPapers": "বিগত সালের প্রশ্ন",
+  "homeQuickPractice": "অনুশীলন"
 }

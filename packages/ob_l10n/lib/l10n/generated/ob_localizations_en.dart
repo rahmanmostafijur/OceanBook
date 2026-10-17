@@ -916,4 +916,22 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get readerPreviewNotice => 'Sample text. Real books open here once reading ships.';
+
+  @override
+  String get homeHeroTitle => 'What will you learn today?';
+
+  @override
+  String get homeHeroSubtitle => 'Books, past papers and practice, all in one place.';
+
+  @override
+  String get homeHeroCta => 'Start exploring';
+
+  @override
+  String get homeQuickBooks => 'Books';
+
+  @override
+  String get homeQuickPapers => 'Past papers';
+
+  @override
+  String get homeQuickPractice => 'Practice';
 }

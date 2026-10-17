@@ -63,8 +63,11 @@ abstract final class AppTheme {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
       ),
+      // The accent (10 %): the one primary action on a screen is coral, everything else stays teal/neutral.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
+          backgroundColor: scheme.tertiary,
+          foregroundColor: scheme.onTertiary,
           minimumSize: compact ? const Size(64, 40) : minTarget,
           textStyle: text.labelLarge,
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),

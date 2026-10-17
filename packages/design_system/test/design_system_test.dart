@@ -21,6 +21,7 @@ void main() {
           'primary': (s.onPrimary, s.primary),
           'primaryContainer': (s.onPrimaryContainer, s.primaryContainer),
           'secondaryContainer': (s.onSecondaryContainer, s.secondaryContainer),
+          'tertiary (accent buttons)': (s.onTertiary, s.tertiary),
           'tertiaryContainer': (s.onTertiaryContainer, s.tertiaryContainer),
           'error': (s.onError, s.error),
           'errorContainer': (s.onErrorContainer, s.errorContainer),
@@ -174,6 +175,37 @@ void main() {
         ),
       );
       expect(tester.hasRunningAnimations, isFalse);
+    });
+  });
+
+  group('ocean hero', () {
+    Widget host({required bool reducedMotion}) => MaterialApp(
+      theme: AppTheme.light(),
+      home: MediaQuery(
+        data: MediaQueryData(disableAnimations: reducedMotion),
+        child: const Scaffold(body: OceanHero(child: Text('hero'))),
+      ),
+    );
+
+    testWidgets('keeps moving by default', (tester) async {
+      await tester.pumpWidget(host(reducedMotion: false));
+      expect(tester.binding.hasScheduledFrame, isTrue);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('hero'), findsOneWidget);
+    });
+
+    testWidgets('stands still under reduced motion and settles', (tester) async {
+      await tester.pumpWidget(host(reducedMotion: true));
+      await tester.pumpAndSettle();
+      expect(find.text('hero'), findsOneWidget);
+    });
+
+    testWidgets('paints no semantics of its own', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(host(reducedMotion: true));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel('hero'), findsOneWidget);
+      handle.dispose();
     });
   });
 }

@@ -372,5 +372,11 @@
   "readerAlignStart": "Left",
   "readerAlignJustify": "Justified",
   "readerClose": "Close reader",
-  "readerPreviewNotice": "Sample text. Real books open here once reading ships."
+  "readerPreviewNotice": "Sample text. Real books open here once reading ships.",
+  "homeHeroTitle": "What will you learn today?",
+  "homeHeroSubtitle": "Books, past papers and practice, all in one place.",
+  "homeHeroCta": "Start exploring",
+  "homeQuickBooks": "Books",
+  "homeQuickPapers": "Past papers",
+  "homeQuickPractice": "Practice"
 }
