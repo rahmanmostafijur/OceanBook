@@ -121,6 +121,32 @@ Findings fixed: access chips overflowed narrow tiles; fixed-height rails and gri
 **Tests:** mobile 71, admin 40, design_system 25; analyzer `--fatal-infos` and formatter clean.
 **Deferred:** admin forms to author and edit question content (needs a ContentDoc editor; the importer is the planned bulk path), creating and editing papers and taxonomy in the admin UI (the APIs are ready), LaTeX rendering.
 
-## 4. Remaining work
+## 4. Remaining work (saved 2026-10-17)
 
-**M14 — QA:** full gates across backend (unit and integration on PostgreSQL 18 and Valkey), mobile, admin and the shared packages; accessibility pass (200 % Bangla text, tap targets, contrast, screen-reader labels) on the new screens; a security review of the new surfaces; Docker and CI check; documentation update. Open owner decisions: whether the reader/library backend is built before Phase 4, and whether to add the BDeBooks-inspired catalog additions before or after the QA gate.
+State: M1–M13 are done and pushed. Only M14 remains in Phase 2, plus the owner decisions and deferred items below.
+
+### M14 — QA gate (not started)
+- [ ] Run the full backend suite on PostgreSQL 18 and Valkey (about 35 minutes; it was last run in full before the M12 review fixes) and the Flutter gates in every workspace member (`mobile`, `admin`, `design_system`, `ob_core`, `ob_l10n`, `reader_core`).
+- [ ] Accessibility pass on the new screens: 200 % Bangla text, tap targets, contrast, screen-reader labels, reduced motion (library, book sheet, reader, home hero, study, question, admin question pages).
+- [ ] Security review of the whole Phase 2 surface (the question bank already had one; catalog and provenance have not been re-reviewed with the new subjects).
+- [ ] Docker build and CI check (`.github/workflows/backend.yml` and `flutter.yml`): confirm migrations 0005 and 0006 run in CI, the new tests are included, and the compose stack builds.
+- [ ] Documentation update: API reference for the new endpoints, `13`-style status file for Phase 2, toolchain notes (Android emulator setup in `docs/development/toolchain.md`).
+- [ ] Release-readiness: seed data plan for curricula and subjects (levels, boards and instruction media are seeded; curricula, subjects, chapters and topics are data to load).
+
+### Owner decisions needed
+1. Build the reader/library backend (chapter content, progress, continue reading, bookmarks) before Phase 4, or keep it in Phase 4? Default: keep in Phase 4. The library screen and reader UI currently run on sample data (`library_providers.dart`, `reader_screen.dart`).
+2. BDeBooks-inspired catalog additions (cached category counts, reading-time estimate, download counters, "report a problem with this file" queue): before or after M14? Default: after.
+3. Re-verify rights when a published question is edited (provenance is bound to the question, not its content)? Default: rely on independent approval.
+4. Question paper `access_level`: enforce on paper listings, or keep access question-level only?
+
+### Deferred from M12 and M13 (needs a decision or a later milestone)
+- Admin: forms to author and edit question content (needs a ContentDoc editor; bulk import in 08 §5 is the planned path), create and edit papers, and manage curricula, subjects, chapters and topics (the APIs exist; the admin UI is browse-only for these).
+- Bulk import (08 §5), saved questions (`/me/saved-questions`), the practice `check` endpoint, quizzes and exams (Phase 3).
+- LaTeX rendering of math (currently TeX source in a labelled chip) and image URLs for question images (alt text is shown until the media URL contract exists).
+- Entitlement events and projection: `entitled` questions, papers and books fail closed for everyone until they exist. When they land, move the access decision from the read session to the write session.
+- Earlier deferrals from M10/M11 still open: presigned upload, malware scan and preview generation (needs the S3 bucket decision); admin forms for editions, table of contents and usage rights; evidence upload for provenance.
+- Low-priority review notes: option locale can differ from stem locale in a question detail; `questions.deleted_at` is read but never written (no delete API); a paper's items are not checked against its question type or section; concurrent "set current curriculum" calls report a generic conflict message.
+
+### Local environment (not in git)
+- Docker Desktop must be running. `docker-compose.test.override.yml` (untracked) publishes Postgres on 5434 because other projects hold 5433; set `TEST_DATABASE_URL=postgresql+asyncpg://oceanbook:oceanbook@localhost:5434/postgres` and `TEST_REDIS_URL=redis://localhost:6379/15`.
+- Android emulator: AVD `oceanbook_pixel` in `D:\dev\avd` (set `ANDROID_AVD_HOME`), started with `emulator -avd oceanbook_pixel -gpu swiftshader_indirect`; the app reaches the API at `10.0.2.2:8000`. A demo user `demo@example.org` exists in the local compose database.
