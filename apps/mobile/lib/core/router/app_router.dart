@@ -13,6 +13,7 @@ import '../../features/books/presentation/explore_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/library/presentation/library_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/questions/presentation/question_screen.dart';
 import '../../features/questions/presentation/study_screen.dart';
 import '../../features/reader/presentation/reader_screen.dart';
 
@@ -91,7 +92,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: '/study', builder: (_, _) => const StudyScreen())],
+            routes: [
+              GoRoute(
+                path: '/study',
+                builder: (_, _) => const StudyScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'questions/:id',
+                    builder: (_, state) => QuestionScreen(questionId: state.pathParameters['id']!),
+                  ),
+                ],
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: '/library', builder: (_, _) => const LibraryScreen())],

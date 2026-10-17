@@ -934,4 +934,54 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get homeQuickPractice => 'Practice';
+
+  @override
+  String get filterSubject => 'Subject';
+
+  @override
+  String get filterAny => 'Any';
+
+  @override
+  String get questionTypeMcqSingle => 'Multiple choice';
+
+  @override
+  String get questionTypeMcqMulti => 'Multiple answers';
+
+  @override
+  String get questionTypeTrueFalse => 'True or false';
+
+  @override
+  String get questionTypeShortAnswer => 'Short answer';
+
+  @override
+  String get questionTypeCreative => 'Creative';
+
+  @override
+  String get questionTypeFillBlank => 'Fill in the blank';
+
+  @override
+  String get questionTypeMatching => 'Matching';
+
+  @override
+  String questionDifficultyLevel(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String get questionAnswerSignIn => 'Sign in to see answers';
+
+  @override
+  String get questionAnswerPremium => 'Answers are part of Premium';
+
+  @override
+  String get questionDetailTitle => 'Question';
+
+  @override
+  String get studyChooseSubject => 'Choose a subject';
+
+  @override
+  String get questionOptionCorrectMark => 'Correct';
+
+  @override
+  String get questionModelAnswer => 'Model answer';
 }

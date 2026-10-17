@@ -926,4 +926,54 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get homeQuickPractice => 'অনুশীলন';
+
+  @override
+  String get filterSubject => 'বিষয়';
+
+  @override
+  String get filterAny => 'যেকোনো';
+
+  @override
+  String get questionTypeMcqSingle => 'বহুনির্বাচনী';
+
+  @override
+  String get questionTypeMcqMulti => 'একাধিক উত্তর';
+
+  @override
+  String get questionTypeTrueFalse => 'সত্য বা মিথ্যা';
+
+  @override
+  String get questionTypeShortAnswer => 'সংক্ষিপ্ত প্রশ্ন';
+
+  @override
+  String get questionTypeCreative => 'সৃজনশীল';
+
+  @override
+  String get questionTypeFillBlank => 'শূন্যস্থান পূরণ';
+
+  @override
+  String get questionTypeMatching => 'মিলকরণ';
+
+  @override
+  String questionDifficultyLevel(int level) {
+    return 'স্তর $level';
+  }
+
+  @override
+  String get questionAnswerSignIn => 'উত্তর দেখতে সাইন ইন করুন';
+
+  @override
+  String get questionAnswerPremium => 'উত্তর প্রিমিয়াম সদস্যদের জন্য';
+
+  @override
+  String get questionDetailTitle => 'প্রশ্ন';
+
+  @override
+  String get studyChooseSubject => 'একটি বিষয় বেছে নিন';
+
+  @override
+  String get questionOptionCorrectMark => 'সঠিক';
+
+  @override
+  String get questionModelAnswer => 'আদর্শ উত্তর';
 }

@@ -1843,6 +1843,102 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Practice'**
   String get homeQuickPractice;
+
+  /// No description provided for @filterSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get filterSubject;
+
+  /// No description provided for @filterAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get filterAny;
+
+  /// No description provided for @questionTypeMcqSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple choice'**
+  String get questionTypeMcqSingle;
+
+  /// No description provided for @questionTypeMcqMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple answers'**
+  String get questionTypeMcqMulti;
+
+  /// No description provided for @questionTypeTrueFalse.
+  ///
+  /// In en, this message translates to:
+  /// **'True or false'**
+  String get questionTypeTrueFalse;
+
+  /// No description provided for @questionTypeShortAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Short answer'**
+  String get questionTypeShortAnswer;
+
+  /// No description provided for @questionTypeCreative.
+  ///
+  /// In en, this message translates to:
+  /// **'Creative'**
+  String get questionTypeCreative;
+
+  /// No description provided for @questionTypeFillBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the blank'**
+  String get questionTypeFillBlank;
+
+  /// No description provided for @questionTypeMatching.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching'**
+  String get questionTypeMatching;
+
+  /// No description provided for @questionDifficultyLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String questionDifficultyLevel(int level);
+
+  /// No description provided for @questionAnswerSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to see answers'**
+  String get questionAnswerSignIn;
+
+  /// No description provided for @questionAnswerPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Answers are part of Premium'**
+  String get questionAnswerPremium;
+
+  /// No description provided for @questionDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get questionDetailTitle;
+
+  /// No description provided for @studyChooseSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a subject'**
+  String get studyChooseSubject;
+
+  /// No description provided for @questionOptionCorrectMark.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get questionOptionCorrectMark;
+
+  /// No description provided for @questionModelAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Model answer'**
+  String get questionModelAnswer;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

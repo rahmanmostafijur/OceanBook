@@ -10,3 +10,5 @@ export 'src/auth/auth_models.dart';
 export 'src/catalog/catalog_models.dart';
 export 'src/catalog/catalog_repository.dart';
 export 'src/localized_text.dart';
+export 'src/questions/question_models.dart';
+export 'src/questions/question_repository.dart';

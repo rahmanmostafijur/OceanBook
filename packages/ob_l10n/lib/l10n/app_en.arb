@@ -378,5 +378,28 @@
   "homeHeroCta": "Start exploring",
   "homeQuickBooks": "Books",
   "homeQuickPapers": "Past papers",
-  "homeQuickPractice": "Practice"
+  "homeQuickPractice": "Practice",
+  "filterSubject": "Subject",
+  "filterAny": "Any",
+  "questionTypeMcqSingle": "Multiple choice",
+  "questionTypeMcqMulti": "Multiple answers",
+  "questionTypeTrueFalse": "True or false",
+  "questionTypeShortAnswer": "Short answer",
+  "questionTypeCreative": "Creative",
+  "questionTypeFillBlank": "Fill in the blank",
+  "questionTypeMatching": "Matching",
+  "questionDifficultyLevel": "Level {level}",
+  "@questionDifficultyLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "questionAnswerSignIn": "Sign in to see answers",
+  "questionAnswerPremium": "Answers are part of Premium",
+  "questionDetailTitle": "Question",
+  "studyChooseSubject": "Choose a subject",
+  "questionOptionCorrectMark": "Correct",
+  "questionModelAnswer": "Model answer"
 }

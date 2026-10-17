@@ -291,5 +291,21 @@
   "homeHeroCta": "খোঁজা শুরু করুন",
   "homeQuickBooks": "বই",
   "homeQuickPapers": "বিগত সালের প্রশ্ন",
-  "homeQuickPractice": "অনুশীলন"
+  "homeQuickPractice": "অনুশীলন",
+  "filterSubject": "বিষয়",
+  "filterAny": "যেকোনো",
+  "questionTypeMcqSingle": "বহুনির্বাচনী",
+  "questionTypeMcqMulti": "একাধিক উত্তর",
+  "questionTypeTrueFalse": "সত্য বা মিথ্যা",
+  "questionTypeShortAnswer": "সংক্ষিপ্ত প্রশ্ন",
+  "questionTypeCreative": "সৃজনশীল",
+  "questionTypeFillBlank": "শূন্যস্থান পূরণ",
+  "questionTypeMatching": "মিলকরণ",
+  "questionDifficultyLevel": "স্তর {level}",
+  "questionAnswerSignIn": "উত্তর দেখতে সাইন ইন করুন",
+  "questionAnswerPremium": "উত্তর প্রিমিয়াম সদস্যদের জন্য",
+  "questionDetailTitle": "প্রশ্ন",
+  "studyChooseSubject": "একটি বিষয় বেছে নিন",
+  "questionOptionCorrectMark": "সঠিক",
+  "questionModelAnswer": "আদর্শ উত্তর"
 }
