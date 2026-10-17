@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.academics import api as academics_api
 from app.catalog.api import admin as catalog_admin
 from app.catalog.api import public as catalog_public
 from app.core.config import Environment, Settings, get_settings
@@ -96,5 +97,7 @@ def create_app(
     api.include_router(catalog_public.router)
     api.include_router(catalog_admin.router)
     api.include_router(provenance_api.router)
+    api.include_router(academics_api.admin)
+    api.include_router(academics_api.public)
     app.include_router(api)
     return app

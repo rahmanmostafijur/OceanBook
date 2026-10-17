@@ -421,6 +421,20 @@ class BookTag(Base):
     )
 
 
+class BookSubject(Base):
+    """Which academic subjects a (text)book serves, so the library can be browsed by subject."""
+
+    __tablename__ = "book_subjects"
+    __table_args__ = (Index("ix_book_subjects_subject_id", "subject_id"),)
+
+    book_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("books.id", ondelete="CASCADE"), primary_key=True
+    )
+    subject_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("subjects.id", ondelete="RESTRICT"), primary_key=True
+    )
+
+
 class BookFile(UUIDPrimaryKey, CreatedAt, Base):
     """An EPUB/PDF of an edition. Preview files are separate files, so a preview grant can never reach
     full content (05 §4)."""

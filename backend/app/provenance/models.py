@@ -73,7 +73,7 @@ class ContentSource(UUIDPrimaryKey, CreatedAt, Base):
     publisher_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("publishers.id", ondelete="SET NULL")
     )
-    # board_id (FK to boards) is added by the question-bank migration together with the boards table.
+    board_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, ForeignKey("boards.id", ondelete="SET NULL"))
     website_url: Mapped[str | None] = mapped_column(Text)
     contact: Mapped[str | None] = mapped_column(Text)
     notes: Mapped[str | None] = mapped_column(Text)

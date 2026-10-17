@@ -54,6 +54,10 @@ TRUNCATE = (
     "tags",
     "content_sources",
     "media_assets",
+    # academics (levels, boards and instruction media are seeded; tests only add keys prefixed `test_`)
+    "subjects",
+    "curricula",
+    "academic_groups",
 )
 
 _SIGNING_KEY_PEM = (

@@ -29,6 +29,10 @@ async def _clean_database(resources: Resources, seeded_settings: list[dict[str, 
         await conn.execute(text(f"TRUNCATE {', '.join(TRUNCATE)} RESTART IDENTITY CASCADE"))
         # Tests may create custom roles; seeded system roles are kept.
         await conn.execute(text("DELETE FROM roles WHERE NOT is_system"))
+        for table in ("boards", "education_levels", "instruction_media"):
+            await conn.execute(
+                text(f"DELETE FROM {table} WHERE key LIKE 'test!_%' ESCAPE '!'")  # noqa: S608 - constant table names
+            )
         await conn.execute(text("DELETE FROM app_settings"))
         for row in seeded_settings:
             await conn.execute(

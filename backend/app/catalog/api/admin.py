@@ -20,6 +20,8 @@ from app.catalog.schemas import (
     BookAccessIn,
     BookCreateIn,
     BookPatch,
+    BookSubjectsIn,
+    BookSubjectsOut,
     CategoryIn,
     CategoryPatch,
     EditionIn,
@@ -266,6 +268,27 @@ async def admin_change_book_access(
 ) -> Envelope[AdminBookOut]:
     book = await BookService(session, resources, client).change_access(actor, book_id, body)
     return ok(await admin_book_view(session, book, territory=_territory(resources)))
+
+
+@router.get("/books/{book_id}/subjects", response_model=Envelope[BookSubjectsOut])
+async def admin_book_subjects(
+    book_id: uuid.UUID, _: CanView, session: WriteSession, resources: ResourcesDep, client: ClientDep
+) -> Envelope[BookSubjectsOut]:
+    ids = await BookService(session, resources, client).subject_ids(book_id)
+    return ok(BookSubjectsOut(subject_ids=ids))
+
+
+@router.put("/books/{book_id}/subjects", response_model=Envelope[BookSubjectsOut])
+async def admin_set_book_subjects(
+    book_id: uuid.UUID,
+    body: BookSubjectsIn,
+    actor: CanEditBooks,
+    session: WriteSession,
+    resources: ResourcesDep,
+    client: ClientDep,
+) -> Envelope[BookSubjectsOut]:
+    ids = await BookService(session, resources, client).set_subjects(actor, book_id, body.subject_ids)
+    return ok(BookSubjectsOut(subject_ids=ids))
 
 
 @router.put("/books/{book_id}/translations/{locale}", response_model=Envelope[TranslationOut])

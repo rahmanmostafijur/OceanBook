@@ -25,6 +25,12 @@ class Permission(StrEnum):
     RIGHTS_MANAGE = "rights.manage"
     PROVENANCE_EDIT = "provenance.edit"
     PROVENANCE_VERIFY = "provenance.verify"
+    # Phase 2: academics and question bank (migration 0005)
+    ACADEMICS_MANAGE = "academics.manage"
+    QUESTIONS_VIEW = "questions.view"
+    QUESTIONS_EDIT = "questions.edit"
+    QUESTIONS_REVIEW = "questions.review"
+    QUESTIONS_PUBLISH = "questions.publish"
 
 
 PERMISSION_DESCRIPTIONS: dict[Permission, str] = {
@@ -42,6 +48,11 @@ PERMISSION_DESCRIPTIONS: dict[Permission, str] = {
     Permission.RIGHTS_MANAGE: "Edit edition usage rights (preview, online reading, download, AI processing)",
     Permission.PROVENANCE_EDIT: "Register content sources and record provenance",
     Permission.PROVENANCE_VERIFY: "Verify or reject provenance recorded by someone else",
+    Permission.ACADEMICS_MANAGE: "Manage curricula, levels, boards, groups, subjects, chapters and topics",
+    Permission.QUESTIONS_VIEW: "View questions, stimuli, papers and reports in the admin console",
+    Permission.QUESTIONS_EDIT: "Create and edit questions, stimuli and question papers; submit for review",
+    Permission.QUESTIONS_REVIEW: "Approve, reject or request changes on questions written by others",
+    Permission.QUESTIONS_PUBLISH: "Publish and archive questions and question papers; resolve reports",
 }
 
 _CATALOG = frozenset(
@@ -54,6 +65,11 @@ _CATALOG = frozenset(
         Permission.RIGHTS_MANAGE,
         Permission.PROVENANCE_EDIT,
         Permission.PROVENANCE_VERIFY,
+        Permission.ACADEMICS_MANAGE,
+        Permission.QUESTIONS_VIEW,
+        Permission.QUESTIONS_EDIT,
+        Permission.QUESTIONS_REVIEW,
+        Permission.QUESTIONS_PUBLISH,
     }
 )
 
@@ -79,10 +95,24 @@ ROLE_NAMES: dict[SystemRole, str] = {
 ROLE_PERMISSIONS: dict[SystemRole, frozenset[Permission]] = {
     SystemRole.STUDENT: frozenset(),
     SystemRole.CONTENT_EDITOR: frozenset(
-        {Permission.CATALOG_VIEW, Permission.CATALOG_EDIT, Permission.BOOKS_EDIT, Permission.PROVENANCE_EDIT}
+        {
+            Permission.CATALOG_VIEW,
+            Permission.CATALOG_EDIT,
+            Permission.BOOKS_EDIT,
+            Permission.PROVENANCE_EDIT,
+            Permission.QUESTIONS_VIEW,
+            Permission.QUESTIONS_EDIT,
+        }
     ),
     SystemRole.REVIEWER: frozenset(
-        {Permission.CATALOG_VIEW, Permission.BOOKS_PUBLISH, Permission.PROVENANCE_VERIFY}
+        {
+            Permission.CATALOG_VIEW,
+            Permission.BOOKS_PUBLISH,
+            Permission.PROVENANCE_VERIFY,
+            Permission.QUESTIONS_VIEW,
+            Permission.QUESTIONS_REVIEW,
+            Permission.QUESTIONS_PUBLISH,
+        }
     ),
     SystemRole.ADMIN: frozenset(
         {

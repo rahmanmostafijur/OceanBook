@@ -9,12 +9,14 @@ from typing import Any
 from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.academics.models import Subject
 from app.catalog.models import (
     Author,
     Book,
     BookCategory,
     BookContributor,
     BookEdition,
+    BookSubject,
     BookTag,
     Category,
     EditionPublisher,
@@ -72,6 +74,14 @@ async def replace_tags(session: AsyncSession, book_id: uuid.UUID, tag_ids: Seque
     await _require_all(session, Tag, tag_ids, "tag_ids")
     await session.execute(delete(BookTag).where(BookTag.book_id == book_id))
     session.add_all(BookTag(book_id=book_id, tag_id=t) for t in dict.fromkeys(tag_ids))
+
+
+async def replace_subjects(
+    session: AsyncSession, book_id: uuid.UUID, subject_ids: Sequence[uuid.UUID]
+) -> None:
+    await _require_all(session, Subject, subject_ids, "subject_ids")
+    await session.execute(delete(BookSubject).where(BookSubject.book_id == book_id))
+    session.add_all(BookSubject(book_id=book_id, subject_id=s) for s in dict.fromkeys(subject_ids))
 
 
 async def replace_publishers(

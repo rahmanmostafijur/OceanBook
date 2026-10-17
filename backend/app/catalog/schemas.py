@@ -186,6 +186,14 @@ class BookAccessIn(StrictModel):
     reason: Reason
 
 
+class BookSubjectsIn(StrictModel):
+    subject_ids: Annotated[list[uuid.UUID], Field(max_length=50)]
+
+
+class BookSubjectsOut(BaseModel):
+    subject_ids: list[uuid.UUID]
+
+
 class ReasonIn(StrictModel):
     reason: Reason
 

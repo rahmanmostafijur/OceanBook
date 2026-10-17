@@ -23,6 +23,7 @@ from app.catalog.models import (
     Book,
     BookEdition,
     BookStatus,
+    BookSubject,
     BookTranslation,
     EditionStatus,
     TranslationStatus,
@@ -33,6 +34,7 @@ from app.catalog.services.common import (
     get_book,
     replace_categories,
     replace_contributors,
+    replace_subjects,
     replace_tags,
 )
 from app.catalog.services.taxonomy import like_pattern, slug_conflict
@@ -211,6 +213,32 @@ class BookService:
         await self.session.commit()
         await self.session.refresh(book)
         return book
+
+    async def subject_ids(self, book_id: uuid.UUID) -> list[uuid.UUID]:
+        await get_book(self.session, book_id)
+        rows = await self.session.execute(
+            select(BookSubject.subject_id)
+            .where(BookSubject.book_id == book_id)
+            .order_by(BookSubject.subject_id)
+        )
+        return list(rows.scalars())
+
+    async def set_subjects(
+        self, actor: Principal, book_id: uuid.UUID, subject_ids: Sequence[uuid.UUID]
+    ) -> list[uuid.UUID]:
+        book = await get_book(self.session, book_id, lock=True)
+        await replace_subjects(self.session, book.id, subject_ids)
+        audit(
+            self.session,
+            actor,
+            self.client,
+            "book.subjects_changed",
+            "book",
+            book.id,
+            after={"subject_ids": sorted(str(s) for s in set(subject_ids))},
+        )
+        await self.session.commit()
+        return await self.subject_ids(book_id)
 
     async def put_translation(
         self, actor: Principal, book_id: uuid.UUID, locale: str, body: TranslationIn

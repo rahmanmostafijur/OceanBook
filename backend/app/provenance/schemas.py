@@ -33,6 +33,7 @@ class ContentSourceIn(StrictModel):
     kind: SourceKind
     name: LocalizedText
     publisher_id: uuid.UUID | None = None
+    board_id: uuid.UUID | None = None
     website_url: HttpUrl | None = None
     contact: Reference | None = None
     notes: Note | None = None
@@ -41,6 +42,7 @@ class ContentSourceIn(StrictModel):
 class ContentSourcePatch(StrictModel):
     name: LocalizedText | None = None
     publisher_id: uuid.UUID | None = None
+    board_id: uuid.UUID | None = None
     website_url: HttpUrl | None = None
     contact: Reference | None = None
     notes: Note | None = None
@@ -105,6 +107,7 @@ class ContentSourceOut(BaseModel):
     kind: str
     name: dict[str, str]
     publisher_id: uuid.UUID | None
+    board_id: uuid.UUID | None
     website_url: str | None
     contact: str | None
     notes: str | None

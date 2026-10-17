@@ -258,6 +258,13 @@ PUBLIC_ROUTES = {
     ("GET", "/api/v1/authors/{slug}"),
     ("GET", "/api/v1/publishers"),
     ("GET", "/api/v1/publishers/{slug}"),
+    # Public academic taxonomy (curriculum tree)
+    ("GET", "/api/v1/academics/levels"),
+    ("GET", "/api/v1/academics/boards"),
+    ("GET", "/api/v1/academics/groups"),
+    ("GET", "/api/v1/academics/instruction-media"),
+    ("GET", "/api/v1/academics/subjects"),
+    ("GET", "/api/v1/academics/subjects/{subject_id}/chapters"),
 }
 
 

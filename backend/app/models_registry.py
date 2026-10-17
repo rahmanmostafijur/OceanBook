@@ -1,5 +1,6 @@
 """Imports every ORM model so Alembic sees the complete metadata. Add new modules here."""
 
+from app.academics import models as academics_models  # noqa: F401
 from app.catalog import models as catalog_models  # noqa: F401
 from app.core.db import Base
 from app.entitlements import models as entitlement_models  # noqa: F401

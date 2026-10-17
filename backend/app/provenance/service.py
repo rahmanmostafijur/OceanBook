@@ -19,6 +19,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.academics.models import Board
 from app.catalog.models import BookEdition, Publisher
 from app.core.errors import Conflict, ErrorCode, Forbidden, NotFound, ValidationFailed
 from app.core.request_info import ClientInfo
@@ -97,6 +98,7 @@ class ProvenanceService:
     async def create_source(self, actor: Principal, body: ContentSourceIn) -> ContentSource:
         values = _values(body)
         await self._check_publisher(values.get("publisher_id"))
+        await self._check_board(values.get("board_id"))
         source = ContentSource(**values)
         self.session.add(source)
         await self.session.flush()
@@ -114,6 +116,8 @@ class ProvenanceService:
         values = _values(body)
         if "publisher_id" in values:
             await self._check_publisher(values["publisher_id"])
+        if "board_id" in values:
+            await self._check_board(values["board_id"])
         for name, value in values.items():
             setattr(source, name, value)
         self._audit(
@@ -289,6 +293,10 @@ class ProvenanceService:
     async def _check_publisher(self, publisher_id: uuid.UUID | None) -> None:
         if publisher_id is not None and await self.session.get(Publisher, publisher_id) is None:
             raise ValidationFailed("Unknown publisher", field="publisher_id")
+
+    async def _check_board(self, board_id: uuid.UUID | None) -> None:
+        if board_id is not None and await self.session.get(Board, board_id) is None:
+            raise ValidationFailed("Unknown board", field="board_id")
 
     async def _check_refs(self, values: dict[str, Any]) -> None:
         if "source_id" in values:
