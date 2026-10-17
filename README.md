@@ -18,7 +18,7 @@ Built phase by phase, each with an owner-defined gate.
 |-------|-------|-------|
 | 0 | Architecture and design | Approved 2026-10-01 ([revisions](docs/architecture/12-phase0-revisions.md)) |
 | 1 | Backend foundation and authentication | Complete ([status](docs/architecture/13-phase1-status.md)) |
-| 2 | Flutter foundation, book catalog, admin UI, question bank | In progress: M1–M11 done, M12–M14 remaining ([plan](docs/architecture/14-phase2-plan.md)) |
+| 2 | Flutter foundation, book catalog, admin UI, question bank | In progress: M1–M13 done (catalog, question bank, browsing), M14 (QA) remaining ([plan](docs/architecture/14-phase2-plan.md)) |
 
 ## Repository layout
 
