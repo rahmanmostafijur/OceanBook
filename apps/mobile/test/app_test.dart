@@ -81,7 +81,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(repo.calls, ['password:nusrat@example.org']);
-    expect(find.text('Your library is empty'), findsOneWidget);
+    expect(find.byType(SearchBar), findsOneWidget);
   });
 
   testWidgets('MFA users get no session until the second factor passes', (tester) async {
@@ -123,7 +123,7 @@ void main() {
     await pumpApp(tester, restored: testUser, events: events);
     await tester.tap(find.text('Library'));
     await tester.pumpAndSettle();
-    expect(find.text('Your library is empty'), findsOneWidget);
+    expect(find.byType(SearchBar), findsOneWidget);
     events.emit(SessionEvent.expired);
     await tester.pumpAndSettle();
     expect(find.text('Welcome to OceanBook'), findsOneWidget);

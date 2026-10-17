@@ -829,4 +829,83 @@ class ObLocalizationsBn extends ObLocalizations {
   @override
   String get adminChangeRightsWarning =>
       'সঙ্গে সঙ্গে কার্যকর হবে এবং যে কনটেন্টের স্বত্ব আর নিশ্চিত নয় তা প্রকাশ থেকে সরে যাবে।';
+
+  @override
+  String get librarySearchHint => 'আপনার লাইব্রেরিতে খুঁজুন';
+
+  @override
+  String get libraryCategoryAll => 'সব';
+
+  @override
+  String get libraryCategoriesLabel => 'বিভাগ';
+
+  @override
+  String libraryProgress(int percent) {
+    return '$percent% পড়া হয়েছে';
+  }
+
+  @override
+  String get libraryNoMatches => 'আপনার খোঁজের সাথে কোনো বই মেলেনি';
+
+  @override
+  String get libraryNoMatchesHint => 'অন্য শব্দ লিখুন বা আরেকটি বিভাগ বেছে নিন।';
+
+  @override
+  String get bookSynopsis => 'সারসংক্ষেপ';
+
+  @override
+  String get bookReadMore => 'আরও পড়ুন';
+
+  @override
+  String get bookReadLess => 'কম দেখুন';
+
+  @override
+  String bookRating(String rating) {
+    return '৫-এর মধ্যে $rating রেটিং';
+  }
+
+  @override
+  String get bookStartReading => 'পড়া শুরু করুন';
+
+  @override
+  String get bookContinueReading => 'পড়া চালিয়ে যান';
+
+  @override
+  String get readerSettings => 'পড়ার সেটিংস';
+
+  @override
+  String get readerTextSize => 'লেখার আকার';
+
+  @override
+  String get readerSmallerText => 'ছোট লেখা';
+
+  @override
+  String get readerLargerText => 'বড় লেখা';
+
+  @override
+  String get readerTheme => 'থিম';
+
+  @override
+  String get readerThemeDay => 'দিন';
+
+  @override
+  String get readerThemeNight => 'রাত';
+
+  @override
+  String get readerThemeSepia => 'সেপিয়া';
+
+  @override
+  String get readerAlignment => 'বিন্যাস';
+
+  @override
+  String get readerAlignStart => 'বামে';
+
+  @override
+  String get readerAlignJustify => 'সমান';
+
+  @override
+  String get readerClose => 'পাঠক বন্ধ করুন';
+
+  @override
+  String get readerPreviewNotice => 'নমুনা লেখা। পড়ার সুবিধা চালু হলে আসল বই এখানে খুলবে।';
 }

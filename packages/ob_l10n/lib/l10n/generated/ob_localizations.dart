@@ -1657,6 +1657,156 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Takes effect at once and unpublishes content that is no longer cleared.'**
   String get adminChangeRightsWarning;
+
+  /// No description provided for @librarySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your library'**
+  String get librarySearchHint;
+
+  /// No description provided for @libraryCategoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get libraryCategoryAll;
+
+  /// No description provided for @libraryCategoriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get libraryCategoriesLabel;
+
+  /// No description provided for @libraryProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% read'**
+  String libraryProgress(int percent);
+
+  /// No description provided for @libraryNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No books match your search'**
+  String get libraryNoMatches;
+
+  /// No description provided for @libraryNoMatchesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different word or pick another category.'**
+  String get libraryNoMatchesHint;
+
+  /// No description provided for @bookSynopsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Synopsis'**
+  String get bookSynopsis;
+
+  /// No description provided for @bookReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get bookReadMore;
+
+  /// No description provided for @bookReadLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Read less'**
+  String get bookReadLess;
+
+  /// No description provided for @bookRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rated {rating} out of 5'**
+  String bookRating(String rating);
+
+  /// No description provided for @bookStartReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reading'**
+  String get bookStartReading;
+
+  /// No description provided for @bookContinueReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue reading'**
+  String get bookContinueReading;
+
+  /// No description provided for @readerSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading settings'**
+  String get readerSettings;
+
+  /// No description provided for @readerTextSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Text size'**
+  String get readerTextSize;
+
+  /// No description provided for @readerSmallerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Smaller text'**
+  String get readerSmallerText;
+
+  /// No description provided for @readerLargerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger text'**
+  String get readerLargerText;
+
+  /// No description provided for @readerTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get readerTheme;
+
+  /// No description provided for @readerThemeDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get readerThemeDay;
+
+  /// No description provided for @readerThemeNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get readerThemeNight;
+
+  /// No description provided for @readerThemeSepia.
+  ///
+  /// In en, this message translates to:
+  /// **'Sepia'**
+  String get readerThemeSepia;
+
+  /// No description provided for @readerAlignment.
+  ///
+  /// In en, this message translates to:
+  /// **'Alignment'**
+  String get readerAlignment;
+
+  /// No description provided for @readerAlignStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get readerAlignStart;
+
+  /// No description provided for @readerAlignJustify.
+  ///
+  /// In en, this message translates to:
+  /// **'Justified'**
+  String get readerAlignJustify;
+
+  /// No description provided for @readerClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close reader'**
+  String get readerClose;
+
+  /// No description provided for @readerPreviewNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample text. Real books open here once reading ships.'**
+  String get readerPreviewNotice;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

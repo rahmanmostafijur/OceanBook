@@ -333,5 +333,44 @@
   "adminTerritories": "Territories",
   "adminTerritoriesHint": "Country codes such as BD, or * for worldwide",
   "adminLicenseReference": "Licence reference",
-  "adminChangeRightsWarning": "Takes effect at once and unpublishes content that is no longer cleared."
+  "adminChangeRightsWarning": "Takes effect at once and unpublishes content that is no longer cleared.",
+  "librarySearchHint": "Search your library",
+  "libraryCategoryAll": "All",
+  "libraryCategoriesLabel": "Categories",
+  "libraryProgress": "{percent}% read",
+  "@libraryProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryNoMatches": "No books match your search",
+  "libraryNoMatchesHint": "Try a different word or pick another category.",
+  "bookSynopsis": "Synopsis",
+  "bookReadMore": "Read more",
+  "bookReadLess": "Read less",
+  "bookRating": "Rated {rating} out of 5",
+  "@bookRating": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "bookStartReading": "Start reading",
+  "bookContinueReading": "Continue reading",
+  "readerSettings": "Reading settings",
+  "readerTextSize": "Text size",
+  "readerSmallerText": "Smaller text",
+  "readerLargerText": "Larger text",
+  "readerTheme": "Theme",
+  "readerThemeDay": "Day",
+  "readerThemeNight": "Night",
+  "readerThemeSepia": "Sepia",
+  "readerAlignment": "Alignment",
+  "readerAlignStart": "Left",
+  "readerAlignJustify": "Justified",
+  "readerClose": "Close reader",
+  "readerPreviewNotice": "Sample text. Real books open here once reading ships."
 }

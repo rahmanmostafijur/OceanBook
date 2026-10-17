@@ -14,6 +14,7 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/library/presentation/library_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/questions/presentation/study_screen.dart';
+import '../../features/reader/presentation/reader_screen.dart';
 
 /// Routes that persist data or need identity. Everything else is open to guests (owner decision).
 const signedInOnlyPrefixes = ['/library', '/profile'];
@@ -41,12 +42,15 @@ String? authRedirect({required AuthState? auth, required Uri location}) {
   return null;
 }
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier<int>(0);
   ref
     ..listen(authControllerProvider, (_, _) => refresh.value++)
     ..onDispose(refresh.dispose);
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     refreshListenable: refresh,
     redirect: (context, state) => authRedirect(auth: ref.read(authControllerProvider).value, location: state.uri),
@@ -56,6 +60,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => SignInScreen(from: state.uri.queryParameters['from']),
       ),
       GoRoute(path: '/sign-in/mfa', builder: (_, _) => const MfaScreen()),
+      // Full-screen, above the navigation shell. Under /library, so it is signed-in only.
+      GoRoute(
+        path: '/library/read/:id',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (_, state) => ReaderScreen(bookId: state.pathParameters['id']!),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => _AppShell(shell: shell),
         branches: [

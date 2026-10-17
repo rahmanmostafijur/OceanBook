@@ -837,4 +837,83 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get adminChangeRightsWarning => 'Takes effect at once and unpublishes content that is no longer cleared.';
+
+  @override
+  String get librarySearchHint => 'Search your library';
+
+  @override
+  String get libraryCategoryAll => 'All';
+
+  @override
+  String get libraryCategoriesLabel => 'Categories';
+
+  @override
+  String libraryProgress(int percent) {
+    return '$percent% read';
+  }
+
+  @override
+  String get libraryNoMatches => 'No books match your search';
+
+  @override
+  String get libraryNoMatchesHint => 'Try a different word or pick another category.';
+
+  @override
+  String get bookSynopsis => 'Synopsis';
+
+  @override
+  String get bookReadMore => 'Read more';
+
+  @override
+  String get bookReadLess => 'Read less';
+
+  @override
+  String bookRating(String rating) {
+    return 'Rated $rating out of 5';
+  }
+
+  @override
+  String get bookStartReading => 'Start reading';
+
+  @override
+  String get bookContinueReading => 'Continue reading';
+
+  @override
+  String get readerSettings => 'Reading settings';
+
+  @override
+  String get readerTextSize => 'Text size';
+
+  @override
+  String get readerSmallerText => 'Smaller text';
+
+  @override
+  String get readerLargerText => 'Larger text';
+
+  @override
+  String get readerTheme => 'Theme';
+
+  @override
+  String get readerThemeDay => 'Day';
+
+  @override
+  String get readerThemeNight => 'Night';
+
+  @override
+  String get readerThemeSepia => 'Sepia';
+
+  @override
+  String get readerAlignment => 'Alignment';
+
+  @override
+  String get readerAlignStart => 'Left';
+
+  @override
+  String get readerAlignJustify => 'Justified';
+
+  @override
+  String get readerClose => 'Close reader';
+
+  @override
+  String get readerPreviewNotice => 'Sample text. Real books open here once reading ships.';
 }
