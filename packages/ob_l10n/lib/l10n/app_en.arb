@@ -401,5 +401,38 @@
   "questionDetailTitle": "Question",
   "studyChooseSubject": "Choose a subject",
   "questionOptionCorrectMark": "Correct",
-  "questionModelAnswer": "Model answer"
+  "questionModelAnswer": "Model answer",
+  "adminStatusApproved": "Approved",
+  "adminStatusChangesRequested": "Changes requested",
+  "adminActionApprove": "Approve",
+  "adminActionRestore": "Restore",
+  "adminNeedsReview": "Needs review",
+  "adminColumnStem": "Question",
+  "adminColumnType": "Type",
+  "adminColumnMarks": "Marks",
+  "adminColumnExam": "Exam",
+  "adminColumnBoards": "Boards",
+  "adminColumnQuestions": "Questions",
+  "adminQuestionIssues": "To fix before it can be submitted",
+  "adminPendingEdit": "An edit is in progress; the published version stays live.",
+  "adminAcknowledgeDuplicates": "Publish anyway (duplicate acknowledged)",
+  "adminGateNoIndependentApproval": "Needs approval from someone who did not edit it",
+  "adminGateDuplicate": "Looks like a duplicate of an existing question",
+  "adminGateNoItems": "The paper has no questions",
+  "adminGateItemsNotPublished": "Some questions in the paper are not published",
+  "adminExamBoardFinal": "Board exam",
+  "adminExamTest": "Test exam",
+  "adminExamPreTest": "Pre-test",
+  "adminExamModel": "Model test",
+  "adminExamAdmission": "Admission",
+  "adminQuestionVersion": "Version {version}",
+  "@adminQuestionVersion": {
+    "placeholders": {
+      "version": {
+        "type": "int"
+      }
+    }
+  },
+  "adminNoPapers": "No question papers yet",
+  "adminNoSubjects": "No subjects yet"
 }

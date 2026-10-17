@@ -984,4 +984,84 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get questionModelAnswer => 'Model answer';
+
+  @override
+  String get adminStatusApproved => 'Approved';
+
+  @override
+  String get adminStatusChangesRequested => 'Changes requested';
+
+  @override
+  String get adminActionApprove => 'Approve';
+
+  @override
+  String get adminActionRestore => 'Restore';
+
+  @override
+  String get adminNeedsReview => 'Needs review';
+
+  @override
+  String get adminColumnStem => 'Question';
+
+  @override
+  String get adminColumnType => 'Type';
+
+  @override
+  String get adminColumnMarks => 'Marks';
+
+  @override
+  String get adminColumnExam => 'Exam';
+
+  @override
+  String get adminColumnBoards => 'Boards';
+
+  @override
+  String get adminColumnQuestions => 'Questions';
+
+  @override
+  String get adminQuestionIssues => 'To fix before it can be submitted';
+
+  @override
+  String get adminPendingEdit => 'An edit is in progress; the published version stays live.';
+
+  @override
+  String get adminAcknowledgeDuplicates => 'Publish anyway (duplicate acknowledged)';
+
+  @override
+  String get adminGateNoIndependentApproval => 'Needs approval from someone who did not edit it';
+
+  @override
+  String get adminGateDuplicate => 'Looks like a duplicate of an existing question';
+
+  @override
+  String get adminGateNoItems => 'The paper has no questions';
+
+  @override
+  String get adminGateItemsNotPublished => 'Some questions in the paper are not published';
+
+  @override
+  String get adminExamBoardFinal => 'Board exam';
+
+  @override
+  String get adminExamTest => 'Test exam';
+
+  @override
+  String get adminExamPreTest => 'Pre-test';
+
+  @override
+  String get adminExamModel => 'Model test';
+
+  @override
+  String get adminExamAdmission => 'Admission';
+
+  @override
+  String adminQuestionVersion(int version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get adminNoPapers => 'No question papers yet';
+
+  @override
+  String get adminNoSubjects => 'No subjects yet';
 }

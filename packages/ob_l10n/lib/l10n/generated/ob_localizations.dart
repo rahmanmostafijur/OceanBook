@@ -1939,6 +1939,162 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Model answer'**
   String get questionModelAnswer;
+
+  /// No description provided for @adminStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get adminStatusApproved;
+
+  /// No description provided for @adminStatusChangesRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes requested'**
+  String get adminStatusChangesRequested;
+
+  /// No description provided for @adminActionApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get adminActionApprove;
+
+  /// No description provided for @adminActionRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get adminActionRestore;
+
+  /// No description provided for @adminNeedsReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs review'**
+  String get adminNeedsReview;
+
+  /// No description provided for @adminColumnStem.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get adminColumnStem;
+
+  /// No description provided for @adminColumnType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get adminColumnType;
+
+  /// No description provided for @adminColumnMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Marks'**
+  String get adminColumnMarks;
+
+  /// No description provided for @adminColumnExam.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam'**
+  String get adminColumnExam;
+
+  /// No description provided for @adminColumnBoards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get adminColumnBoards;
+
+  /// No description provided for @adminColumnQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get adminColumnQuestions;
+
+  /// No description provided for @adminQuestionIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'To fix before it can be submitted'**
+  String get adminQuestionIssues;
+
+  /// No description provided for @adminPendingEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'An edit is in progress; the published version stays live.'**
+  String get adminPendingEdit;
+
+  /// No description provided for @adminAcknowledgeDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish anyway (duplicate acknowledged)'**
+  String get adminAcknowledgeDuplicates;
+
+  /// No description provided for @adminGateNoIndependentApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs approval from someone who did not edit it'**
+  String get adminGateNoIndependentApproval;
+
+  /// No description provided for @adminGateDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like a duplicate of an existing question'**
+  String get adminGateDuplicate;
+
+  /// No description provided for @adminGateNoItems.
+  ///
+  /// In en, this message translates to:
+  /// **'The paper has no questions'**
+  String get adminGateNoItems;
+
+  /// No description provided for @adminGateItemsNotPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Some questions in the paper are not published'**
+  String get adminGateItemsNotPublished;
+
+  /// No description provided for @adminExamBoardFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Board exam'**
+  String get adminExamBoardFinal;
+
+  /// No description provided for @adminExamTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Test exam'**
+  String get adminExamTest;
+
+  /// No description provided for @adminExamPreTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-test'**
+  String get adminExamPreTest;
+
+  /// No description provided for @adminExamModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Model test'**
+  String get adminExamModel;
+
+  /// No description provided for @adminExamAdmission.
+  ///
+  /// In en, this message translates to:
+  /// **'Admission'**
+  String get adminExamAdmission;
+
+  /// No description provided for @adminQuestionVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String adminQuestionVersion(int version);
+
+  /// No description provided for @adminNoPapers.
+  ///
+  /// In en, this message translates to:
+  /// **'No question papers yet'**
+  String get adminNoPapers;
+
+  /// No description provided for @adminNoSubjects.
+  ///
+  /// In en, this message translates to:
+  /// **'No subjects yet'**
+  String get adminNoSubjects;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

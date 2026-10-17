@@ -976,4 +976,84 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get questionModelAnswer => 'আদর্শ উত্তর';
+
+  @override
+  String get adminStatusApproved => 'অনুমোদিত';
+
+  @override
+  String get adminStatusChangesRequested => 'পরিবর্তন চাওয়া হয়েছে';
+
+  @override
+  String get adminActionApprove => 'অনুমোদন করুন';
+
+  @override
+  String get adminActionRestore => 'পুনরুদ্ধার করুন';
+
+  @override
+  String get adminNeedsReview => 'পর্যালোচনা দরকার';
+
+  @override
+  String get adminColumnStem => 'প্রশ্ন';
+
+  @override
+  String get adminColumnType => 'ধরন';
+
+  @override
+  String get adminColumnMarks => 'নম্বর';
+
+  @override
+  String get adminColumnExam => 'পরীক্ষা';
+
+  @override
+  String get adminColumnBoards => 'বোর্ড';
+
+  @override
+  String get adminColumnQuestions => 'প্রশ্ন';
+
+  @override
+  String get adminQuestionIssues => 'জমা দেওয়ার আগে যা ঠিক করতে হবে';
+
+  @override
+  String get adminPendingEdit => 'সম্পাদনা চলছে; প্রকাশিত সংস্করণ অপরিবর্তিত থাকবে।';
+
+  @override
+  String get adminAcknowledgeDuplicates => 'তবুও প্রকাশ করুন (ডুপ্লিকেট জানা আছে)';
+
+  @override
+  String get adminGateNoIndependentApproval => 'যিনি সম্পাদনা করেননি তাঁর অনুমোদন দরকার';
+
+  @override
+  String get adminGateDuplicate => 'বিদ্যমান প্রশ্নের ডুপ্লিকেট মনে হচ্ছে';
+
+  @override
+  String get adminGateNoItems => 'কাগজে কোনো প্রশ্ন নেই';
+
+  @override
+  String get adminGateItemsNotPublished => 'কাগজের কিছু প্রশ্ন প্রকাশিত নয়';
+
+  @override
+  String get adminExamBoardFinal => 'বোর্ড পরীক্ষা';
+
+  @override
+  String get adminExamTest => 'নির্বাচনী পরীক্ষা';
+
+  @override
+  String get adminExamPreTest => 'প্রাক-নির্বাচনী';
+
+  @override
+  String get adminExamModel => 'মডেল টেস্ট';
+
+  @override
+  String get adminExamAdmission => 'ভর্তি পরীক্ষা';
+
+  @override
+  String adminQuestionVersion(int version) {
+    return 'সংস্করণ $version';
+  }
+
+  @override
+  String get adminNoPapers => 'এখনও কোনো প্রশ্নপত্র নেই';
+
+  @override
+  String get adminNoSubjects => 'এখনও কোনো বিষয় নেই';
 }

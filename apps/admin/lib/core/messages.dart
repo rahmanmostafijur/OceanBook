@@ -29,6 +29,10 @@ String gateReason(ObLocalizations l10n, String code) => switch (code) {
   'OUTSIDE_VALIDITY_WINDOW' => l10n.adminGateOutsideWindow,
   'TERRITORY_NOT_COVERED' => l10n.adminGateTerritory,
   'DISPUTED' => l10n.adminGateDisputed,
+  'NO_INDEPENDENT_APPROVAL' => l10n.adminGateNoIndependentApproval,
+  'DUPLICATE_QUESTION' => l10n.adminGateDuplicate,
+  'NO_ITEMS' => l10n.adminGateNoItems,
+  'ITEMS_NOT_PUBLISHED' => l10n.adminGateItemsNotPublished,
   _ => code,
 };
 
@@ -42,6 +46,8 @@ List<String> blockReasonsOf(Object error) {
 String statusLabel(ObLocalizations l10n, String status) => switch (status) {
   'draft' => l10n.adminStatusDraft,
   'in_review' => l10n.adminStatusInReview,
+  'approved' => l10n.adminStatusApproved,
+  'changes_requested' => l10n.adminStatusChangesRequested,
   'published' => l10n.adminStatusPublished,
   'unpublished' => l10n.adminStatusUnpublished,
   'archived' => l10n.adminStatusArchived,

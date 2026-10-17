@@ -9,6 +9,10 @@ import '../features/auth/admin_sign_in_page.dart';
 import '../features/catalog/book_detail_page.dart';
 import '../features/catalog/books_page.dart';
 import '../features/catalog/taxonomy_pages.dart';
+import '../features/questionbank/papers_page.dart';
+import '../features/questionbank/question_detail_page.dart';
+import '../features/questionbank/questions_page.dart';
+import '../features/questionbank/subjects_page.dart';
 import '../features/rights/content_sources_page.dart';
 import '../features/rights/rights_queue_page.dart';
 import '../features/users/users_page.dart';
@@ -34,6 +38,9 @@ Widget _pageFor(AdminNavItem item) => switch (item.path) {
   '/categories' => const CategoriesPage(),
   '/content-sources' => const ContentSourcesPage(),
   '/rights' => const RightsQueuePage(),
+  '/questions' => const QuestionsPage(),
+  '/question-papers' => const PapersPage(),
+  '/subjects' || '/chapters' || '/topics' => const SubjectsPage(),
   '/' => const _Dashboard(),
   _ => PlannedPage(item: item),
 };
@@ -57,6 +64,10 @@ final adminRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/books/:id',
             builder: (_, state) => BookDetailPage(bookId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: '/questions/:id',
+            builder: (_, state) => QuestionDetailPage(questionId: state.pathParameters['id']!),
           ),
         ],
       ),
