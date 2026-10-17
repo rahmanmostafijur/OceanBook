@@ -119,7 +119,7 @@ class ProvenanceOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
-    subject_type: Literal["edition"]
+    subject_type: Literal["edition", "question_paper", "question", "stimulus"]
     subject_id: uuid.UUID
     source_id: uuid.UUID
     source_url: str | None

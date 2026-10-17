@@ -20,6 +20,8 @@ from app.core.resources import Resources
 from app.identity.api import admin, auth, me
 from app.identity.providers.registry import IdentityProviders
 from app.provenance import api as provenance_api
+from app.questionbank.api import admin as questionbank_admin
+from app.questionbank.api import public as questionbank_public
 
 API_PREFIX = "/api/v1"
 
@@ -99,5 +101,7 @@ def create_app(
     api.include_router(provenance_api.router)
     api.include_router(academics_api.admin)
     api.include_router(academics_api.public)
+    api.include_router(questionbank_public.router)
+    api.include_router(questionbank_admin.router)
     app.include_router(api)
     return app

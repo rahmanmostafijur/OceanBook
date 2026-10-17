@@ -54,6 +54,7 @@ REGISTER_PER_IP = RatePolicy("register_ip", limit=20, window_seconds=3600, fail_
 REFRESH_PER_SESSION = RatePolicy("refresh_session", limit=30, window_seconds=60, fail_closed=False)
 ADMIN_PER_USER = RatePolicy("admin_user", limit=600, window_seconds=60, fail_closed=False)
 CATALOG_PER_IP = RatePolicy("catalog_ip", limit=300, window_seconds=60, fail_closed=False)
+REPORTS_PER_USER = RatePolicy("question_report_user", limit=20, window_seconds=3600, fail_closed=False)
 
 
 def subject_key(raw: str) -> str:

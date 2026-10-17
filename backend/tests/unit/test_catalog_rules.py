@@ -11,7 +11,7 @@ from pydantic import TypeAdapter, ValidationError
 
 from app.catalog.isbn import normalise_isbn10, normalise_isbn13
 from app.catalog.models import AccessLevel, Book, EditionUsageRights
-from app.catalog.services.access import NoEntitlements, decide_access
+from app.catalog.services.access import AccessDecision, NoEntitlements, decide_access
 from app.core.i18n import LocalizedText, negotiate, nfc, pick_locale, resolve
 from app.provenance.rules import BlockReason, content_today, evaluate
 
@@ -144,7 +144,7 @@ USER = uuid.uuid4()
 
 async def _decide(
     book: Book, user: uuid.UUID | None, *, rights: EditionUsageRights | None = RIGHTS, preview: bool = True
-):
+) -> AccessDecision:
     return await decide_access(
         book,
         rights=rights,

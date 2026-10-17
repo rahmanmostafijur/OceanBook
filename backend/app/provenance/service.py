@@ -38,8 +38,28 @@ from app.provenance.schemas import (
     RightsChangeIn,
     VerificationIn,
 )
+from app.questionbank.enforcement import withdraw_question_content_if_unpublishable
+from app.questionbank.models import Question, QuestionPaper, Stimulus
 
 EDITABLE = frozenset({VerificationStatus.UNVERIFIED, VerificationStatus.REJECTED})
+
+# subject type -> (record column, ORM model); the database allows exactly one subject per record.
+SUBJECTS: dict[str, tuple[str, Any]] = {
+    "edition": ("edition_id", BookEdition),
+    "question_paper": ("question_paper_id", QuestionPaper),
+    "question": ("question_id", Question),
+    "stimulus": ("stimulus_id", Stimulus),
+}
+
+
+def subject_of(record: ProvenanceRecord) -> tuple[str, uuid.UUID]:
+    for subject_type, (column, _) in SUBJECTS.items():
+        value = getattr(record, column)
+        if value is not None:
+            return subject_type, value
+    raise ValueError("provenance record without a subject")
+
+
 _URL_FIELDS = ("source_url", "website_url")
 
 
@@ -135,14 +155,19 @@ class ProvenanceService:
             raise NotFound("Provenance record not found")
         return record
 
-    async def for_edition(self, edition_id: uuid.UUID) -> Sequence[ProvenanceRecord]:
-        await self._edition(edition_id)
+    async def for_subject(self, subject_type: str, subject_id: uuid.UUID) -> Sequence[ProvenanceRecord]:
+        column, model = SUBJECTS[subject_type]
+        if await self.session.get(model, subject_id) is None:
+            raise NotFound(f"{subject_type.replace('_', ' ').capitalize()} not found")
         query = (
             select(ProvenanceRecord)
-            .where(ProvenanceRecord.edition_id == edition_id)
+            .where(getattr(ProvenanceRecord, column) == subject_id)
             .order_by(ProvenanceRecord.created_at)
         )
         return (await self.session.execute(query)).scalars().all()
+
+    async def for_edition(self, edition_id: uuid.UUID) -> Sequence[ProvenanceRecord]:
+        return await self.for_subject("edition", edition_id)
 
     async def queue(self, *, offset: int, limit: int) -> Sequence[ProvenanceRecord]:
         """Oldest-first verification queue."""
@@ -158,11 +183,18 @@ class ProvenanceService:
     async def create_for_edition(
         self, actor: Principal, edition_id: uuid.UUID, body: ProvenanceIn
     ) -> ProvenanceRecord:
-        await self._edition(edition_id)
+        return await self.create_for_subject(actor, "edition", edition_id, body)
+
+    async def create_for_subject(
+        self, actor: Principal, subject_type: str, subject_id: uuid.UUID, body: ProvenanceIn
+    ) -> ProvenanceRecord:
+        column, model = SUBJECTS[subject_type]
+        if await self.session.get(model, subject_id) is None:
+            raise NotFound(f"{subject_type.replace('_', ' ').capitalize()} not found")
         values = _values(body)
         await self._check_refs(values)
         record = ProvenanceRecord(
-            edition_id=edition_id, created_by=actor.user_id, updated_by=actor.user_id, **values
+            **{column: subject_id}, created_by=actor.user_id, updated_by=actor.user_id, **values
         )
         self.session.add(record)
         await self.session.flush()
@@ -270,11 +302,20 @@ class ProvenanceService:
             reason=body.reason,
         )
         await self.session.flush()
+        territory = self.resources.settings.content_launch_territory
         if record.edition_id is not None:
             await withdraw_if_unpublishable(
                 self.session,
                 record.edition_id,
-                territory=self.resources.settings.content_launch_territory,
+                territory=territory,
+                actor_user_id=actor.user_id,
+                reason=body.reason,
+            )
+        else:
+            await withdraw_question_content_if_unpublishable(
+                self.session,
+                *subject_of(record),
+                territory=territory,
                 actor_user_id=actor.user_id,
                 reason=body.reason,
             )

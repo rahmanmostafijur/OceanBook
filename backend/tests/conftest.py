@@ -57,6 +57,10 @@ TRUNCATE = (
     # academics (levels, boards and instruction media are seeded; tests only add keys prefixed `test_`)
     "subjects",
     "curricula",
+    # question bank
+    "questions",
+    "question_stimuli",
+    "question_papers",
     "academic_groups",
 )
 

@@ -1,7 +1,7 @@
 """Content source registry and provenance records (docs/architecture/12 §5).
 
-A provenance record names exactly one subject through a real FK. Phase 2 starts with editions; the
-question-bank milestone adds question papers, questions and stimuli and widens the one-subject CHECK.
+A provenance record names exactly one subject through a real FK: an edition, a question paper, a
+question or a stimulus.
 """
 
 from __future__ import annotations
@@ -83,7 +83,9 @@ class ContentSource(UUIDPrimaryKey, CreatedAt, Base):
 class ProvenanceRecord(UUIDPrimaryKey, Timestamps, Base):
     __tablename__ = "provenance_records"
     __table_args__ = (
-        CheckConstraint("num_nonnulls(edition_id) = 1", name="one_subject"),
+        CheckConstraint(
+            "num_nonnulls(edition_id, question_paper_id, question_id, stimulus_id) = 1", name="one_subject"
+        ),
         CheckConstraint(check_in("license_type", LicenseType), name="license_type"),
         CheckConstraint(check_in("rights_status", RightsStatus), name="rights_status"),
         CheckConstraint(check_in("verification_status", VerificationStatus), name="verification_status"),
@@ -102,6 +104,9 @@ class ProvenanceRecord(UUIDPrimaryKey, Timestamps, Base):
             name="two_person",
         ),
         Index("ix_provenance_records_edition_id", "edition_id"),
+        Index("ix_provenance_records_question_paper_id", "question_paper_id"),
+        Index("ix_provenance_records_question_id", "question_id"),
+        Index("ix_provenance_records_stimulus_id", "stimulus_id"),
         Index("ix_provenance_records_source_id", "source_id"),
         Index(
             "ix_provenance_records_queue",
@@ -115,6 +120,15 @@ class ProvenanceRecord(UUIDPrimaryKey, Timestamps, Base):
 
     edition_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid, ForeignKey("book_editions.id", ondelete="CASCADE")
+    )
+    question_paper_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("question_papers.id", ondelete="CASCADE")
+    )
+    question_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("questions.id", ondelete="CASCADE")
+    )
+    stimulus_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("question_stimuli.id", ondelete="CASCADE")
     )
     source_id: Mapped[uuid.UUID] = mapped_column(
         Uuid, ForeignKey("content_sources.id", ondelete="RESTRICT"), nullable=False

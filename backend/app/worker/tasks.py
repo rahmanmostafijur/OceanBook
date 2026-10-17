@@ -10,6 +10,7 @@ from app.core.logging import get_logger
 from app.platform import maintenance
 from app.platform.outbox import DomainEvent, run_handlers
 from app.provenance.enforcement import enforce_published_rights
+from app.questionbank.enforcement import enforce_published_question_rights
 from app.worker import runtime
 from app.worker.celery_app import celery_app
 from app.worker.handlers import registry
@@ -80,8 +81,8 @@ def enforce_content_rights() -> int:
     async def job() -> int:
         resources = runtime.resources()
         async with resources.db.write_sessionmaker() as session:
-            return await enforce_published_rights(
-                session, territory=resources.settings.content_launch_territory
-            )
+            territory = resources.settings.content_launch_territory
+            editions = await enforce_published_rights(session, territory=territory)
+            return editions + await enforce_published_question_rights(session, territory=territory)
 
     return runtime.run(job())

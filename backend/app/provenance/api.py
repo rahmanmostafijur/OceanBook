@@ -24,7 +24,7 @@ from app.provenance.schemas import (
     RightsChangeIn,
     VerificationIn,
 )
-from app.provenance.service import ProvenanceService
+from app.provenance.service import ProvenanceService, subject_of
 
 router = APIRouter(prefix="/admin", tags=["admin: provenance"])
 
@@ -35,14 +35,18 @@ Paging = Annotated[OffsetParams, Depends(offset_params)]
 
 
 def _out(record: ProvenanceRecord) -> ProvenanceOut:
-    assert record.edition_id is not None  # the only subject type until the question bank adds more
+    subject_type, subject_id = subject_of(record)
     return ProvenanceOut.model_validate(
         {
             **{c.key: getattr(record, c.key) for c in ProvenanceRecord.__table__.columns},
-            "subject_type": "edition",
-            "subject_id": record.edition_id,
+            "subject_type": subject_type,
+            "subject_id": subject_id,
         }
     )
+
+
+def provenance_out(record: ProvenanceRecord) -> ProvenanceOut:
+    return _out(record)
 
 
 @router.get("/content-sources", response_model=Envelope[list[ContentSourceOut]])

@@ -265,6 +265,9 @@ PUBLIC_ROUTES = {
     ("GET", "/api/v1/academics/instruction-media"),
     ("GET", "/api/v1/academics/subjects"),
     ("GET", "/api/v1/academics/subjects/{subject_id}/chapters"),
+    # Public question papers (questions accept an optional bearer token, so they declare security)
+    ("GET", "/api/v1/question-papers"),
+    ("GET", "/api/v1/question-papers/{paper_id}"),
 }
 
 

@@ -8,5 +8,6 @@ from app.identity import models as identity_models  # noqa: F401
 from app.media import models as media_models  # noqa: F401
 from app.platform import app_settings, audit, outbox  # noqa: F401
 from app.provenance import models as provenance_models  # noqa: F401
+from app.questionbank import models as questionbank_models  # noqa: F401
 
 metadata = Base.metadata

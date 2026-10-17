@@ -150,9 +150,10 @@ async def verified_provenance(
         201,
     )
     await call(client, "POST", f"/admin/provenance/{record['id']}/submit", team.editor)
-    return await call(
+    verified: dict[str, Any] = await call(
         client, "POST", f"/admin/provenance/{record['id']}/decision", team.reviewer, {"decision": "verified"}
     )
+    return verified
 
 
 async def published_book(
@@ -161,4 +162,7 @@ async def published_book(
     book, edition = await draft_book(client, team, refs, **kwargs)
     await verified_provenance(client, team, edition["id"], refs["source"]["id"])
     await call(client, "POST", f"/admin/books/{book['id']}/submit", team.editor)
-    return await call(client, "POST", f"/admin/books/{book['id']}/publish", team.reviewer)
+    published: dict[str, Any] = await call(
+        client, "POST", f"/admin/books/{book['id']}/publish", team.reviewer
+    )
+    return published
