@@ -370,8 +370,18 @@ async def test_validation_and_conflicts(client: AsyncClient, team: Team) -> None
             ],
         },
     ):
-        response = await client.post(f"{API}/admin/books", headers=team.editor, json=body)
+        response = await client.post(f"{API}/admin/books", headers=team.admin, json=body)
         assert response.status_code == 422, (body, response.text)
+    # An editor may only create books at the default access level.
+    open_book = {
+        "slug": "open-book",
+        "source_locale": "bn",
+        "translation": {"title": "t"},
+        "access_level": "free",
+    }
+    denied = await client.post(f"{API}/admin/books", headers=team.editor, json=open_book)
+    assert denied.status_code == 403, denied.text
+    assert denied.json()["errors"][0]["details"]["missing_permissions"] == ["books.change_access"]
     bad_isbn = await client.patch(
         f"{API}/admin/editions/{edition['id']}", headers=team.editor, json={"isbn13": "978-0-306-40615-8"}
     )

@@ -91,7 +91,7 @@ async def draft_book(
         client,
         "POST",
         "/admin/books",
-        team.editor,
+        team.editor if access == "entitled" else team.admin,
         {
             "slug": slug,
             "source_locale": "bn",

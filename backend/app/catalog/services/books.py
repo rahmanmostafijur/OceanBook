@@ -38,11 +38,12 @@ from app.catalog.services.common import (
     replace_tags,
 )
 from app.catalog.services.taxonomy import like_pattern, slug_conflict
-from app.core.errors import Conflict, ErrorCode, ValidationFailed
+from app.core.errors import Conflict, ErrorCode, Forbidden, ValidationFailed
 from app.core.i18n import pick_locale
 from app.core.request_info import ClientInfo
 from app.core.resources import Resources
 from app.entitlements.models import EntitlementDefinition
+from app.identity.permissions import Permission
 from app.identity.services.principal import Principal
 from app.media.models import MediaAsset, MediaKind
 from app.platform.outbox import publish_event
@@ -119,6 +120,15 @@ class BookService:
     async def create(self, actor: Principal, body: BookCreateIn) -> Book:
         self._check_locale(body.source_locale, "source_locale")
         await self._check_access(body.access_level, body.required_entitlement_key)
+        if body.access_level != AccessLevel.ENTITLED:
+            # Opening a book up needs the same permission as the audited access change.
+            granted = await actor.permissions(self.session)
+            if Permission.BOOKS_CHANGE_ACCESS.value not in granted:
+                raise Forbidden(
+                    "Creating a book with this access level needs permission to change access",
+                    code=ErrorCode.FORBIDDEN,
+                    details={"missing_permissions": [Permission.BOOKS_CHANGE_ACCESS.value]},
+                )
         book = Book(
             slug=body.slug,
             source_locale=body.source_locale,
@@ -143,7 +153,19 @@ class BookService:
         await replace_contributors(self.session, book.id, body.contributors)
         await replace_categories(self.session, book.id, body.categories)
         await replace_tags(self.session, book.id, body.tag_ids)
-        audit(self.session, actor, self.client, "book.created", "book", book.id, after={"slug": book.slug})
+        audit(
+            self.session,
+            actor,
+            self.client,
+            "book.created",
+            "book",
+            book.id,
+            after={
+                "slug": book.slug,
+                "access_level": book.access_level,
+                "required_entitlement_key": book.required_entitlement_key,
+            },
+        )
         await self.session.commit()
         await self.session.refresh(book)
         return book

@@ -66,7 +66,7 @@ async def test_admin_listing_search_and_edits(client: AsyncClient, team: Team) -
         client,
         "POST",
         "/admin/books",
-        team.editor,
+        team.admin,
         {
             "slug": "other",
             "source_locale": "bn",
