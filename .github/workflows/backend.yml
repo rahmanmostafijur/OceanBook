@@ -77,8 +77,14 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Scan image
         uses: aquasecurity/trivy-action@v0.33.1
+        env:
+          # Mirror the vulnerability DB on ECR as a fallback: pulls from ghcr.io are rate limited on shared
+          # runners and fail the step with a bare "exit code 1".
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2,ghcr.io/aquasecurity/trivy-db:2
         with:
           image-ref: oceanbook-backend:${{ github.sha }}
+          scanners: vuln
+          format: table
           severity: CRITICAL,HIGH
           ignore-unfixed: true
           exit-code: "1"
