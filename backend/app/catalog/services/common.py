@@ -30,6 +30,20 @@ from app.identity.permissions import Permission
 from app.identity.services.principal import Principal
 from app.platform.audit import ActorType, record_audit
 
+_MAX_AUDITED_TEXT = 500
+
+
+def field_snapshot(row: Any, names: Sequence[str]) -> dict[str, Any]:
+    """Plain, JSON-safe values of the named attributes, for audit before/after payloads."""
+    out: dict[str, Any] = {}
+    for name in names:
+        value = getattr(row, name)
+        if value is None or isinstance(value, bool | int | float | dict | list):
+            out[name] = value
+        else:
+            out[name] = str(value)[:_MAX_AUDITED_TEXT]
+    return out
+
 
 async def require_permission(
     session: AsyncSession, actor: Principal, permission: Permission, message: str

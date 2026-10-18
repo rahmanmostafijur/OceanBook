@@ -22,6 +22,7 @@ from app.catalog.schemas import (
     url_or_none,
 )
 from app.core.errors import Conflict, ErrorCode, NotFound, ValidationFailed
+from app.core.pagination import MAX_LIST_ROWS
 from app.core.request_info import ClientInfo
 from app.identity.services.principal import Principal
 from app.platform.audit import ActorType, record_audit
@@ -107,7 +108,9 @@ class TaxonomyService:
     # ------------------------------------------------------------------ tags
 
     async def list_tags(self) -> Sequence[Tag]:
-        return (await self.session.execute(select(Tag).order_by(Tag.slug))).scalars().all()
+        return (
+            (await self.session.execute(select(Tag).order_by(Tag.slug).limit(MAX_LIST_ROWS))).scalars().all()
+        )
 
     async def create_tag(self, actor: Principal, body: TagIn) -> Tag:
         return await self._create(actor, Tag(slug=body.slug, name=body.name), "tag")
@@ -118,7 +121,7 @@ class TaxonomyService:
         query = select(Category).order_by(Category.depth, Category.position, Category.slug)
         if not include_inactive:
             query = query.where(Category.is_active)
-        return (await self.session.execute(query)).scalars().all()
+        return (await self.session.execute(query.limit(MAX_LIST_ROWS))).scalars().all()
 
     async def create_category(self, actor: Principal, body: CategoryIn) -> Category:
         await self.session.execute(_CATEGORY_LOCK)

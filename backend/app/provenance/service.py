@@ -22,6 +22,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.academics.models import Board
 from app.catalog.models import BookEdition, Publisher
 from app.core.errors import Conflict, ErrorCode, Forbidden, NotFound, ValidationFailed
+from app.core.logging import get_logger
+from app.core.pagination import MAX_LIST_ROWS
 from app.core.request_info import ClientInfo
 from app.core.resources import Resources
 from app.identity.services.principal import Principal
@@ -40,6 +42,8 @@ from app.provenance.schemas import (
 )
 from app.questionbank.enforcement import withdraw_question_content_if_unpublishable
 from app.questionbank.models import Question, QuestionPaper, Stimulus
+
+log = get_logger(__name__)
 
 EDITABLE = frozenset({VerificationStatus.UNVERIFIED, VerificationStatus.REJECTED})
 
@@ -94,6 +98,11 @@ async def edition_publishability(
 async def assert_publishable(session: AsyncSession, edition_id: uuid.UUID, *, territory: str) -> None:
     result = await edition_publishability(session, edition_id, territory=territory)
     if not result.publishable:
+        # The request is rolled back, so a refused attempt cannot be written to the audit table;
+        # keep a structured log line instead.
+        log.warning(
+            "publish_gate_refused", edition_id=str(edition_id), reasons=[r.value for r in result.reasons]
+        )
         raise Conflict(
             "This edition cannot be published until its provenance is verified and its rights are clear",
             code=ErrorCode.CONTENT_NOT_PUBLISHABLE,
@@ -110,7 +119,7 @@ class ProvenanceService:
     # ------------------------------------------------------------------ sources
 
     async def list_sources(self, *, include_inactive: bool) -> Sequence[ContentSource]:
-        query = select(ContentSource).order_by(ContentSource.created_at)
+        query = select(ContentSource).order_by(ContentSource.created_at).limit(MAX_LIST_ROWS)
         if not include_inactive:
             query = query.where(ContentSource.is_active)
         return (await self.session.execute(query)).scalars().all()
@@ -237,6 +246,7 @@ class ProvenanceService:
             )
         record.verification_status = VerificationStatus.PENDING
         record.submitted_at = datetime.now(UTC)
+        record.submitted_by = actor.user_id
         record.verification_notes = None
         self._audit(actor, "provenance.submitted", "provenance_record", record.id, after=snapshot(record))
         await self.session.commit()
@@ -251,9 +261,9 @@ class ProvenanceService:
                 code=ErrorCode.INVALID_STATE_TRANSITION,
                 details={"verification_status": record.verification_status},
             )
-        if actor.user_id in {record.created_by, record.updated_by}:
+        if actor.user_id in {record.created_by, record.updated_by, record.submitted_by}:
             raise Forbidden(
-                "Provenance must be verified by someone other than the person who recorded it",
+                "Provenance must be verified by someone other than the person who recorded or submitted it",
                 code=ErrorCode.SELF_VERIFICATION_FORBIDDEN,
             )
         before = snapshot(record)

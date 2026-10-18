@@ -282,6 +282,7 @@ class Book(UUIDPrimaryKey, Timestamps, Base):
     popularity_score: Mapped[float] = mapped_column(REAL, nullable=False, server_default="0", default=0.0)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_by: Mapped[uuid.UUID | None] = mapped_column(Uuid, ForeignKey("users.id", ondelete="SET NULL"))
+    submitted_by: Mapped[uuid.UUID | None] = mapped_column(Uuid, ForeignKey("users.id", ondelete="SET NULL"))
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 

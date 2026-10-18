@@ -15,6 +15,8 @@ from app.core.errors import ErrorCode, ValidationFailed
 
 DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
+# Safety net for reference lists that are small by design (taxonomy, sources): never return more.
+MAX_LIST_ROWS = 1000
 _SIG_BYTES = 16
 
 

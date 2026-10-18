@@ -23,6 +23,7 @@ from app.academics.models import (
 )
 from app.academics.schemas import SubjectGroupIn
 from app.core.errors import Conflict, ErrorCode, NotFound, ValidationFailed
+from app.core.pagination import MAX_LIST_ROWS
 from app.core.request_info import ClientInfo
 from app.identity.services.principal import Principal
 from app.platform.audit import ActorType, record_audit
@@ -52,7 +53,7 @@ class AcademicsService:
         query = select(model).where(*conditions)
         if not include_inactive and hasattr(model, "is_active"):
             query = query.where(model.is_active)  # type: ignore[attr-defined]
-        return (await self.session.execute(query.order_by(*order))).scalars().all()
+        return (await self.session.execute(query.order_by(*order).limit(MAX_LIST_ROWS))).scalars().all()
 
     async def subjects(
         self,
@@ -106,7 +107,12 @@ class AcademicsService:
         ids = [c.id for c in chapters]
         topics: dict[uuid.UUID, list[Topic]] = {i: [] for i in ids}
         if ids:
-            query = select(Topic).where(Topic.chapter_id.in_(ids)).order_by(Topic.position, Topic.id)
+            query = (
+                select(Topic)
+                .where(Topic.chapter_id.in_(ids))
+                .order_by(Topic.position, Topic.id)
+                .limit(MAX_LIST_ROWS)
+            )
             if not include_inactive:
                 query = query.where(Topic.is_active)
             for topic in (await self.session.execute(query)).scalars():

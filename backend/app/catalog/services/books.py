@@ -31,6 +31,7 @@ from app.catalog.models import (
 from app.catalog.schemas import BookAccessIn, BookCreateIn, BookPatch, TranslationIn
 from app.catalog.services.common import (
     audit,
+    field_snapshot,
     get_book,
     replace_categories,
     replace_contributors,
@@ -40,7 +41,7 @@ from app.catalog.services.common import (
     require_publish_to_edit_live,
 )
 from app.catalog.services.taxonomy import like_pattern, slug_conflict
-from app.core.errors import Conflict, ErrorCode, ValidationFailed
+from app.core.errors import Conflict, ErrorCode, Forbidden, ValidationFailed
 from app.core.i18n import pick_locale
 from app.core.request_info import ClientInfo
 from app.core.resources import Resources
@@ -54,6 +55,10 @@ from app.provenance.service import assert_publishable
 BOOK_PUBLISHED = "book.published"
 BOOK_UNPUBLISHED = "book.unpublished"
 BOOK_ACCESS_CHANGED = "book.access_changed"
+
+
+_BOOK_AUDITED = ("slug", "content_type", "default_edition_id", "cover_asset_id")
+_TRANSLATION_AUDITED = ("title", "subtitle", "description", "origin")
 
 
 def _transition_error(book: Book, action: str) -> Conflict:
@@ -176,6 +181,7 @@ class BookService:
         self._ensure_not_archived(book)
         await require_publish_to_edit_live(self.session, actor, book.status == BookStatus.PUBLISHED)
         fields = body.model_fields_set
+        before = field_snapshot(book, _BOOK_AUDITED)
         if body.slug is not None:
             book.slug = body.slug
             await self._flush_slug()
@@ -200,7 +206,8 @@ class BookService:
             "book.updated",
             "book",
             book.id,
-            after={"fields": sorted(fields)},
+            before=before,
+            after={**field_snapshot(book, _BOOK_AUDITED), "fields": sorted(fields)},
         )
         await self.session.commit()
         await self.session.refresh(book)
@@ -273,6 +280,7 @@ class BookService:
         self._ensure_not_archived(book)
         self._check_locale(locale, "locale")
         translation = await self.session.get(BookTranslation, (book.id, locale))
+        before = field_snapshot(translation, _TRANSLATION_AUDITED) if translation is not None else None
         await require_publish_to_edit_live(
             self.session,
             actor,
@@ -296,7 +304,12 @@ class BookService:
             action,
             "book",
             book.id,
-            after={"locale": locale, "status": translation.status},
+            before=before,
+            after={
+                "locale": locale,
+                "status": translation.status,
+                **field_snapshot(translation, _TRANSLATION_AUDITED),
+            },
         )
         await self.session.commit()
         await self.session.refresh(translation)
@@ -330,6 +343,7 @@ class BookService:
         book = await get_book(self.session, book_id, lock=True)
         if book.status != BookStatus.DRAFT:
             raise _transition_error(book, "submitted for review")
+        book.submitted_by = actor.user_id
         return await self._move(actor, book, BookStatus.IN_REVIEW, "book.submitted")
 
     async def request_changes(self, actor: Principal, book_id: uuid.UUID, reason: str) -> Book:
@@ -342,6 +356,11 @@ class BookService:
         book = await get_book(self.session, book_id, lock=True)
         if book.status not in (BookStatus.IN_REVIEW, BookStatus.UNPUBLISHED):
             raise _transition_error(book, "published")
+        if actor.user_id in {book.created_by, book.submitted_by}:
+            raise Forbidden(
+                "A book must be published by someone other than the person who created or submitted it",
+                code=ErrorCode.SELF_VERIFICATION_FORBIDDEN,
+            )
         if await self.session.get(BookTranslation, (book.id, book.source_locale)) is None:
             raise Conflict(
                 "Add the source-language title before publishing",

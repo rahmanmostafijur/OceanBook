@@ -22,6 +22,7 @@ from app.catalog.models import (
 from app.catalog.schemas import EditionIn, EditionPatch, StructureIn, UsageRightsIn
 from app.catalog.services.common import (
     audit,
+    field_snapshot,
     get_book,
     get_edition,
     replace_publishers,
@@ -87,6 +88,8 @@ class EditionService:
         self._ensure_not_archived(book)
         await require_publish_to_edit_live(self.session, actor, edition.status == EditionStatus.PUBLISHED)
         values = body.model_dump(exclude_unset=True, exclude={"publishers", "preview_policy"})
+        audited = (*values, "preview_policy")
+        before = field_snapshot(edition, audited)
         for name, value in values.items():
             setattr(edition, name, value)
         if body.preview_policy is not None:
@@ -101,7 +104,8 @@ class EditionService:
             "edition.updated",
             "book_edition",
             edition.id,
-            after={"fields": sorted(body.model_fields_set)},
+            before=before,
+            after={**field_snapshot(edition, audited), "fields": sorted(body.model_fields_set)},
         )
         await self.session.commit()
         await self.session.refresh(edition)

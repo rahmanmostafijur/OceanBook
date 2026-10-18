@@ -414,3 +414,44 @@ async def test_media_purpose_keeps_evidence_private(
         status=422,
     )
     assert public_as_evidence["field"] == "evidence_asset_id"
+
+
+async def test_separation_of_duties_covers_the_submitter(client: AsyncClient, team: Team) -> None:
+    refs = await taxonomy(client, team)
+    book, edition = await draft_book(client, team, refs)
+    record = await call(
+        client,
+        "POST",
+        f"/admin/editions/{edition['id']}/provenance",
+        team.editor,
+        {
+            "source_id": refs["source"]["id"],
+            "license_type": "licensed_commercial",
+            "rights_status": "cleared",
+            "attribution_text": {"bn": "অনুমতিক্রমে"},
+        },
+        201,
+    )
+    # The admin did not write the record but submitted it, so the admin cannot verify it either.
+    await call(client, "POST", f"/admin/provenance/{record['id']}/submit", team.admin)
+    refused = await call(
+        client,
+        "POST",
+        f"/admin/provenance/{record['id']}/decision",
+        team.admin,
+        {"decision": "verified"},
+        status=403,
+    )
+    assert refused["code"] == "SELF_VERIFICATION_FORBIDDEN"
+    await call(
+        client, "POST", f"/admin/provenance/{record['id']}/decision", team.reviewer, {"decision": "verified"}
+    )
+
+    # A book cannot be published by the person who created it, even with the publish permission.
+    await call(client, "POST", f"/admin/books/{book['id']}/submit", team.editor)
+    own = await call(client, "POST", f"/admin/books/{book['id']}/publish", team.editor, status=403)
+    assert own["code"] in {"FORBIDDEN", "SELF_VERIFICATION_FORBIDDEN"}
+    admin_book, _ = await draft_book(client, team, refs, slug="admin-book", access="free")
+    await call(client, "POST", f"/admin/books/{admin_book['id']}/submit", team.admin)
+    mine = await call(client, "POST", f"/admin/books/{admin_book['id']}/publish", team.admin, status=403)
+    assert mine["code"] == "SELF_VERIFICATION_FORBIDDEN"
