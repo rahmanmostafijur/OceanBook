@@ -15,6 +15,7 @@ import asyncio
 import getpass
 import sys
 import uuid
+from pathlib import Path
 
 from sqlalchemy import select
 
@@ -29,6 +30,7 @@ from app.identity.permissions import SystemRole
 from app.identity.services.login import normalise_email
 from app.identity.services.step_up import issue_enrolment_token
 from app.platform.audit import ActorType, record_audit
+from app.seeding.academics import SeedError, load_academics, read_seed_file
 
 
 async def create_super_admin(email: str, name: str, password: str) -> str:
@@ -78,6 +80,19 @@ async def create_super_admin(email: str, name: str, password: str) -> str:
         await db.dispose()
 
 
+DEV_SAMPLE = Path(__file__).resolve().parents[1] / "seed" / "dev" / "academics-sample.json"
+
+
+async def seed_academics(path: Path, *, dry_run: bool) -> dict[str, int]:
+    seed = read_seed_file(path)
+    db = Database.from_settings(get_settings())
+    try:
+        async with db.write_sessionmaker() as session:
+            return dict(sorted((await load_academics(session, seed, dry_run=dry_run)).items()))
+    finally:
+        await db.dispose()
+
+
 async def issue_enrolment(email: str | None = None, user_id: str | None = None) -> tuple[str, str]:
     settings = get_settings()
     db = Database.from_settings(settings)
@@ -116,7 +131,28 @@ def main() -> None:
     create.add_argument("--name", required=True)
     enrol = commands.add_parser("issue-mfa-enrolment")
     enrol.add_argument("--email", required=True)
+    seed = commands.add_parser("seed-academics", help="insert curriculum data (see backend/seed/README.md)")
+    source = seed.add_mutually_exclusive_group(required=True)
+    source.add_argument("--file", type=Path, help="reviewed JSON file (production data operation)")
+    source.add_argument("--dev-sample", action="store_true", help="bundled sample; not allowed when deployed")
+    seed.add_argument("--dry-run", action="store_true", help="validate and report, then roll back")
     args = parser.parse_args()
+
+    if args.command == "seed-academics":
+        if args.dev_sample and get_settings().is_deployed:
+            raise SystemExit(
+                "--dev-sample is refused in a deployed environment; use --file with reviewed data"
+            )
+        try:
+            report = asyncio.run(
+                seed_academics(DEV_SAMPLE if args.dev_sample else args.file, dry_run=args.dry_run)
+            )
+        except SeedError as exc:
+            raise SystemExit(f"Seed failed, nothing was written: {exc}") from exc
+        print("Dry run (rolled back):" if args.dry_run else "Seeded:")  # noqa: T201
+        for key, count in report.items():
+            print(f"  {key}: {count}")  # noqa: T201
+        return
 
     if args.command == "issue-mfa-enrolment":
         token, expires = asyncio.run(issue_enrolment(email=args.email))

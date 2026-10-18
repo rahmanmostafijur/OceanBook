@@ -1,0 +1,54 @@
+{
+  "curriculum": {
+    "key": "nctb_sample",
+    "name": { "bn": "এনসিটিবি (নমুনা)", "en": "NCTB (sample)" },
+    "effective_from_year": 2024,
+    "is_current": true
+  },
+  "groups": [
+    { "level": "ssc", "key": "science", "name": { "bn": "বিজ্ঞান", "en": "Science" } },
+    { "level": "ssc", "key": "humanities", "name": { "bn": "মানবিক", "en": "Humanities" } },
+    { "level": "hsc", "key": "science", "name": { "bn": "বিজ্ঞান", "en": "Science" } }
+  ],
+  "subjects": [
+    {
+      "level": "ssc",
+      "slug": "bangla",
+      "family_key": "bangla",
+      "name": { "bn": "বাংলা", "en": "Bangla" },
+      "position": 1,
+      "groups": [
+        { "group": "science", "offering": "compulsory" },
+        { "group": "humanities", "offering": "compulsory" }
+      ],
+      "chapters": [
+        {
+          "number": 1,
+          "name": { "bn": "গদ্য", "en": "Prose" },
+          "topics": [
+            { "name": { "bn": "অপরিচিতা", "en": "Aparichita" } },
+            { "name": { "bn": "বাঙালির খাদ্য", "en": "Bangalir Khadya" } }
+          ]
+        },
+        { "number": 2, "name": { "bn": "পদ্য", "en": "Poetry" }, "topics": [] }
+      ]
+    },
+    {
+      "level": "hsc",
+      "slug": "physics-1st-paper",
+      "family_key": "physics",
+      "board_code": "174",
+      "paper_number": 1,
+      "name": { "bn": "পদার্থবিজ্ঞান ১ম পত্র", "en": "Physics 1st paper" },
+      "position": 2,
+      "groups": [{ "group": "science", "offering": "compulsory" }],
+      "chapters": [
+        {
+          "number": 1,
+          "name": { "bn": "ভৌতজগৎ ও পরিমাপ", "en": "Physical world and measurement" },
+          "topics": [{ "name": { "bn": "মাত্রা", "en": "Dimensions" } }]
+        }
+      ]
+    }
+  ]
+}
