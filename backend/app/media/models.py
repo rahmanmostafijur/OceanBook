@@ -25,11 +25,22 @@ class MediaPurpose(StrEnum):
     EVIDENCE = "evidence"  # rights evidence: never given a URL
 
 
+# Object keys are namespaced by purpose, so the CDN mapping can never reach an evidence file even if a
+# row's purpose were wrong, and the database refuses a key that disagrees with the purpose.
+PUBLIC_KEY_PREFIX = "public/"
+EVIDENCE_KEY_PREFIX = "evidence/"
+
+
 class MediaAsset(UUIDPrimaryKey, CreatedAt, Base):
     __tablename__ = "media_assets"
     __table_args__ = (
         CheckConstraint(check_in("kind", MediaKind), name="kind"),
         CheckConstraint(check_in("purpose", MediaPurpose), name="purpose"),
+        CheckConstraint(
+            "(purpose = 'public' AND storage_key LIKE 'public/%') "
+            "OR (purpose = 'evidence' AND storage_key LIKE 'evidence/%')",
+            name="key_matches_purpose",
+        ),
         CheckConstraint("size_bytes > 0", name="size_positive"),
         CheckConstraint("octet_length(sha256) = 32", name="sha256_length"),
         CheckConstraint("(width IS NULL) = (height IS NULL)", name="dimensions_together"),
@@ -49,6 +60,6 @@ class MediaAsset(UUIDPrimaryKey, CreatedAt, Base):
 
 def public_url(base_url: str | None, storage_key: str | None) -> str | None:
     """CDN URL for a public asset (covers). Private assets (evidence) are never given a URL."""
-    if not base_url or not storage_key:
+    if not base_url or not storage_key or not storage_key.startswith(PUBLIC_KEY_PREFIX):
         return None
     return f"{base_url.rstrip('/')}/{storage_key}"

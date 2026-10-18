@@ -375,7 +375,7 @@ async def test_media_purpose_keeps_evidence_private(
         asset = MediaAsset(
             kind=MediaKind.IMAGE,
             purpose=purpose,
-            storage_key=f"test/{purpose}.png",
+            storage_key=f"{purpose.value}/test.png",
             mime_type="image/png",
             size_bytes=10,
             sha256=bytes(32),

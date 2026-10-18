@@ -203,6 +203,7 @@ def _deployed(**overrides: Any) -> Settings:
         "jwt_signing_kid": "2026-10",
         "redis_url": SecretStr("rediss://cache.internal:6379/0"),
         "trust_cloudflare_headers": True,
+        "cloudflare_origin_secret": SecretStr("o" * 40),
         "data_encryption_key": SecretStr(base64.urlsafe_b64encode(os.urandom(32)).decode()),
         "phone_otp_provider": "twilio_verify",
         **overrides,
@@ -223,6 +224,8 @@ def test_deployed_environment_accepts_complete_config() -> None:
         ({"cursor_signing_key": SecretStr("short")}, "at least 32"),
         ({"jwt_signing_kid": "dev"}, "development default"),
         ({"redis_url": SecretStr("redis://localhost:6379/0")}, "localhost"),
+        ({"cloudflare_origin_secret": None}, "OB_CLOUDFLARE_ORIGIN_SECRET"),
+        ({"cloudflare_origin_secret": SecretStr("short")}, "OB_CLOUDFLARE_ORIGIN_SECRET"),
     ],
 )
 def test_deployed_environment_rejects_unsafe_config(overrides: dict[str, object], message: str) -> None:

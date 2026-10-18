@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hmac
 import ipaddress
 from dataclasses import dataclass
 
@@ -25,10 +26,24 @@ def _valid_ip(value: str | None) -> str | None:
         return None
 
 
+def _from_cloudflare(request: Request, settings: Settings) -> bool:
+    """True when the request provably came through our Cloudflare zone.
+
+    Cloudflare adds `X-Origin-Verify` (a Transform Rule); a client that reaches the origin directly cannot
+    know the secret, so its `CF-Connecting-IP` is ignored. Without a configured secret (local development
+    only; deployed settings require one) the header is trusted as before.
+    """
+    secret = settings.cloudflare_origin_secret
+    if secret is None:
+        return True
+    sent = request.headers.get("x-origin-verify", "")
+    return hmac.compare_digest(sent.encode(), secret.get_secret_value().encode())
+
+
 def client_info(request: Request) -> ClientInfo:
     settings: Settings = request.app.state.resources.settings
     ip = None
-    if settings.trust_cloudflare_headers:
+    if settings.trust_cloudflare_headers and _from_cloudflare(request, settings):
         ip = _valid_ip(request.headers.get("cf-connecting-ip"))
     if ip is None and request.client is not None:
         ip = _valid_ip(request.client.host)

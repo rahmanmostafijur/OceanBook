@@ -55,6 +55,9 @@ class Settings(BaseSettings):
 
     cors_allow_origins: Annotated[list[str], NoDecode] = Field(default_factory=list)
     trust_cloudflare_headers: bool = False
+    # Shared secret that a Cloudflare Transform Rule adds as `X-Origin-Verify`. Deployed environments that
+    # trust Cloudflare headers must set it: without it anyone who reaches the origin could forge them.
+    cloudflare_origin_secret: SecretStr | None = None
     max_request_body_bytes: int = Field(default=1_048_576, ge=1024)
 
     # Login devices (sessions). The *download* device limit is business data:
@@ -180,6 +183,15 @@ class Settings(BaseSettings):
         if "trust_cloudflare_headers" not in self.model_fields_set:
             # Wrong either way is a security problem: forged client IPs, or one shared rate-limit bucket.
             raise ValueError("OB_TRUST_CLOUDFLARE_HEADERS must be set explicitly in deployed environments")
+        if self.trust_cloudflare_headers:
+            origin_secret = self.cloudflare_origin_secret
+            if origin_secret is None or len(origin_secret.get_secret_value()) < 32:
+                raise ValueError(
+                    "OB_CLOUDFLARE_ORIGIN_SECRET (at least 32 characters) is required when "
+                    "OB_TRUST_CLOUDFLARE_HEADERS is true in a deployed environment"
+                )
+            if PLACEHOLDER_MARKER in origin_secret.get_secret_value():
+                raise ValueError("OB_CLOUDFLARE_ORIGIN_SECRET still contains a placeholder value")
         if not self.staff_mfa_required:
             raise ValueError("OB_STAFF_MFA_REQUIRED cannot be disabled in deployed environments")
         if self.phone_otp_provider == "console":
