@@ -29,3 +29,8 @@ Thumbs.db
 # Claude Code local settings (project settings.json is shared)
 .claude
 .claude/settings.local.json
+
+# Android release signing (never commit)
+**/android/key.properties
+*.jks
+*.keystore

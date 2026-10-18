@@ -16,6 +16,7 @@ const double _backdropBlur = 28;
 Future<void> showBookDetailsSheet(BuildContext context, LibraryBook book) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
+  sheetAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
   useSafeArea: true,
   showDragHandle: false,
   constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth),

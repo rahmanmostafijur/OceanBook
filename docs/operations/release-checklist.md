@@ -59,7 +59,8 @@ Required in deployed environments (the process refuses to start otherwise): `OB_
 - The admin web app and the mobile app are Flutter builds that call the API directly; there is no server-side proxy in the repository. The API base URL is compiled in (`--dart-define=API_BASE_URL=https://api.<domain>/api/v1`; defaults are `http://localhost:8000/api/v1` for admin and `http://10.0.2.2:8000/api/v1` for mobile, so a release build without the define points at localhost).
 - [repo] CORS is configured only through `OB_CORS_ALLOW_ORIGINS` (empty by default).
 - [env] Build the admin web with the production `API_BASE_URL`, host it as static files, and set `OB_CORS_ALLOW_ORIGINS` to exactly that origin. If the owner prefers same-origin hosting, route `/api/*` to the API at the edge and leave CORS empty.
-- [env] Release-sign the Android build (keystore) and verify the mobile build against the staging API.
+- [repo] `apps/mobile/android/app/build.gradle.kts` signs release builds with the keystore described in `android/key.properties` (`keyAlias`, `keyPassword`, `storeFile`, `storePassword`; git-ignored). Without that file the release build falls back to the debug key and prints a warning; such an APK must never be published. `flutter build apk --debug`, `--release` (debug-signed) and the admin `flutter build web --release` succeed.
+- [env] Create the upload keystore, keep it and its passwords in the secret manager, provide `key.properties` on the build machine or CI, build with `--dart-define=API_BASE_URL=...`, and verify the mobile build against the staging API. No Play or App Store configuration exists in the repository.
 
 ## 9. Rollback and recovery
 

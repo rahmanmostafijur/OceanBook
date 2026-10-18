@@ -6,6 +6,7 @@ import '../tokens/app_motion.dart';
 import '../tokens/app_shapes.dart';
 import '../tokens/app_spacing.dart';
 import '../tokens/app_typography.dart';
+import 'reduced_motion_transitions.dart';
 
 /// How dense the UI is. Mobile uses Material's standard density; the web admin is a desktop tool and
 /// uses compact density with one-step-smaller body text. Same tokens, same colours, same shapes.
@@ -40,11 +41,11 @@ abstract final class AppTheme {
       splashFactory: InkSparkle.splashFactory,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.windows: FadeForwardsPageTransitionsBuilder(),
-          TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
-          TargetPlatform.macOS: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.android: ReducedMotionPageTransitionsBuilder(FadeForwardsPageTransitionsBuilder()),
+          TargetPlatform.iOS: ReducedMotionPageTransitionsBuilder(CupertinoPageTransitionsBuilder()),
+          TargetPlatform.windows: ReducedMotionPageTransitionsBuilder(FadeForwardsPageTransitionsBuilder()),
+          TargetPlatform.linux: ReducedMotionPageTransitionsBuilder(FadeForwardsPageTransitionsBuilder()),
+          TargetPlatform.macOS: ReducedMotionPageTransitionsBuilder(FadeForwardsPageTransitionsBuilder()),
         },
       ),
       appBarTheme: AppBarTheme(

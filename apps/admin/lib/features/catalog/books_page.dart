@@ -105,7 +105,7 @@ class BooksPage extends ConsumerWidget {
                 retryLabel: l10n.actionRetry,
                 onRetry: () => ref.invalidate(adminBooksProvider),
               ),
-              _ => const Center(child: CircularProgressIndicator()),
+              _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
             },
           ),
         ],

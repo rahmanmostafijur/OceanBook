@@ -36,7 +36,7 @@ class BookDetailScreen extends ConsumerWidget {
           retryLabel: l10n.actionRetry,
           onRetry: () => ref.invalidate(bookDetailProvider(idOrSlug)),
         ),
-        _ => const Center(child: CircularProgressIndicator()),
+        _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
       },
     );
   }
@@ -228,6 +228,7 @@ class _ChapterTile extends StatelessWidget {
     final badge = chapter.hasPreview ? AccessChip(badge: AccessBadge.preview, label: l10n.bookPreviewBadge) : null;
     if (chapter.sections.isEmpty) return ListTile(title: Text(chapter.title), trailing: badge);
     return ExpansionTile(
+      expansionAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
       title: Text(chapter.title),
       trailing: badge,
       children: [

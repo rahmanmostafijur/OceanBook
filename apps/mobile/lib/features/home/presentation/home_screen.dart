@@ -282,7 +282,7 @@ class _PopularRail extends ConsumerWidget {
         ),
       ),
       AsyncError(:final error) => Text(failureMessage(l10n, error), style: hint),
-      _ => const SizedBox(height: 120, child: Center(child: CircularProgressIndicator())),
+      _ => SizedBox(height: 120, child: PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading)),
     };
   }
 }

@@ -217,7 +217,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       key: const Key('submit'),
       onPressed: _busy ? null : _submitEmail,
       child: _busy
-          ? const SizedBox.square(dimension: 20, child: CircularProgressIndicator(strokeWidth: 2))
+          ? SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2, semanticsLabel: l10n.commonLoading),
+            )
           : Text(_creating ? l10n.actionCreateAccount : l10n.actionSignIn),
     ),
     const SizedBox(height: AppSpacing.xs),

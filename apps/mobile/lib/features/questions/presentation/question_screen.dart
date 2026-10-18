@@ -30,7 +30,7 @@ class QuestionScreen extends ConsumerWidget {
           retryLabel: l10n.actionRetry,
           onRetry: () => ref.invalidate(questionDetailProvider(questionId)),
         ),
-        _ => const Center(child: CircularProgressIndicator()),
+        _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
       },
     );
   }

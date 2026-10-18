@@ -50,7 +50,7 @@ class AuthorScreen extends ConsumerWidget {
                       children: [for (final book in value) BookTile(book: book, width: 160)],
                     ),
                     AsyncError(:final error) => Text(failureMessage(l10n, error)),
-                    _ => const Center(child: CircularProgressIndicator()),
+                    _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
                   },
                 ],
               ),
@@ -63,7 +63,7 @@ class AuthorScreen extends ConsumerWidget {
           retryLabel: l10n.actionRetry,
           onRetry: () => ref.invalidate(authorProvider(slug)),
         ),
-        _ => const Center(child: CircularProgressIndicator()),
+        _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
       },
     );
   }

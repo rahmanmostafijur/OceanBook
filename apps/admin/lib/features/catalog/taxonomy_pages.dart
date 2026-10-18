@@ -93,7 +93,7 @@ class PeoplePage extends ConsumerWidget {
                 retryLabel: l10n.actionRetry,
                 onRetry: () => ref.invalidate(adminPeopleProvider(kind)),
               ),
-              _ => const Center(child: CircularProgressIndicator()),
+              _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
             },
           ),
         ],
@@ -134,7 +134,7 @@ class CategoriesPage extends ConsumerWidget {
         retryLabel: l10n.actionRetry,
         onRetry: () => ref.invalidate(adminCategoriesProvider),
       ),
-      _ => const Center(child: CircularProgressIndicator()),
+      _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
     };
   }
 }

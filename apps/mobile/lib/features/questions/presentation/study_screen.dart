@@ -82,7 +82,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
               ),
               if (query != null) SliverToBoxAdapter(child: _FilterBar(query: query)),
               if (study.value?.reloading ?? false)
-                SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2, semanticsLabel: l10n.commonLoading)),
+                SliverToBoxAdapter(child: PageLoading.linear(semanticLabel: l10n.commonLoading)),
               ..._results(context, l10n, study, controller),
             ],
           ),
@@ -144,7 +144,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
       _ => [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: Center(child: CircularProgressIndicator(semanticsLabel: l10n.commonLoading)),
+          child: PageLoading(semanticLabel: l10n.commonLoading),
         ),
       ],
     };
@@ -171,7 +171,7 @@ class _Footer extends StatelessWidget {
     if (state.loadingMore) {
       return Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
-        child: Center(child: CircularProgressIndicator(semanticsLabel: l10n.commonLoading)),
+        child: PageLoading(semanticLabel: l10n.commonLoading),
       );
     }
     return const SizedBox(height: AppSpacing.sectionGap);
@@ -371,6 +371,7 @@ Future<Choice<T>?> showChoiceSheet<T>(
   return showModalBottomSheet<Choice<T>>(
     context: context,
     isScrollControlled: true,
+    sheetAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
     useSafeArea: true,
     constraints: const BoxConstraints(maxWidth: AppSizes.maxFormWidth + 80),
     builder: (context) => DraggableScrollableSheet(

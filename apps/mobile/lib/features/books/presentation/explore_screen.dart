@@ -136,7 +136,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           ),
         ),
       ],
-      _ => [const SliverFillRemaining(hasScrollBody: false, child: Center(child: CircularProgressIndicator()))],
+      _ => [SliverFillRemaining(hasScrollBody: false, child: PageLoading(semanticLabel: l10n.commonLoading))],
     };
   }
 }
@@ -159,9 +159,9 @@ class _Footer extends StatelessWidget {
       );
     }
     if (state.loadingMore) {
-      return const Padding(
-        padding: EdgeInsets.all(AppSpacing.md),
-        child: Center(child: CircularProgressIndicator()),
+      return Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: PageLoading(semanticLabel: l10n.commonLoading),
       );
     }
     return const SizedBox(height: AppSpacing.sectionGap);

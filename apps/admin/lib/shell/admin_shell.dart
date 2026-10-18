@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +13,9 @@ import '../core/providers.dart';
 /// Desktop-first admin frame: a persistent, sectioned NavigationDrawer on wide screens; a modal drawer
 /// behind a menu button on narrower windows. Content keeps a comfortable maximum width.
 const double _maxLabelWidth = 200;
+const double _minTileHeight = 56;
+const double _tileVerticalPadding = 16;
+const double _indicatorWidth = 336;
 
 class AdminShell extends ConsumerWidget {
   const AdminShell({required this.location, required this.child, super.key});
@@ -24,6 +29,25 @@ class AdminShell extends ConsumerWidget {
     if (exact >= 0) return exact;
     final prefix = items.indexWhere((i) => i.path != '/' && location.startsWith(i.path));
     return prefix < 0 ? 0 : prefix;
+  }
+
+  /// The drawer tile height is fixed by Material, so it is computed from the longest label wrapped at
+  /// [_maxLabelWidth] under the user's text scale: labels wrap instead of truncating.
+  double _tileHeight(BuildContext context, ObLocalizations l10n) {
+    final style = Theme.of(context).textTheme.labelLarge;
+    final scaler = MediaQuery.textScalerOf(context);
+    final direction = Directionality.of(context);
+    var tallest = 0.0;
+    for (final item in allAdminItems) {
+      final painter = TextPainter(
+        text: TextSpan(text: item.label(l10n), style: style),
+        textDirection: direction,
+        textScaler: scaler,
+      )..layout(maxWidth: _maxLabelWidth);
+      tallest = math.max(tallest, painter.height);
+      painter.dispose();
+    }
+    return math.max(_minTileHeight, tallest + _tileVerticalPadding);
   }
 
   Widget _drawer(BuildContext context, ObLocalizations l10n, {required bool modal}) {
@@ -48,25 +72,34 @@ class AdminShell extends ConsumerWidget {
         children.add(
           NavigationDrawerDestination(
             icon: Icon(item.icon),
-            // Long labels (especially in Bangla) ellipsize instead of overflowing the fixed-width drawer.
+            // Long labels (especially in Bangla) wrap within the label width; the tile grows to fit.
             label: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: _maxLabelWidth),
               child: Tooltip(
                 message: item.label(l10n),
-                child: Text(item.label(l10n), maxLines: 1, overflow: TextOverflow.ellipsis),
+                child: Text(item.label(l10n)),
               ),
             ),
           ),
         );
       }
     }
-    return NavigationDrawer(
-      selectedIndex: _selected,
-      onDestinationSelected: (i) {
-        if (modal) Navigator.of(context).pop();
-        context.go(allAdminItems[i].path);
-      },
-      children: children,
+    final tileHeight = _tileHeight(context, l10n);
+    return Theme(
+      data: theme.copyWith(
+        navigationDrawerTheme: theme.navigationDrawerTheme.copyWith(
+          tileHeight: tileHeight,
+          indicatorSize: Size(_indicatorWidth, tileHeight),
+        ),
+      ),
+      child: NavigationDrawer(
+        selectedIndex: _selected,
+        onDestinationSelected: (i) {
+          if (modal) Navigator.of(context).pop();
+          context.go(allAdminItems[i].path);
+        },
+        children: children,
+      ),
     );
   }
 

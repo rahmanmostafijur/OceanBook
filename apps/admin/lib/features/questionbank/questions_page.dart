@@ -137,7 +137,7 @@ class QuestionsPage extends ConsumerWidget {
                 retryLabel: l10n.actionRetry,
                 onRetry: () => ref.invalidate(adminQuestionsProvider),
               ),
-              _ => const Center(child: CircularProgressIndicator()),
+              _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
             },
           ),
         ],

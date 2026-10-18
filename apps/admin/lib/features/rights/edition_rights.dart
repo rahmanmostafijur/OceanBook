@@ -119,7 +119,7 @@ class _EditionRightsState extends ConsumerState<EditionRights> {
             ],
           ),
           AsyncError(:final error) => Text(adminFailureMessage(l10n, error)),
-          _ => const LinearProgressIndicator(),
+          _ => PageLoading.linear(semanticLabel: ObLocalizations.of(context).commonLoading),
         },
       ],
     );

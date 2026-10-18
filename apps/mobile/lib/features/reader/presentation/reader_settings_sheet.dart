@@ -11,6 +11,7 @@ import 'reader_settings_controller.dart';
 Future<void> showReaderSettings(BuildContext context) => showModalBottomSheet<void>(
   context: context,
   barrierColor: Colors.black12,
+  sheetAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
   showDragHandle: true,
   constraints: const BoxConstraints(maxWidth: AppSizes.maxFormWidth + 40),
   shape: AppShapes.bottomSheet,

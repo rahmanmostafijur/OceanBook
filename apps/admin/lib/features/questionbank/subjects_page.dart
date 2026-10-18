@@ -40,7 +40,7 @@ class SubjectsPage extends ConsumerWidget {
         retryLabel: l10n.actionRetry,
         onRetry: () => ref.invalidate(adminSubjectsProvider),
       ),
-      _ => const Center(child: CircularProgressIndicator()),
+      _ => PageLoading(semanticLabel: ObLocalizations.of(context).commonLoading),
     };
   }
 }
@@ -56,6 +56,7 @@ class _SubjectTile extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: AppSpacing.xs),
       child: ExpansionTile(
+        expansionAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
         key: Key('subject-${subject.id}'),
         title: Text(subject.name),
         subtitle: Text(
@@ -81,7 +82,10 @@ class _SubjectTile extends ConsumerWidget {
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Text(adminFailureMessage(ObLocalizations.of(context), error)),
               ),
-              _ => const Padding(padding: EdgeInsets.all(AppSpacing.md), child: LinearProgressIndicator()),
+              _ => Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: PageLoading.linear(semanticLabel: ObLocalizations.of(context).commonLoading),
+              ),
             },
           ),
         ],

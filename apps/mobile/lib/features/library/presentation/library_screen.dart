@@ -13,6 +13,17 @@ import 'widgets/library_book_card.dart';
 const double _minTileWidth = 150;
 const double _gridSpacing = AppSpacing.sm;
 
+const double _searchBarMinHeight = 56;
+const double _searchTextSize = 16;
+const double _searchTextLineHeight = 1.6;
+const double _searchBarSlack = 8;
+
+/// The search bar is at least 56 dp and grows with the text scale; the pinned header must reserve that.
+double _searchBarHeight(BuildContext context) => math.max(
+  _searchBarMinHeight,
+  MediaQuery.textScalerOf(context).scale(_searchTextSize) * _searchTextLineHeight + _searchBarSlack,
+);
+
 /// Library dashboard (signed-in only): sticky search, genre pills and a responsive cover grid.
 /// Reading, downloads and sync arrive in Phase 4, so the shelf is sample data for now.
 class LibraryScreen extends ConsumerWidget {
@@ -25,7 +36,6 @@ class LibraryScreen extends ConsumerWidget {
     final filter = ref.watch(libraryFilterProvider);
     final categories = ref.watch(libraryCategoriesProvider);
     final gutter = AppSpacing.gutter(MediaQuery.sizeOf(context).width);
-    final textScale = MediaQuery.textScalerOf(context).scale(1);
 
     return Scaffold(
       body: CustomScrollView(
@@ -34,7 +44,7 @@ class LibraryScreen extends ConsumerWidget {
           SliverPersistentHeader(
             pinned: true,
             delegate: _StickyHeader(
-              extent: 72 + AppSizes.chipRowHeight(context) + AppSpacing.xs,
+              extent: _searchBarHeight(context) + AppSpacing.xs * 2 + AppSizes.chipRowHeight(context) + AppSpacing.xs,
               child: Column(
                 children: [
                   Padding(
@@ -71,7 +81,7 @@ class LibraryScreen extends ConsumerWidget {
                   final columns = math.max(2, (width / _minTileWidth).floor());
                   final tileWidth = (width - _gridSpacing * (columns - 1)) / columns;
                   // Cover (2:3) plus the text block, which grows with the user's text scale.
-                  final tileHeight = tileWidth / AppSizes.coverAspectRatio + libraryCardTextHeight * textScale;
+                  final tileHeight = tileWidth / AppSizes.coverAspectRatio + libraryCardTextHeight(context);
                   return SliverGrid.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,

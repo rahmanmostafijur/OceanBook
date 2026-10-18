@@ -7,9 +7,9 @@
 
 | Gate item | Result | How it was verified |
 |-----------|--------|---------------------|
-| Backend tests | ✅ 294 passed (final run, 2026-10-19, after all fixes below and the seed loader) | `pytest` against real PostgreSQL 18 and Valkey 8 in Docker |
+| Backend tests | ✅ 314 passed (2026-10-19, after the origin secret, media purpose and seed gate) | `pytest` against real PostgreSQL 18 and Valkey 8 in Docker |
 | Lint / format / types / boundaries | ✅ | `ruff`, `mypy` (133 files), `lint-imports` (2 contracts kept) |
-| Flutter | ✅ | `dart format`, `flutter analyze --fatal-infos`, `flutter test`: mobile 73, admin 41, design_system 27, ob_core 16, reader_core 5 (`ob_l10n` has no tests) |
+| Flutter | ✅ | `dart format`, `flutter analyze --fatal-infos`, `flutter test`: mobile 80, admin 43, design_system 32, ob_core 16, reader_core 5 (`ob_l10n` has no tests) |
 | Docker | ✅ | Backend image builds; `docker compose config` is valid |
 | CI | ✅ by inspection | `backend.yml` runs the whole suite (migration drift and down/up cycle included, so 0005 and 0006 are covered); `flutter.yml` includes `reader_core` |
 
@@ -71,13 +71,18 @@ Code audit of the Phase 2 mobile and admin screens plus computed WCAG contrast o
 - Control borders (chips, option tiles) use `outline` instead of `outlineVariant`.
 - Notification button disabled until implemented; study and library progress indicators labelled; book sheet has a close button and a semantics-free drag handle.
 
+**Fixed, 2026-10-19 (second pass)**
+
+- No truncation at the largest text sizes: admin drawer labels wrap and the tile height follows the text scale; library cards allow 3 title and 2 author lines and the grid cell height is computed from the text scaler (the pinned library header also scales). Tests check no overflow at 200 % and 300 % in English and Bangla.
+- Full-page and refresh loading indicators use one shared `PageLoading` (live region with a localized label) across mobile and admin; tests cover the widget and a real page.
+- Reduced motion: page transitions are instant when animations are disabled (`ReducedMotionPageTransitionsBuilder`), bottom sheets and expansion tiles skip their animation; remaining implicit animations were already guarded.
+
 **Still open (documented limits)**
 
-- Admin drawer labels and the library card title and author still truncate visually at the highest text scales, because their containers have fixed heights; tooltips and full semantics labels cover them.
-- Full-page spinners in explore, author, book detail, question and admin screens have no `semanticsLabel`.
-- Page and bottom-sheet transitions do not consult `AppMotion.reduced`; admin compact density is below 48 dp but above WCAG 2.2's 24 dp; no skip link or focus move after admin navigation.
-- Not covered by unit tests: `Skeleton.semanticLabel`, `ContentDocView.blankLabel`, `chipRowHeight` scaling, the reader's accessible-navigation behaviour.
-- Everything marked "verify" in the audit still needs a TalkBack pass on a device.
+- The ink splash (`InkSparkle`) is theme-level and cannot follow reduced motion; the route duration is not shortened (the page appears instantly but the route still runs for its normal time); Material `Switch` and `NavigationBar` keep their own animations.
+- Admin compact density is below 48 dp but above WCAG 2.2's 24 dp; no skip link or focus move after admin navigation.
+- Not unit-tested: `Skeleton.semanticLabel`, `ContentDocView.blankLabel`, the reader's accessible-navigation behaviour.
+- **Device-only checks, not performed:** TalkBack, VoiceOver, physical-device largest font and display size, and everything marked "verify" in the audit. Widget tests simulate text scale and semantics but do not replace a real device.
 
 ## 6. Upload purpose, CI and scanners (2026-10-19)
 
