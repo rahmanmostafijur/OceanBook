@@ -30,7 +30,7 @@ from app.identity.permissions import SystemRole
 from app.identity.services.login import normalise_email
 from app.identity.services.step_up import issue_enrolment_token
 from app.platform.audit import ActorType, record_audit
-from app.seeding.academics import SeedError, load_academics, read_seed_file
+from app.seeding.academics import SeedError, assert_reviewed, load_academics, read_seed_file
 
 
 async def create_super_admin(email: str, name: str, password: str) -> str:
@@ -85,6 +85,8 @@ DEV_SAMPLE = Path(__file__).resolve().parents[1] / "seed" / "dev" / "academics-s
 
 async def seed_academics(path: Path, *, dry_run: bool) -> dict[str, int]:
     seed = read_seed_file(path)
+    if get_settings().is_deployed:
+        assert_reviewed(seed)
     db = Database.from_settings(get_settings())
     try:
         async with db.write_sessionmaker() as session:

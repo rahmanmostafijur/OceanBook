@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "status": "synthetic",
+    "source": "TEMPLATE. Every value below is a made-up placeholder, not curriculum data. Replace all of it, then set status to reviewed and fill source, reviewed_by and reviewed_on (ISO date)."
+  },
+  "curriculum": {
+    "key": "replace_with_curriculum_key",
+    "name": { "bn": "[নমুনা] পাঠ্যক্রমের নাম", "en": "[TEMPLATE] Curriculum name" },
+    "effective_from_year": 2000,
+    "is_current": false
+  },
+  "groups": [
+    { "level": "ssc", "key": "replace_group_key", "name": { "bn": "[নমুনা] বিভাগ", "en": "[TEMPLATE] Group" } }
+  ],
+  "subjects": [
+    {
+      "level": "ssc",
+      "slug": "replace-subject-slug",
+      "family_key": "replace_family_key",
+      "name": { "bn": "[নমুনা] বিষয়", "en": "[TEMPLATE] Subject" },
+      "position": 1,
+      "groups": [{ "group": "replace_group_key", "offering": "compulsory" }],
+      "chapters": [
+        {
+          "number": 1,
+          "name": { "bn": "[নমুনা] অধ্যায়", "en": "[TEMPLATE] Chapter" },
+          "topics": [{ "name": { "bn": "[নমুনা] বিষয়বস্তু", "en": "[TEMPLATE] Topic" } }]
+        }
+      ]
+    }
+  ]
+}

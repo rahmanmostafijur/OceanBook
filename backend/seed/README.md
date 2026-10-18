@@ -28,3 +28,21 @@ The report lists `<kind>.created` and `<kind>.existing` counts.
 ## File format
 
 `curriculum` (key, name with `bn`, optional effective years, `is_current`), `groups` (level, key, name), `subjects` (level `ssc` or `hsc`, slug, `family_key`, optional `board_code` and `paper_number` 1 or 2, `position`, `groups` with an offering of `compulsory`, `elective` or `optional`, and nested `chapters` with `number`, `name` and `topics`). See the sample for a complete example. Topics are matched inside their chapter by Bangla name.
+
+## Synthetic and reviewed data
+
+Each file has a `meta` block. `status` is `synthetic` or `reviewed`.
+
+- `dev/academics-sample.json` and `templates/academics-template.json` are **synthetic**. The template's names all start with "[TEMPLATE]"/"[নমুনা]" and its keys are `replace_*`, so it cannot pass for real data. Neither is NCTB content.
+- In a deployed environment `--file` refuses any file that is not `reviewed`, or that lacks `source`, `reviewed_by` or `reviewed_on` in `meta` (`assert_reviewed`). The check runs before the database is opened.
+
+## What the real import needs (not available yet)
+
+For each level (SSC and HSC), one reviewed file in `seed/nctb/` containing:
+
+1. The official subject list per group with offering (compulsory, elective, optional), board subject codes and paper numbers.
+2. Chapter numbers and Bangla and English chapter titles exactly as in the current NCTB textbook, and the topic list per chapter (topics are matched by Bangla name).
+3. The curriculum key, name and effective years, and which curriculum is current.
+4. Approval evidence: the textbook edition or gazette used as the source, the reviewer's name and the review date (recorded in `meta`), plus the reviewer's sign-off kept with the release record.
+
+Procedure: copy the template, fill it from the source, run `--dry-run`, review the report, run it in staging, then in production (docs/operations/release-checklist.md).

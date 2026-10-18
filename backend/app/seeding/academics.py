@@ -102,7 +102,18 @@ class CurriculumSeed(_Named):
     is_current: bool = False
 
 
+class SeedMeta(_Strict):
+    """Where the data came from. Only `reviewed` files, with reviewer, date and source, load in a
+    deployed environment; `synthetic` files exist for development, tests and templates."""
+
+    status: Literal["synthetic", "reviewed"]
+    source: str | None = None
+    reviewed_by: str | None = None
+    reviewed_on: str | None = None
+
+
 class SeedFile(_Strict):
+    meta: SeedMeta | None = None
     curriculum: CurriculumSeed
     groups: list[GroupSeed] = []
     subjects: list[SubjectSeed] = []
@@ -117,6 +128,16 @@ class SeedFile(_Strict):
             if len(numbers) != len(set(numbers)):
                 raise ValueError(f"duplicate chapter number in subject {subject.slug}")
         return self
+
+
+def assert_reviewed(seed: SeedFile) -> None:
+    """Refuse anything that is not reviewed production data. Called before a deployed load."""
+    meta = seed.meta
+    if meta is None or meta.status != "reviewed":
+        raise SeedError("only files with meta.status 'reviewed' may be loaded in a deployed environment")
+    missing = [name for name in ("source", "reviewed_by", "reviewed_on") if not getattr(meta, name)]
+    if missing:
+        raise SeedError(f"reviewed files must record {', '.join(missing)} in meta")
 
 
 def read_seed_file(path: Path) -> SeedFile:

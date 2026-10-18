@@ -1,4 +1,5 @@
 {
+  "meta": { "status": "synthetic", "source": "Synthetic development sample. Not NCTB data." },
   "curriculum": {
     "key": "nctb_sample",
     "name": { "bn": "এনসিটিবি (নমুনা)", "en": "NCTB (sample)" },

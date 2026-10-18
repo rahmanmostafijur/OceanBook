@@ -128,3 +128,32 @@ async def test_bundled_dev_sample_loads(db: AsyncSession) -> None:
     assert report["subject.created"] == len(sample.subjects)
     again = await load_academics(db, sample)
     assert all(key.endswith(".existing") for key in again)
+
+
+def test_deployed_loads_need_reviewed_files_with_evidence() -> None:
+    from app.seeding.academics import assert_reviewed
+
+    for meta in (
+        None,
+        {"status": "synthetic"},
+        {"status": "reviewed"},
+        {"status": "reviewed", "source": "NCTB textbook 2024", "reviewed_by": "A. Reviewer"},
+    ):
+        with pytest.raises(SeedError):
+            assert_reviewed(seed(meta=meta))
+    ok = {
+        "status": "reviewed",
+        "source": "NCTB 2024",
+        "reviewed_by": "A. Reviewer",
+        "reviewed_on": "2026-11-01",
+    }
+    assert_reviewed(seed(meta=ok))
+
+
+def test_the_template_parses_but_is_marked_synthetic() -> None:
+    from app.seeding.academics import assert_reviewed
+
+    template = read_seed_file(DEV_SAMPLE.parents[1] / "templates" / "academics-template.json")
+    assert template.meta is not None and template.meta.status == "synthetic"
+    with pytest.raises(SeedError):
+        assert_reviewed(template)
