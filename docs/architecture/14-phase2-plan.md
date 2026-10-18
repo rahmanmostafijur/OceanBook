@@ -126,12 +126,12 @@ Findings fixed: access chips overflowed narrow tiles; fixed-height rails and gri
 State: M1–M13 are done and pushed. Only M14 remains in Phase 2, plus the owner decisions and deferred items below.
 
 ### M14 — QA gate (not started)
-- [ ] Run the full backend suite on PostgreSQL 18 and Valkey (about 35 minutes; it was last run in full before the M12 review fixes) and the Flutter gates in every workspace member (`mobile`, `admin`, `design_system`, `ob_core`, `ob_l10n`, `reader_core`).
+- [x] Run the full backend suite on PostgreSQL 18 and Valkey (about 35 minutes; it was last run in full before the M12 review fixes) and the Flutter gates in every workspace member (`mobile`, `admin`, `design_system`, `ob_core`, `ob_l10n`, `reader_core`).
 - [ ] Accessibility pass on the new screens: 200 % Bangla text, tap targets, contrast, screen-reader labels, reduced motion (library, book sheet, reader, home hero, study, question, admin question pages).
-- [ ] Security review of the whole Phase 2 surface (the question bank already had one; catalog and provenance have not been re-reviewed with the new subjects).
-- [ ] Docker build and CI check (`.github/workflows/backend.yml` and `flutter.yml`): confirm migrations 0005 and 0006 run in CI, the new tests are included, and the compose stack builds.
-- [ ] Documentation update: API reference for the new endpoints, `13`-style status file for Phase 2, toolchain notes (Android emulator setup in `docs/development/toolchain.md`).
-- [ ] Release-readiness: seed data plan for curricula and subjects (levels, boards and instruction media are seeded; curricula, subjects, chapters and topics are data to load).
+- [x] Security review of the whole Phase 2 surface (the question bank already had one; catalog and provenance have not been re-reviewed with the new subjects).
+- [x] Docker build and CI check (`.github/workflows/backend.yml` and `flutter.yml`): confirm migrations 0005 and 0006 run in CI, the new tests are included, and the compose stack builds.
+- [x] Documentation update: API reference ([16](16-phase2-api-reference.md)), status file ([15](15-phase2-status.md)), emulator notes in `docs/development/toolchain.md`.
+- [x] Release-readiness (plan in 15 §4; loader script not built): seed data plan for curricula and subjects (levels, boards and instruction media are seeded; curricula, subjects, chapters and topics are data to load).
 
 ### Owner decisions needed
 1. Build the reader/library backend (chapter content, progress, continue reading, bookmarks) before Phase 4, or keep it in Phase 4? Default: keep in Phase 4. The library screen and reader UI currently run on sample data (`library_providers.dart`, `reader_screen.dart`).

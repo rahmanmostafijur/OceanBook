@@ -60,7 +60,11 @@ void main() {
 
       await tester.enterText(find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)), '');
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.widgetWithText(ChoiceChip, 'বিজ্ঞান'));
+      await tester.scrollUntilVisible(
+        find.widgetWithText(ChoiceChip, 'বিজ্ঞান'),
+        100,
+        scrollable: find.descendant(of: find.byType(CategoryPills), matching: find.byType(Scrollable)),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(ChoiceChip, 'বিজ্ঞান'));
       await tester.pumpAndSettle();

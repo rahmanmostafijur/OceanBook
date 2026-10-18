@@ -12,6 +12,9 @@ import '../../books/presentation/widgets/book_tile.dart';
 
 /// Home: a calm, mobile-first overview (not an admin dashboard). Sections fill in as their domains land:
 /// catalog rails in M10, study progress in Phase 3, continue-reading in Phase 4.
+/// How far the search bar hangs below the hero.
+const double _searchOverlap = 28;
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -36,14 +39,19 @@ class HomeScreen extends ConsumerWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                OceanHero(
-                  bottomInset: 56,
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(gutter, AppSpacing.sm, gutter, 0),
-                        child: _HeroContent(greeting: greeting),
+                // The search bar overlaps the hero's lower edge. It sits inside the Stack's own bounds
+                // (the hero is padded up by the overlap) because hit testing ignores anything outside them.
+                Padding(
+                  padding: const EdgeInsets.only(bottom: _searchOverlap),
+                  child: OceanHero(
+                    bottomInset: 56,
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(gutter, AppSpacing.sm, gutter, 0),
+                          child: _HeroContent(greeting: greeting),
+                        ),
                       ),
                     ),
                   ),
@@ -51,7 +59,7 @@ class HomeScreen extends ConsumerWidget {
                 Positioned(
                   left: gutter,
                   right: gutter,
-                  bottom: -28,
+                  bottom: 0,
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth - 2 * AppSpacing.xl),
@@ -77,7 +85,7 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 28 + AppSpacing.md)),
+          const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
           SliverToBoxAdapter(
             child: ConstrainedContent(
               child: Column(
@@ -142,7 +150,7 @@ class _HeroContent extends StatelessWidget {
                 greeting,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium?.copyWith(color: onHero.withValues(alpha: 0.9)),
+                style: theme.textTheme.titleMedium?.copyWith(color: onHero),
               ),
             ),
             IconButton(
@@ -162,7 +170,7 @@ class _HeroContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.xs),
-        Text(l10n.homeHeroSubtitle, style: theme.textTheme.bodyLarge?.copyWith(color: onHero.withValues(alpha: 0.88))),
+        Text(l10n.homeHeroSubtitle, style: theme.textTheme.bodyLarge?.copyWith(color: onHero)),
         const SizedBox(height: AppSpacing.xl),
         FilledButton.icon(
           onPressed: () => context.go('/explore'),

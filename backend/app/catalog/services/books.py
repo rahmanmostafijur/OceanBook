@@ -208,6 +208,7 @@ class BookService:
 
     async def change_access(self, actor: Principal, book_id: uuid.UUID, body: BookAccessIn) -> Book:
         book = await get_book(self.session, book_id, lock=True)
+        self._ensure_not_archived(book)
         await self._check_access(body.access_level, body.required_entitlement_key)
         before = {
             "access_level": book.access_level,
@@ -251,6 +252,7 @@ class BookService:
         self, actor: Principal, book_id: uuid.UUID, subject_ids: Sequence[uuid.UUID]
     ) -> list[uuid.UUID]:
         book = await get_book(self.session, book_id, lock=True)
+        self._ensure_not_archived(book)
         await replace_subjects(self.session, book.id, subject_ids)
         audit(
             self.session,
@@ -303,6 +305,7 @@ class BookService:
     async def publish_translation(self, actor: Principal, book_id: uuid.UUID, locale: str) -> BookTranslation:
         """Makes a translation added to an already-published book visible."""
         book = await get_book(self.session, book_id, lock=True)
+        self._ensure_not_archived(book)
         translation = await self.session.get(BookTranslation, (book.id, locale), with_for_update=True)
         if translation is None:
             raise ValidationFailed("No translation for this locale", field="locale")

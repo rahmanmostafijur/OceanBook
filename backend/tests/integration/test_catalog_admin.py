@@ -159,6 +159,19 @@ async def test_review_loop_unpublish_and_archive(client: AsyncClient, team: Team
         client, "PATCH", f"/admin/books/{book['id']}", team.editor, {"content_type": "guide"}, 409
     )
     assert frozen["code"] == "INVALID_STATE_TRANSITION"
+    for method, path, headers, body in (
+        (
+            "PATCH",
+            f"/admin/books/{book['id']}/access",
+            team.admin,
+            {"access_level": "free", "reason": "Reopening it"},
+        ),
+        ("PUT", f"/admin/books/{book['id']}/subjects", team.editor, {"subject_ids": []}),
+        ("PATCH", f"/admin/editions/{edition['id']}", team.editor, {"page_count": 10}),
+        ("PUT", f"/admin/editions/{edition['id']}/structure", team.editor, {"chapters": []}),
+    ):
+        refused = await client.request(method, f"{API}{path}", headers=headers, json=body)
+        assert refused.status_code == 409, (path, refused.text)
     await call(
         client, "POST", f"/admin/books/{book['id']}/archive", team.reviewer, {"reason": "Again"}, status=409
     )

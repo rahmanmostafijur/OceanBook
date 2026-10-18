@@ -983,6 +983,9 @@ class ObLocalizationsEn extends ObLocalizations {
   String get questionOptionCorrectMark => 'Correct';
 
   @override
+  String get questionOptionWrongMark => 'Incorrect, your answer';
+
+  @override
   String get questionModelAnswer => 'Model answer';
 
   @override

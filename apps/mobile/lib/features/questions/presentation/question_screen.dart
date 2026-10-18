@@ -171,7 +171,8 @@ class _OptionTile extends StatelessWidget {
     return Semantics(
       button: true,
       selected: picked,
-      label: '${option.label}. ${_plain(option.content)}${correct ? ', ${l10n.questionOptionCorrectMark}' : ''}',
+      label:
+          '${option.label}. ${_plain(option.content)}${correct ? ', ${l10n.questionOptionCorrectMark}' : ''}${wrongPick ? ', ${l10n.questionOptionWrongMark}' : ''}',
       excludeSemantics: true,
       child: Material(
         color: background,

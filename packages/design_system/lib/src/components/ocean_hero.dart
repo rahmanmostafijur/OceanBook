@@ -7,12 +7,22 @@ import '../tokens/app_motion.dart';
 import '../tokens/app_shapes.dart';
 import '../tokens/app_spacing.dart';
 
+/// Gradient behind the hero text. Light theme deepens `primary` toward the scrim; in the dark theme
+/// `primary` is light and `onPrimary` dark, so the gradient must not darken toward the scrim there, or
+/// the text would lose contrast at the start of the gradient.
+List<Color> oceanHeroGradient(ColorScheme scheme) {
+  if (scheme.brightness == Brightness.dark) {
+    return [scheme.primary, Color.lerp(scheme.primary, scheme.onPrimary, 0.2)!];
+  }
+  return [Color.lerp(scheme.primary, scheme.scrim, 0.45)!, scheme.primary];
+}
+
 /// The landing hero: a deep-ocean gradient with slow layered waves, drifting bubbles and a warm coral
 /// glow in one corner. It is the app's 30 % (teal) surface with a touch of the 10 % accent.
 ///
 /// Everything painted is decorative and excluded from semantics. The waves stand still when the user
-/// has reduced motion on. Content sits on `primary`, so [ColorScheme.onPrimary] text keeps at least
-/// 7:1 contrast over the whole gradient.
+/// has reduced motion on. Content sits on [oceanHeroGradient], so [ColorScheme.onPrimary] text keeps at
+/// least 4.5:1 contrast over the whole gradient in both themes.
 class OceanHero extends StatefulWidget {
   const OceanHero({required this.child, this.minHeight = 300, this.bottomInset = AppSpacing.huge, super.key});
 
@@ -51,7 +61,7 @@ class _OceanHeroState extends State<OceanHero> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     // System bar icons follow the hero's tone: light icons on the dark ocean, dark ones on the light one.
-    final overlay = ThemeData.estimateBrightnessForColor(scheme.primary) == Brightness.dark
+    final overlay = ThemeData.estimateBrightnessForColor(oceanHeroGradient(scheme).first) == Brightness.dark
         ? SystemUiOverlayStyle.light
         : SystemUiOverlayStyle.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -68,7 +78,7 @@ class _OceanHeroState extends State<OceanHero> with SingleTickerProviderStateMix
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color.lerp(scheme.primary, scheme.scrim, 0.45)!, scheme.primary],
+            colors: oceanHeroGradient(scheme),
           ),
         ),
         child: Stack(

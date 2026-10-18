@@ -32,7 +32,7 @@ class CategoryPills extends StatelessWidget {
               child: ChoiceChip(
                 label: Text(category ?? l10n.libraryCategoryAll),
                 selected: category == selected,
-                showCheckmark: false,
+                showCheckmark: true,
                 onSelected: (_) => onSelected(category),
               ),
             );

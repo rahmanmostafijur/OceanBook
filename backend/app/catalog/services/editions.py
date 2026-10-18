@@ -83,7 +83,8 @@ class EditionService:
         return edition
 
     async def update(self, actor: Principal, edition_id: uuid.UUID, body: EditionPatch) -> BookEdition:
-        edition = await get_edition(self.session, edition_id, lock=True)
+        book, edition = await self._locked(edition_id)
+        self._ensure_not_archived(book)
         await require_publish_to_edit_live(self.session, actor, edition.status == EditionStatus.PUBLISHED)
         values = body.model_dump(exclude_unset=True, exclude={"publishers", "preview_policy"})
         for name, value in values.items():
@@ -109,7 +110,8 @@ class EditionService:
     async def set_usage_rights(
         self, actor: Principal, edition_id: uuid.UUID, body: UsageRightsIn
     ) -> EditionUsageRights:
-        await get_edition(self.session, edition_id)
+        book, _ = await self._locked(edition_id)
+        self._ensure_not_archived(book)
         rights = await self.session.get(EditionUsageRights, edition_id, with_for_update=True)
         if rights is None:
             rights = EditionUsageRights(edition_id=edition_id)
@@ -138,7 +140,8 @@ class EditionService:
         self, actor: Principal, edition_id: uuid.UUID, body: StructureIn
     ) -> tuple[int, int]:
         """Replace the table of contents. Returns (chapters, sections)."""
-        edition = await get_edition(self.session, edition_id, lock=True)
+        book, edition = await self._locked(edition_id)
+        self._ensure_not_archived(book)
         await require_publish_to_edit_live(self.session, actor, edition.status == EditionStatus.PUBLISHED)
         await self.session.execute(delete(EditionChapter).where(EditionChapter.edition_id == edition.id))
         sections = 0
@@ -229,6 +232,11 @@ class EditionService:
         await self.session.commit()
         await self.session.refresh(edition)
         return edition
+
+    @staticmethod
+    def _ensure_not_archived(book: Book) -> None:
+        if book.status == BookStatus.ARCHIVED:
+            raise Conflict("An archived book cannot be edited", code=ErrorCode.INVALID_STATE_TRANSITION)
 
     async def _locked(self, edition_id: uuid.UUID) -> tuple[Book, BookEdition]:
         """Book first, then edition: the lock order shared by every catalog and rights write path."""

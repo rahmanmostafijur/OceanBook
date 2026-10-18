@@ -1934,6 +1934,12 @@ abstract class ObLocalizations {
   /// **'Correct'**
   String get questionOptionCorrectMark;
 
+  /// No description provided for @questionOptionWrongMark.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect, your answer'**
+  String get questionOptionWrongMark;
+
   /// No description provided for @questionModelAnswer.
   ///
   /// In en, this message translates to:

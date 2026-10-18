@@ -15,10 +15,10 @@
 
 ## 2. M14 items not done
 
-- Manual accessibility pass (contrast, tap targets, reduced motion). Widget tests already check 200 % Bangla text and accessibility guidelines on the new screens.
-- Seed-data plan for curricula, subjects, chapters and topics.
-- `docs/development/toolchain.md` still says the emulator is not needed; the AVD setup (`oceanbook_pixel`, WHPX) is not documented there.
-- API reference for the new endpoints.
+- Accessibility pass: see §5. Widget tests already check 200 % Bangla text and accessibility guidelines on the new screens.
+- The seed-data loader script and the NCTB source files (the plan is in §4).
+
+Done since the first draft: API reference ([16](16-phase2-api-reference.md)), emulator setup in `docs/development/toolchain.md`, seed-data plan (§4).
 
 ## 3. Security review of the catalog, provenance and academics surface
 
@@ -34,6 +34,41 @@ Static read-only review. No CRITICAL or HIGH findings. Authorization, SQL inject
 | L3 | Provenance two-person rule checks authorship, not the submitter | Open |
 | L4 | No per-record separate-reviewer check on book publish | Open |
 | L5 | Audit payloads on updates hold field names only; failed publish-gate attempts are not audited | Open |
-| L6 | Some book and edition routes skip the archived check | Open |
+| L6 | Some book and edition routes skip the archived check | **Fixed**: access, subjects, translation publish, edition update, usage rights and structure now refuse archived books (409). Regression test in `test_review_loop_unpublish_and_archive` |
 | L7 | Academics, categories, tags and content-source lists are unpaginated | Open |
 | L8 | `cf-connecting-ip` is trusted only with `trust_cloudflare_headers`; confirm the origin is not directly reachable when it is on | Check at deployment |
+
+## 4. Seed-data plan (release readiness)
+
+Already seeded by migration 0005: education levels, boards and instruction media (idempotent `ON CONFLICT DO NOTHING`). Curricula, subjects, chapters and topics are data, not code, and are loaded after the first deploy through the admin API (`/admin/academics/...`, `academics.manage`), in this order because each row references the one before:
+
+1. **Curriculum:** one row per national curriculum revision (`key`, localised `name`, effective years); mark exactly one `is_current` (a unique index enforces it).
+2. **Academic groups** per education level (Science, Business Studies, Humanities for SSC and HSC).
+3. **Subjects** per curriculum and level. A board paper is a subject row (`board_code`, `paper_number`); `family_key` ties papers of one subject together across curriculum revisions, so keep it stable.
+4. **Chapters** per subject, then **topics** per chapter, in textbook order (`position`).
+
+Plan: keep the source list (NCTB textbook contents) in a reviewed CSV or JSON file in the repo, load it with a small idempotent script that calls the admin API (so every row is audited), and load SSC and HSC separately so a bad file only blocks one level. The planned bulk importer for questions (08 §5) needs these rows to exist first. Until the data is loaded the mobile Study screens show empty subject lists. Not built yet: the loader script and the source files.
+
+## 5. Accessibility pass
+
+Code audit of the Phase 2 mobile and admin screens plus computed WCAG contrast of every token pair (light and dark) and the reader palettes. The emulator was not used, so the items marked "verify" still need a device check (TalkBack, largest font and display size). Token pairs, reader palettes, icon-only button tooltips, image labels, reduced motion on the hero and skeleton, and heading semantics were found clean.
+
+**Fixed (HIGH)**
+
+| Finding | Fix |
+|---------|-----|
+| Home hero text failed contrast in dark mode (2.3 to 2.5:1 at the gradient start) | `oceanHeroGradient()`; dark theme no longer darkens toward the scrim; text drops its 0.88/0.9 alpha. New test checks 4.5:1 along the gradient in both themes |
+| Selected category chip and reader setting segments were shown by fill colour alone | Checkmark and selected icon enabled |
+| A wrong answer was not announced to screen readers | New string `questionOptionWrongMark` (en, bn) appended to the option label |
+| The lower half of the home search bar hung outside its parent and could not be tapped | Bar now sits inside the Stack's bounds |
+
+**Open, MEDIUM (device check marks "verify")**
+
+- Study question tile semantics drop marks, difficulty and the premium icon; filter sheet does not announce the current choice.
+- Reader chrome toggles only by tapping the page, and the back and settings buttons leave the semantics tree when hidden.
+- Truncation at large text: home quick tiles and greeting, library book card, admin drawer labels; fixed-height chip rows (verify).
+- Admin: action errors are not live regions; reason dialogs silently ignore input under 3 characters; DataTables have no horizontal scroll (verify).
+- Hard-coded strings: admin users page, `Skeleton` label ("Loading"), blank-answer semantic label `____`; Latin digits in page counters and reader font size under the Bangla locale.
+- Border contrast: chip and option borders use `outlineVariant` (1.6 to 2:1); `outline` would pass.
+
+**Open, LOW:** notification button with an empty handler, unlabeled progress indicators, drag handle without semantics and no close button on the book sheet, page and bottom-sheet motion ignore `AppMotion.reduced`, admin compact density below 48 dp (above WCAG 2.2's 24 dp), no skip link or focus move after admin navigation.

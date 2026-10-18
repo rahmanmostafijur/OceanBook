@@ -975,6 +975,9 @@ class ObLocalizationsBn extends ObLocalizations {
   String get questionOptionCorrectMark => 'সঠিক';
 
   @override
+  String get questionOptionWrongMark => 'ভুল, আপনার উত্তর';
+
+  @override
   String get questionModelAnswer => 'আদর্শ উত্তর';
 
   @override

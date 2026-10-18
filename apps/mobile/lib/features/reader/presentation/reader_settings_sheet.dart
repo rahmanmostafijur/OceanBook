@@ -65,7 +65,6 @@ class ReaderSettingsPanel extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<ReaderTheme>(
-                showSelectedIcon: false,
                 segments: [
                   ButtonSegment(
                     value: ReaderTheme.light,
@@ -92,7 +91,6 @@ class ReaderSettingsPanel extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<bool>(
-                showSelectedIcon: false,
                 segments: [
                   ButtonSegment(
                     value: false,

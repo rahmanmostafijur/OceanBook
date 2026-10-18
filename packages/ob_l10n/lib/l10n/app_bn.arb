@@ -307,6 +307,7 @@
   "questionDetailTitle": "প্রশ্ন",
   "studyChooseSubject": "একটি বিষয় বেছে নিন",
   "questionOptionCorrectMark": "সঠিক",
+  "questionOptionWrongMark": "ভুল, আপনার উত্তর",
   "questionModelAnswer": "আদর্শ উত্তর",
   "adminStatusApproved": "অনুমোদিত",
   "adminStatusChangesRequested": "পরিবর্তন চাওয়া হয়েছে",

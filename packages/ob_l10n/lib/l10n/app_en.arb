@@ -401,6 +401,7 @@
   "questionDetailTitle": "Question",
   "studyChooseSubject": "Choose a subject",
   "questionOptionCorrectMark": "Correct",
+  "questionOptionWrongMark": "Incorrect, your answer",
   "questionModelAnswer": "Model answer",
   "adminStatusApproved": "Approved",
   "adminStatusChangesRequested": "Changes requested",

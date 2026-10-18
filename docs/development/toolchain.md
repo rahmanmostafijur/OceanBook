@@ -24,7 +24,7 @@ Verified on 2026-10-01 on Windows 10 Pro 22H2 (10.0.19045). CI uses the same pin
 ## Deliberately not installed
 
 - **Android Studio (IDE):** building and testing only need the SDK and a JDK, both installed headlessly with Google's official command-line tools. `flutter doctor` is green for the Android toolchain without it. Install it if you want the IDE or the emulator UI; nothing in the build depends on it.
-- **Android Emulator / system images:** not needed for builds or tests. Add with `sdkmanager "emulator" "system-images;android-36;google_apis;x86_64"` when needed.
+- **Android Emulator UI:** not needed for builds or tests; the emulator itself is installed for manual checks, see "Android emulator" below.
 - **Visual Studio (C++ desktop workload):** only for Windows desktop apps, which OceanBook does not target. Desktop targets are disabled (`flutter config --no-enable-windows-desktop --no-enable-linux-desktop --no-enable-macos-desktop`).
 - **Xcode / iOS toolchain:** requires macOS. iOS builds and tests run on a macOS CI runner.
 
@@ -51,3 +51,23 @@ flutter doctor -v
 - `flutter build web --release` (apps/admin, M9 code): ✓
 - `flutter build apk --debug` (apps/mobile, M8 code): ✓ (`app-debug.apk`, about 196 MB; Gradle assembleDebug takes about 47 s warm)
 - CI: [.github/workflows/flutter.yml](../../.github/workflows/flutter.yml) pins the same Flutter version and runs format, `analyze --fatal-infos` and tests on every member, then the web and APK builds. actionlint is clean.
+
+## Android emulator
+
+For manual checks (accessibility, layout at large text, the full sign-in flow). Not used by CI.
+
+```powershell
+# One-time: emulator and system image (Hyper-V / WHPX must be enabled; it works on this machine)
+sdkmanager --sdk_root=D:\dev\android-sdk "emulator" "system-images;android-36;google_apis;x86_64"
+$env:ANDROID_AVD_HOME = "D:\dev\avd"
+avdmanager create avd -n oceanbook_pixel -k "system-images;android-36;google_apis;x86_64" -d pixel_7
+
+# Each session
+$env:ANDROID_AVD_HOME = "D:\dev\avd"
+emulator -avd oceanbook_pixel -gpu swiftshader_indirect
+flutter run -d emulator-5554   # from apps/mobile
+```
+
+- The app reaches the host API at `http://10.0.2.2:8000` (the emulator's alias for the host's localhost). Start the API with `docker compose up -d` first.
+- A demo user `demo@example.org` exists in the local compose database (create more with `python -m app.cli create-super-admin`).
+- To check large text: Settings > Display > Font size > Largest, and Display size > Largest; TalkBack is under Settings > Accessibility.

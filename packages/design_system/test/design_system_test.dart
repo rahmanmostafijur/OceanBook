@@ -13,6 +13,19 @@ double contrast(Color a, Color b) {
 }
 
 void main() {
+  group('ocean hero text contrast over the whole gradient', () {
+    for (final brightness in Brightness.values) {
+      test('${brightness.name} scheme keeps onPrimary at 4.5:1 from start to end', () {
+        final s = AppColors.scheme(brightness);
+        final colors = oceanHeroGradient(s);
+        for (var t = 0.0; t <= 1.0; t += 0.1) {
+          final bg = Color.lerp(colors.first, colors.last, t)!;
+          expect(contrast(s.onPrimary, bg), greaterThanOrEqualTo(4.5), reason: 'at ${t.toStringAsFixed(1)}');
+        }
+      });
+    }
+  });
+
   group('colour contrast (WCAG 2.2 AA, 4.5:1 for text)', () {
     for (final brightness in Brightness.values) {
       test('${brightness.name} scheme role pairs', () {
