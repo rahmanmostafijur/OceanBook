@@ -36,7 +36,7 @@ Static read-only review. No CRITICAL or HIGH findings. Authorization, SQL inject
 | L5 | Audit payloads on updates hold field names only; failed publish-gate attempts are not audited | **Fixed**: book, translation and edition updates record before and after values (text truncated at 500 characters). Refused publish-gate attempts cannot be audited in the database because the request rolls back, so they are logged (`publish_gate_refused`) with the reasons |
 | L6 | Some book and edition routes skip the archived check | **Fixed**: access, subjects, translation publish, edition update, usage rights and structure now refuse archived books (409). Regression test in `test_review_loop_unpublish_and_archive` |
 | L7 | Academics, categories, tags and content-source lists are unpaginated | **Fixed as a safety cap**: reference lists are small by design, so they keep their shape but never return more than `MAX_LIST_ROWS` (1000) rows. Paging them would change the response contract the apps rely on for no present need |
-| L8 | `cf-connecting-ip` is trusted only with `trust_cloudflare_headers` | **Justified, no code change**: deployed environments already refuse to start unless `OB_TRUST_CLOUDFLARE_HEADERS` is set explicitly (`core/config.py`). Setting it true is only safe when the origin accepts traffic from Cloudflare alone; that firewall rule is a deployment task, listed in the release checklist below |
+| L8 | `cf-connecting-ip` is trusted only with `trust_cloudflare_headers` | **Fixed in code, infrastructure still required**: deployed environments that trust Cloudflare headers must also set `OB_CLOUDFLARE_ORIGIN_SECRET`, and the IP header is honoured only when the request carries a matching `X-Origin-Verify` (constant-time compare; unit tests for forged, missing and wrong values). The Cloudflare Transform Rule and the origin network restriction are environment tasks with a verification procedure in `docs/operations/release-checklist.md` section 1 |
 
 ## 4. Seed-data plan (release readiness)
 
@@ -78,3 +78,11 @@ Code audit of the Phase 2 mobile and admin screens plus computed WCAG contrast o
 - Page and bottom-sheet transitions do not consult `AppMotion.reduced`; admin compact density is below 48 dp but above WCAG 2.2's 24 dp; no skip link or focus move after admin navigation.
 - Not covered by unit tests: `Skeleton.semanticLabel`, `ContentDocView.blankLabel`, `chipRowHeight` scaling, the reader's accessible-navigation behaviour.
 - Everything marked "verify" in the audit still needs a TalkBack pass on a device.
+
+## 6. Upload purpose, CI and scanners (2026-10-19)
+
+Release steps: [docs/operations/release-checklist.md](../operations/release-checklist.md) separates repository-verified items from checks that need the real environment.
+
+- **Upload purpose:** there is still no upload route. `app/media/service.py::register_asset` is now the single place an asset row is created: purpose required and validated, public assets images only under `public/`, evidence under `evidence/`; migration 0009 adds a database check that the key matches the purpose, and the CDN URL builder ignores keys outside `public/`. Tests: `tests/integration/test_media.py`.
+- **GitHub Actions (public API):** at `ee51516` the `backend` workflow's `checks` job passed on a GitHub runner, which runs the full suite including model/migration drift and the downgrade/re-upgrade cycle with migrations 0007 and 0008, and `flutter` passed. The `backend` `image` job had failed at job setup on every run since it was added, because `aquasecurity/trivy-action@0.28.0` does not exist; pinned to `v0.33.1` in `de8902e`. The first run that exercises migration 0009 and the fixed image job is the run for the push that contains that commit.
+- **Scanners, run locally:** `pip-audit --strict` on the exported production requirements: no known vulnerabilities. Trivy (`aquasec/trivy` container) on the freshly built backend image, HIGH and CRITICAL with `--ignore-unfixed`: exit 0, nothing to fix. The image contains Alembic head `0009`.
