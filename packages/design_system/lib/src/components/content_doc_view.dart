@@ -11,10 +11,13 @@ import '../tokens/app_spacing.dart';
 /// Math is shown as its TeX source in a distinct, labelled style until a LaTeX renderer is added; images
 /// show their alt text until the media URL contract for question images lands.
 class ContentDocView extends StatelessWidget {
-  const ContentDocView({required this.doc, this.style, super.key});
+  const ContentDocView({required this.doc, this.style, this.blankLabel = '', super.key});
 
   final Map<String, Object?> doc;
   final TextStyle? style;
+
+  /// Spoken name of a fill-in-the-blank gap (localized by the caller).
+  final String blankLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +27,10 @@ class ContentDocView extends StatelessWidget {
       if (raw is! Map) continue;
       final block = raw.cast<String, Object?>();
       final widget = switch (block['type']) {
-        'paragraph' => _Rich(inlines: block['inlines'], style: base),
+        'paragraph' => _Rich(inlines: block['inlines'], style: base, blankLabel: blankLabel),
         'image' => _ImagePlaceholder(alt: (block['alt'] as String?) ?? ''),
-        'list' => _ListBlock(block: block, style: base),
-        'table' => _TableBlock(rows: block['rows'], style: base),
+        'list' => _ListBlock(block: block, style: base, blankLabel: blankLabel),
+        'table' => _TableBlock(rows: block['rows'], style: base, blankLabel: blankLabel),
         _ => null,
       };
       if (widget != null) blocks.add(widget);
@@ -42,10 +45,11 @@ class ContentDocView extends StatelessWidget {
 }
 
 class _Rich extends StatelessWidget {
-  const _Rich({required this.inlines, required this.style});
+  const _Rich({required this.inlines, required this.style, required this.blankLabel});
 
   final Object? inlines;
   final TextStyle style;
+  final String blankLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class _Rich extends StatelessWidget {
               alignment: PlaceholderAlignment.baseline,
               baseline: TextBaseline.alphabetic,
               child: Semantics(
-                label: '____',
+                label: blankLabel,
                 child: Container(
                   width: 72,
                   height: (style.fontSize ?? 16) * 1.2,
@@ -171,10 +175,11 @@ const _banglaMarkers = ['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', 'জ', 
 const _romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
 
 class _ListBlock extends StatelessWidget {
-  const _ListBlock({required this.block, required this.style});
+  const _ListBlock({required this.block, required this.style, required this.blankLabel});
 
   final Map<String, Object?> block;
   final TextStyle style;
+  final String blankLabel;
 
   String _marker(int index) {
     final n = index + 1;
@@ -200,7 +205,7 @@ class _ListBlock extends StatelessWidget {
               children: [
                 SizedBox(width: 32, child: Text(_marker(i), style: style)),
                 Expanded(
-                  child: _Rich(inlines: item, style: style),
+                  child: _Rich(inlines: item, style: style, blankLabel: blankLabel),
                 ),
               ],
             ),
@@ -211,10 +216,11 @@ class _ListBlock extends StatelessWidget {
 }
 
 class _TableBlock extends StatelessWidget {
-  const _TableBlock({required this.rows, required this.style});
+  const _TableBlock({required this.rows, required this.style, required this.blankLabel});
 
   final Object? rows;
   final TextStyle style;
+  final String blankLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +232,7 @@ class _TableBlock extends StatelessWidget {
             for (final cell in (row as List?) ?? const <Object?>[])
               Padding(
                 padding: const EdgeInsets.all(AppSpacing.xs),
-                child: _Rich(inlines: cell, style: style),
+                child: _Rich(inlines: cell, style: style, blankLabel: blankLabel),
               ),
           ],
         ),

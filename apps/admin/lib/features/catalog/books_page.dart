@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
+import '../../core/scrollable_table.dart';
 import 'admin_catalog_api.dart';
 import 'new_book_dialog.dart';
 
@@ -130,32 +131,29 @@ class _BooksTable extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                  showCheckboxColumn: false,
-                  columns: [
-                    DataColumn(label: Text(l10n.adminColumnTitle)),
-                    DataColumn(label: Text(l10n.adminColumnStatus)),
-                    DataColumn(label: Text(l10n.adminColumnAccess)),
-                    DataColumn(label: Text(l10n.adminColumnEditions), numeric: true),
-                    DataColumn(label: Text(l10n.adminColumnUpdated)),
-                  ],
-                  rows: [
-                    for (final book in page.rows)
-                      DataRow(
-                        onSelectChanged: (_) => context.go('/books/${book.id}'),
-                        cells: [
-                          DataCell(Text(book.title, overflow: TextOverflow.ellipsis)),
-                          DataCell(StatusChip(status: book.status)),
-                          DataCell(Text(accessLabel(l10n, book.accessLevel))),
-                          DataCell(Text('${book.editionCount}')),
-                          DataCell(Text(MaterialLocalizations.of(context).formatShortDate(book.updatedAt.toLocal()))),
-                        ],
-                      ),
-                  ],
-                ),
+            child: ScrollableTable(
+              child: DataTable(
+                showCheckboxColumn: false,
+                columns: [
+                  DataColumn(label: Text(l10n.adminColumnTitle)),
+                  DataColumn(label: Text(l10n.adminColumnStatus)),
+                  DataColumn(label: Text(l10n.adminColumnAccess)),
+                  DataColumn(label: Text(l10n.adminColumnEditions), numeric: true),
+                  DataColumn(label: Text(l10n.adminColumnUpdated)),
+                ],
+                rows: [
+                  for (final book in page.rows)
+                    DataRow(
+                      onSelectChanged: (_) => context.go('/books/${book.id}'),
+                      cells: [
+                        DataCell(Text(book.title, overflow: TextOverflow.ellipsis)),
+                        DataCell(StatusChip(status: book.status)),
+                        DataCell(Text(accessLabel(l10n, book.accessLevel))),
+                        DataCell(Text('${book.editionCount}')),
+                        DataCell(Text(MaterialLocalizations.of(context).formatShortDate(book.updatedAt.toLocal()))),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),
@@ -173,7 +171,7 @@ class _BooksTable extends StatelessWidget {
                       : null,
                   icon: const Icon(Icons.chevron_left),
                 ),
-                Text('${filter.page} / $lastPage'),
+                Text(l10n.adminPageOf(filter.page, lastPage)),
                 IconButton(
                   tooltip: MaterialLocalizations.of(context).nextPageTooltip,
                   onPressed: filter.page < lastPage

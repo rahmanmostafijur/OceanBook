@@ -83,6 +83,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
     final palette = paletteFor(settings.theme);
     final book = _book();
     final chromeDuration = AppMotion.of(context, AppMotion.short4);
+    final chromeShown = _chromeVisible || MediaQuery.accessibleNavigationOf(context);
     final overlay = palette.brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
 
     final textStyle = TextStyle(
@@ -102,50 +103,53 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => setState(() => _chromeVisible = !_chromeVisible),
-                child: SafeArea(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: _readingMeasure + _sideMargin * 2),
-                      child: ListView(
-                        controller: _scroll,
-                        padding: const EdgeInsets.fromLTRB(_sideMargin, 88, _sideMargin, 72),
-                        children: [
-                          if (book != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
-                              child: Semantics(
-                                header: true,
-                                child: Text(
-                                  book.title,
-                                  style: textStyle.copyWith(
-                                    fontSize: textStyle.fontSize! * 1.5,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.3,
+              Semantics(
+                onTapHint: l10n.readerToggleControls,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => setState(() => _chromeVisible = !_chromeVisible),
+                  child: SafeArea(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: _readingMeasure + _sideMargin * 2),
+                        child: ListView(
+                          controller: _scroll,
+                          padding: const EdgeInsets.fromLTRB(_sideMargin, 88, _sideMargin, 72),
+                          children: [
+                            if (book != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
+                                child: Semantics(
+                                  header: true,
+                                  child: Text(
+                                    book.title,
+                                    style: textStyle.copyWith(
+                                      fontSize: textStyle.fontSize! * 1.5,
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.3,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          for (final paragraph in _samplePassage)
+                            for (final paragraph in _samplePassage)
+                              Padding(
+                                padding: EdgeInsets.only(bottom: textStyle.fontSize! * 0.9),
+                                child: Text(
+                                  paragraph,
+                                  style: textStyle,
+                                  textAlign: settings.justify ? TextAlign.justify : TextAlign.start,
+                                ),
+                              ),
                             Padding(
-                              padding: EdgeInsets.only(bottom: textStyle.fontSize! * 0.9),
+                              padding: const EdgeInsets.only(top: AppSpacing.xl),
                               child: Text(
-                                paragraph,
-                                style: textStyle,
-                                textAlign: settings.justify ? TextAlign.justify : TextAlign.start,
+                                l10n.readerPreviewNotice,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
                               ),
                             ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: AppSpacing.xl),
-                            child: Text(
-                              l10n.readerPreviewNotice,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -156,10 +160,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
                 left: 0,
                 right: 0,
                 child: IgnorePointer(
-                  ignoring: !_chromeVisible,
+                  ignoring: !chromeShown,
+                  // Hidden controls stay reachable for screen-reader users, who cannot tap the page to reveal them.
                   child: AnimatedOpacity(
                     duration: chromeDuration,
-                    opacity: _chromeVisible ? 1 : 0,
+                    opacity: chromeShown ? 1 : 0,
+                    alwaysIncludeSemantics: true,
                     child: _TopBar(
                       palette: palette,
                       title: book?.title ?? '',
@@ -176,6 +182,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
                   valueListenable: _progress,
                   builder: (context, value, _) => LinearProgressIndicator(
                     value: value,
+                    semanticsLabel: l10n.readerProgress,
                     minHeight: 3,
                     color: palette.accent,
                     backgroundColor: palette.muted.withValues(alpha: 0.2),

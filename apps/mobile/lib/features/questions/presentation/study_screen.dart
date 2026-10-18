@@ -15,6 +15,7 @@ import 'study_controller.dart';
 const _searchDebounce = Duration(milliseconds: 350);
 const _loadMoreExtent = 600.0;
 const _firstYear = 2010;
+const _largeTextScale = 1.5;
 
 /// Study: the SSC/HSC question bank. Pick a level, narrow by subject, chapter, type, difficulty, board
 /// and year; every filter is applied by the server, and pages load as you scroll.
@@ -81,7 +82,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
               ),
               if (query != null) SliverToBoxAdapter(child: _FilterBar(query: query)),
               if (study.value?.reloading ?? false)
-                const SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2)),
+                SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2, semanticsLabel: l10n.commonLoading)),
               ..._results(context, l10n, study, controller),
             ],
           ),
@@ -140,7 +141,12 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
           ),
         ),
       ],
-      _ => [const SliverFillRemaining(hasScrollBody: false, child: Center(child: CircularProgressIndicator()))],
+      _ => [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(child: CircularProgressIndicator(semanticsLabel: l10n.commonLoading)),
+        ),
+      ],
     };
   }
 }
@@ -163,9 +169,9 @@ class _Footer extends StatelessWidget {
       );
     }
     if (state.loadingMore) {
-      return const Padding(
-        padding: EdgeInsets.all(AppSpacing.md),
-        child: Center(child: CircularProgressIndicator()),
+      return Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Center(child: CircularProgressIndicator(semanticsLabel: l10n.commonLoading)),
       );
     }
     return const SizedBox(height: AppSpacing.sectionGap);
@@ -216,7 +222,7 @@ class _FilterBar extends ConsumerWidget {
     }
 
     return SizedBox(
-      height: AppSizes.minTouchTarget + AppSpacing.xs,
+      height: AppSizes.chipRowHeight(context) + AppSpacing.xs,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: gutter),
@@ -387,12 +393,14 @@ Future<Choice<T>?> showChoiceSheet<T>(
               children: [
                 ListTile(
                   title: Text(anyLabel),
+                  selected: selected == null,
                   trailing: selected == null ? const Icon(Icons.check) : null,
                   onTap: () => Navigator.of(context).pop(Choice<T>(null)),
                 ),
                 for (final (value, label) in options)
                   ListTile(
                     title: Text(label),
+                    selected: value == selected,
                     trailing: value == selected ? const Icon(Icons.check) : null,
                     onTap: () => Navigator.of(context).pop(Choice<T>(value)),
                   ),
@@ -416,9 +424,17 @@ class _QuestionTile extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final marks = question.marks == question.marks.roundToDouble() ? question.marks.round() : question.marks;
+    final isLargeText = MediaQuery.textScalerOf(context).scale(1) >= _largeTextScale;
+    final label = [
+      questionTypeLabel(l10n, question.type),
+      l10n.questionMarks(marks),
+      if (question.difficulty != null) l10n.questionDifficultyLevel(question.difficulty!),
+      if (question.accessLevel == AccessLevel.entitled) l10n.questionPremium,
+      question.stemText,
+    ].join(', ');
     return Semantics(
       button: true,
-      label: '${questionTypeLabel(l10n, question.type)}, ${question.stemText}',
+      label: label,
       excludeSemantics: true,
       child: Card(
         child: InkWell(
@@ -428,7 +444,12 @@ class _QuestionTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(question.stemText, maxLines: 3, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodyLarge),
+                Text(
+                  question.stemText,
+                  maxLines: isLargeText ? 6 : 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyLarge,
+                ),
                 const SizedBox(height: AppSpacing.xs),
                 Wrap(
                   spacing: AppSpacing.xs,
@@ -439,7 +460,14 @@ class _QuestionTile extends StatelessWidget {
                     _Tag(label: l10n.questionMarks(marks)),
                     if (question.difficulty != null) _Tag(label: l10n.questionDifficultyLevel(question.difficulty!)),
                     if (question.accessLevel == AccessLevel.entitled)
-                      Icon(Icons.workspace_premium_outlined, size: AppSizes.iconSmall, color: scheme.onSurfaceVariant),
+                      Tooltip(
+                        message: l10n.questionPremium,
+                        child: Icon(
+                          Icons.workspace_premium_outlined,
+                          size: AppSizes.iconSmall,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
                   ],
                 ),
               ],

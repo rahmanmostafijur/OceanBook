@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
+import '../../core/messages.dart';
 import '../../core/providers.dart';
+import '../../core/scrollable_table.dart';
 
 @immutable
 class AdminUserRow {
@@ -109,27 +111,27 @@ class UsersPage extends ConsumerWidget {
                 title: l10n.errorNotFound,
               ),
               AsyncData(:final value) => Card(
-                child: SingleChildScrollView(
+                child: ScrollableTable(
                   child: DataTable(
                     columns: [
                       DataColumn(label: Text(l10n.authDisplayName)),
                       DataColumn(label: Text(l10n.authEmail)),
                       DataColumn(label: Text(l10n.adminNavRoles)),
-                      const DataColumn(label: Text('Status')),
+                      DataColumn(label: Text(l10n.adminColumnStatus)),
                     ],
                     rows: [
                       for (final u in value.rows)
                         DataRow(
                           cells: [
                             DataCell(Text(u.displayName)),
-                            DataCell(Text(u.email ?? '—')),
+                            DataCell(Text(u.email ?? l10n.adminNoEmail)),
                             DataCell(
                               Wrap(
                                 spacing: AppSpacing.xxs,
-                                children: [for (final r in u.roles) Chip(label: Text(r))],
+                                children: [for (final r in u.roles) Chip(label: Text(roleLabel(l10n, r)))],
                               ),
                             ),
-                            DataCell(Text(u.status)),
+                            DataCell(Text(statusLabel(l10n, u.status))),
                           ],
                         ),
                     ],

@@ -123,21 +123,24 @@ Findings fixed: access chips overflowed narrow tiles; fixed-height rails and gri
 
 ## 4. Remaining work (saved 2026-10-17)
 
-State: M1–M13 are done and pushed. Only M14 remains in Phase 2, plus the owner decisions and deferred items below.
+State (2026-10-18): Phase 2 is complete. M14 is done (results in [15](15-phase2-status.md)), the four owner decisions are resolved below, and what remains is deferred to later phases or to deployment.
 
-### M14 — QA gate (not started)
+### M14 — QA gate ✅ (2026-10-18)
 - [x] Run the full backend suite on PostgreSQL 18 and Valkey (about 35 minutes; it was last run in full before the M12 review fixes) and the Flutter gates in every workspace member (`mobile`, `admin`, `design_system`, `ob_core`, `ob_l10n`, `reader_core`).
-- [ ] Accessibility pass on the new screens: 200 % Bangla text, tap targets, contrast, screen-reader labels, reduced motion (library, book sheet, reader, home hero, study, question, admin question pages).
+- [x] Accessibility pass on the new screens: 200 % Bangla text, tap targets, contrast, screen-reader labels, reduced motion (library, book sheet, reader, home hero, study, question, admin question pages).
 - [x] Security review of the whole Phase 2 surface (the question bank already had one; catalog and provenance have not been re-reviewed with the new subjects).
 - [x] Docker build and CI check (`.github/workflows/backend.yml` and `flutter.yml`): confirm migrations 0005 and 0006 run in CI, the new tests are included, and the compose stack builds.
 - [x] Documentation update: API reference ([16](16-phase2-api-reference.md)), status file ([15](15-phase2-status.md)), emulator notes in `docs/development/toolchain.md`.
 - [x] Release-readiness (plan in 15 §4; loader script not built): seed data plan for curricula and subjects (levels, boards and instruction media are seeded; curricula, subjects, chapters and topics are data to load).
 
-### Owner decisions needed
-1. Build the reader/library backend (chapter content, progress, continue reading, bookmarks) before Phase 4, or keep it in Phase 4? Default: keep in Phase 4. The library screen and reader UI currently run on sample data (`library_providers.dart`, `reader_screen.dart`).
-2. BDeBooks-inspired catalog additions (cached category counts, reading-time estimate, download counters, "report a problem with this file" queue): before or after M14? Default: after.
-3. Re-verify rights when a published question is edited (provenance is bound to the question, not its content)? Default: rely on independent approval.
-4. Question paper `access_level`: enforce on paper listings, or keep access question-level only?
+### Owner decisions (resolved 2026-10-18)
+
+Resolved by the engineering lead under delegated authority; each can be reopened by the owner.
+
+1. **Reader/library backend: stays in Phase 4.** The reader needs the file pipeline (S3 bucket decision, presigned upload, malware scan, preview generation), entitlement events and the offline-sync contract (06), none of which exist yet. Building progress, bookmarks and chapter content first would freeze an API before its storage and entitlement model is known. Consequence: the library screen and reader UI keep running on sample data (`library_providers.dart`, `reader_screen.dart`) and Read stays disabled unless the server grants it and the reader is available.
+2. **BDeBooks-inspired catalog additions: after Phase 2, planned for Phase 3.** Cached category counts, reading-time estimates, download counters and the file-problem report queue are enhancements on a stable catalog; download counters and the problem queue depend on the file pipeline from decision 1. Consequence: none now; the catalog list already supports the sorts and filters the apps use.
+3. **Re-verifying rights when a published question is edited: no extra step, rely on the existing controls.** An edit creates a new revision; the live version stays untouched until the revision is approved by a reviewer who did not write or edit it, and publishing re-runs the rights gate (`question_publishability`) and the daily and hourly enforcement jobs. Provenance describes the source of the material, which an editorial edit does not change. A change of source needs a provenance change, and that is already audited and, for verified records, restricted to narrowing. Covered by `test_editing_a_published_question_keeps_the_live_version_until_republished`. Consequence: provenance stays bound to the question.
+4. **Question paper `access_level`: access stays question-level; the paper field is informational.** A paper's public detail lists only item numbers and question ids; every question's content, answers and explanations are gated by that question's own access level and entitlement. Enforcing at paper level too would create two sources of truth for the same decision and could contradict the question gate. Consequence: paper listings are public metadata, and `access_level` on a paper is a label for clients ("premium paper"), not a lock.
 
 ### Deferred from M12 and M13 (needs a decision or a later milestone)
 - Admin: forms to author and edit question content (needs a ContentDoc editor; bulk import in 08 §5 is the planned path), create and edit papers, and manage curricula, subjects, chapters and topics (the APIs exist; the admin UI is browse-only for these).

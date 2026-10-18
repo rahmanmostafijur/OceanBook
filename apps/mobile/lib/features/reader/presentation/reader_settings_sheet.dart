@@ -47,7 +47,7 @@ class ReaderSettingsPanel extends ConsumerWidget {
                   child: Semantics(
                     liveRegion: true,
                     child: Text(
-                      '${(settings.fontScale * 100).round()}%',
+                      l10n.readerFontPercent((settings.fontScale * 100).round()),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium,
                     ),

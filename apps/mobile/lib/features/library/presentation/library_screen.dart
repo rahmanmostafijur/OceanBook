@@ -34,7 +34,7 @@ class LibraryScreen extends ConsumerWidget {
           SliverPersistentHeader(
             pinned: true,
             delegate: _StickyHeader(
-              extent: 72 + AppSizes.minTouchTarget + AppSpacing.xs + 8 * (textScale - 1).clamp(0, 1),
+              extent: 72 + AppSizes.chipRowHeight(context) + AppSpacing.xs,
               child: Column(
                 children: [
                   Padding(

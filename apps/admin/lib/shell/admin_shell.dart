@@ -51,7 +51,10 @@ class AdminShell extends ConsumerWidget {
             // Long labels (especially in Bangla) ellipsize instead of overflowing the fixed-width drawer.
             label: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: _maxLabelWidth),
-              child: Text(item.label(l10n), maxLines: 1, overflow: TextOverflow.ellipsis),
+              child: Tooltip(
+                message: item.label(l10n),
+                child: Text(item.label(l10n), maxLines: 1, overflow: TextOverflow.ellipsis),
+              ),
             ),
           ),
         );

@@ -52,6 +52,10 @@ String statusLabel(ObLocalizations l10n, String status) => switch (status) {
   'unpublished' => l10n.adminStatusUnpublished,
   'archived' => l10n.adminStatusArchived,
   'withdrawn' => l10n.adminStatusWithdrawn,
+  'active' => l10n.adminStatusActive,
+  'suspended' => l10n.adminStatusSuspended,
+  'pending_deletion' => l10n.adminStatusPendingDeletion,
+  'deleted' => l10n.adminStatusDeleted,
   _ => status,
 };
 
@@ -59,4 +63,13 @@ String accessLabel(ObLocalizations l10n, String level) => switch (level) {
   'free' => l10n.adminAccessFree,
   'registered' => l10n.adminAccessRegistered,
   _ => l10n.adminAccessEntitled,
+};
+
+String roleLabel(ObLocalizations l10n, String role) => switch (role) {
+  'student' => l10n.adminRoleStudent,
+  'content_editor' => l10n.adminRoleContentEditor,
+  'reviewer' => l10n.adminRoleReviewer,
+  'admin' => l10n.adminRoleAdmin,
+  'super_admin' => l10n.adminRoleSuperAdmin,
+  _ => role,
 };

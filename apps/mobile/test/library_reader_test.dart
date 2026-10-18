@@ -164,6 +164,13 @@ void main() {
       return ProviderScope.containerOf(element).read(readerSettingsProvider);
     }
 
+    testWidgets('reading progress is labelled for screen readers', (tester) async {
+      final handle = tester.ensureSemantics();
+      await openReader(tester);
+      expect(find.bySemanticsLabel('Reading progress'), findsOneWidget);
+      handle.dispose();
+    });
+
     testWidgets('settings change size, theme and alignment live', (tester) async {
       await openReader(tester);
       expect(currentSettings(tester).fontScale, 1.0);

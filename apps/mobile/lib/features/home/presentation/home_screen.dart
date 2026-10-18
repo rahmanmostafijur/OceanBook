@@ -14,6 +14,7 @@ import '../../books/presentation/widgets/book_tile.dart';
 /// catalog rails in M10, study progress in Phase 3, continue-reading in Phase 4.
 /// How far the search bar hangs below the hero.
 const double _searchOverlap = 28;
+const double _largeTextScale = 1.5;
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -148,7 +149,7 @@ class _HeroContent extends StatelessWidget {
             Expanded(
               child: Text(
                 greeting,
-                maxLines: 2,
+                maxLines: MediaQuery.textScalerOf(context).scale(1) >= _largeTextScale ? null : 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.titleMedium?.copyWith(color: onHero),
               ),
@@ -156,7 +157,7 @@ class _HeroContent extends StatelessWidget {
             IconButton(
               tooltip: l10n.notificationsTitle,
               color: onHero,
-              onPressed: () {},
+              onPressed: null, // disabled until notifications ship
               icon: const Icon(Icons.notifications_none),
             ),
           ],
@@ -240,7 +241,7 @@ class _QuickTile extends StatelessWidget {
                 Text(
                   label,
                   textAlign: TextAlign.center,
-                  maxLines: 2,
+                  maxLines: MediaQuery.textScalerOf(context).scale(1) >= _largeTextScale ? null : 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.onSecondaryContainer),
                 ),

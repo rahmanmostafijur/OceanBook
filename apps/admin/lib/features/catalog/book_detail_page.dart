@@ -123,10 +123,14 @@ class _BookViewState extends ConsumerState<_BookView> {
         ),
         if (_error != null) ...[
           const SizedBox(height: AppSpacing.sm),
-          Text(
-            _error!,
-            key: const Key('action-error'),
-            style: TextStyle(color: theme.colorScheme.error),
+          Semantics(
+            liveRegion: true,
+            container: true,
+            child: Text(
+              _error!,
+              key: const Key('action-error'),
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
           ),
           for (final reason in _blockReasons) Text('• ${gateReason(l10n, reason)}'),
         ],
@@ -162,6 +166,7 @@ class _ReasonDialog extends StatefulWidget {
 
 class _ReasonDialogState extends State<_ReasonDialog> {
   final _controller = TextEditingController();
+  bool _tooShort = false;
 
   @override
   void dispose() {
@@ -171,7 +176,11 @@ class _ReasonDialogState extends State<_ReasonDialog> {
 
   void _confirm() {
     final text = _controller.text.trim();
-    if (text.length >= 3) Navigator.of(context).pop(text); // the server requires 3..500 characters
+    if (text.length >= 3) {
+      Navigator.of(context).pop(text); // the server requires 3..500 characters
+    } else {
+      setState(() => _tooShort = true);
+    }
   }
 
   @override
@@ -184,7 +193,13 @@ class _ReasonDialogState extends State<_ReasonDialog> {
         controller: _controller,
         autofocus: true,
         maxLength: 500,
-        decoration: InputDecoration(helperText: l10n.adminReasonHint),
+        decoration: InputDecoration(
+          helperText: l10n.adminReasonHint,
+          errorText: _tooShort ? l10n.adminReasonTooShort : null,
+        ),
+        onChanged: (_) {
+          if (_tooShort) setState(() => _tooShort = false);
+        },
         onSubmitted: (_) => _confirm(),
       ),
       actions: [

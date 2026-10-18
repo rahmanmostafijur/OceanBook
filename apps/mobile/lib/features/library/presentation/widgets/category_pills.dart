@@ -20,7 +20,7 @@ class CategoryPills extends StatelessWidget {
       container: true,
       label: l10n.libraryCategoriesLabel,
       child: SizedBox(
-        height: AppSizes.minTouchTarget,
+        height: AppSizes.chipRowHeight(context),
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: gutter),

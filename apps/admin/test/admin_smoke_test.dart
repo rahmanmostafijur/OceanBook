@@ -107,7 +107,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(DataTable), findsOneWidget);
     expect(find.text('রফিক'), findsOneWidget);
-    expect(find.text('admin'), findsOneWidget);
+    expect(find.text('Administrator'), findsOneWidget);
+    expect(find.text('Active'), findsWidgets);
   });
 
   testWidgets('admin shell meets Material accessibility guidelines', (tester) async {

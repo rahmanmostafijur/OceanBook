@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 
 /// Spacing scale (dp). Larger gaps between sections, smaller inside related components.
@@ -30,6 +32,11 @@ abstract final class AppSizes {
 
   /// Minimum interactive size (Material and WCAG 2.2 target size).
   static const double minTouchTarget = 48;
+
+  /// Height of a single-line chip row: the touch target, or taller once the text scale makes the chip
+  /// (one 20 dp line plus 16 dp padding) outgrow it, so chips never clip at large text sizes.
+  static double chipRowHeight(BuildContext context) =>
+      math.max(minTouchTarget, MediaQuery.textScalerOf(context).scale(20) + 16);
 
   /// Comfortable reading measure for long text and forms on large screens.
   static const double maxReadableWidth = 720;

@@ -1067,4 +1067,73 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get adminNoSubjects => 'No subjects yet';
+
+  @override
+  String get contentBlank => 'blank';
+
+  @override
+  String get questionPremium => 'Premium';
+
+  @override
+  String get readerToggleControls => 'Show or hide reading controls';
+
+  @override
+  String get readerProgress => 'Reading progress';
+
+  @override
+  String get adminReasonTooShort => 'Enter at least 3 characters';
+
+  @override
+  String get adminStatusActive => 'Active';
+
+  @override
+  String get adminStatusSuspended => 'Suspended';
+
+  @override
+  String get adminStatusPendingDeletion => 'Pending deletion';
+
+  @override
+  String get adminStatusDeleted => 'Deleted';
+
+  @override
+  String get adminRoleStudent => 'Student';
+
+  @override
+  String get adminRoleContentEditor => 'Content editor';
+
+  @override
+  String get adminRoleReviewer => 'Reviewer';
+
+  @override
+  String get adminRoleAdmin => 'Administrator';
+
+  @override
+  String get adminRoleSuperAdmin => 'Super administrator';
+
+  @override
+  String get adminNoEmail => 'No email';
+
+  @override
+  String get commonLoading => 'Loading';
+
+  @override
+  String get actionClose => 'Close';
+
+  @override
+  String adminPageOf(int page, int total) {
+    final intl.NumberFormat pageNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String pageString = pageNumberFormat.format(page);
+    final intl.NumberFormat totalNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '$pageString / $totalString';
+  }
+
+  @override
+  String readerFontPercent(int percent) {
+    final intl.NumberFormat percentNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String percentString = percentNumberFormat.format(percent);
+
+    return '$percentString%';
+  }
 }

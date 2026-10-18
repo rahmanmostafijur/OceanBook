@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
+import '../../core/scrollable_table.dart';
 import '../catalog/admin_catalog_api.dart' show Paged;
 import '../catalog/books_page.dart' show StatusChip;
 import 'admin_question_api.dart';
@@ -106,30 +107,27 @@ class _PapersTable extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                  columns: [
-                    DataColumn(label: Text(l10n.filterYear), numeric: true),
-                    DataColumn(label: Text(l10n.adminColumnExam)),
-                    DataColumn(label: Text(l10n.adminColumnStatus)),
-                    DataColumn(label: Text(l10n.adminColumnBoards), numeric: true),
-                    DataColumn(label: Text(l10n.adminColumnQuestions), numeric: true),
-                  ],
-                  rows: [
-                    for (final paper in page.rows)
-                      DataRow(
-                        cells: [
-                          DataCell(Text('${paper.examYear}')),
-                          DataCell(Text(paper.title ?? examKindLabel(l10n, paper.examKind))),
-                          DataCell(StatusChip(status: paper.status)),
-                          DataCell(Text('${paper.boardCount}')),
-                          DataCell(Text('${paper.itemCount}')),
-                        ],
-                      ),
-                  ],
-                ),
+            child: ScrollableTable(
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text(l10n.filterYear), numeric: true),
+                  DataColumn(label: Text(l10n.adminColumnExam)),
+                  DataColumn(label: Text(l10n.adminColumnStatus)),
+                  DataColumn(label: Text(l10n.adminColumnBoards), numeric: true),
+                  DataColumn(label: Text(l10n.adminColumnQuestions), numeric: true),
+                ],
+                rows: [
+                  for (final paper in page.rows)
+                    DataRow(
+                      cells: [
+                        DataCell(Text('${paper.examYear}')),
+                        DataCell(Text(paper.title ?? examKindLabel(l10n, paper.examKind))),
+                        DataCell(StatusChip(status: paper.status)),
+                        DataCell(Text('${paper.boardCount}')),
+                        DataCell(Text('${paper.itemCount}')),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),
@@ -147,7 +145,7 @@ class _PapersTable extends StatelessWidget {
                       : null,
                   icon: const Icon(Icons.chevron_left),
                 ),
-                Text('${query.page} / $lastPage'),
+                Text(l10n.adminPageOf(query.page, lastPage)),
                 IconButton(
                   tooltip: MaterialLocalizations.of(context).nextPageTooltip,
                   onPressed: query.page < lastPage

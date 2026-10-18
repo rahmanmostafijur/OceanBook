@@ -7,6 +7,9 @@ import '../../domain/library_book.dart';
 /// Space the text under a cover needs at 1x scale: title (2 lines), author, progress label and bar.
 const double libraryCardTextHeight = 112;
 
+/// From this text scale the author line may wrap instead of truncating.
+const double _largeTextScale = 1.5;
+
 /// Cover, thin progress bar, title, author and a progress label. One labelled button for assistive
 /// tech. The grid reserves the cover's height plus [libraryCardTextHeight] scaled by the text scale, so
 /// the text sits right under the cover and any spare height falls below the card.
@@ -39,14 +42,18 @@ class LibraryBookCard extends StatelessWidget {
               Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
               Text(
                 book.author,
-                maxLines: 1,
+                maxLines: MediaQuery.textScalerOf(context).scale(1) >= _largeTextScale ? 2 : 1,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
               ),
               const SizedBox(height: AppSpacing.xs),
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppShapes.extraSmall),
-                child: LinearProgressIndicator(value: book.progressPercent / 100, minHeight: 4),
+                child: LinearProgressIndicator(
+                  value: book.progressPercent / 100,
+                  minHeight: 4,
+                  semanticsLabel: progress,
+                ),
               ),
               const SizedBox(height: AppSpacing.xxs),
               Text(

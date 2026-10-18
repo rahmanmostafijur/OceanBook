@@ -100,7 +100,7 @@ abstract final class AppTheme {
       chipTheme: ChipThemeData(
         shape: AppShapes.chip,
         labelStyle: text.labelLarge,
-        side: BorderSide(color: scheme.outlineVariant),
+        side: BorderSide(color: scheme.outline),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: SegmentedButton.styleFrom(minimumSize: compact ? const Size(48, 40) : minTarget),

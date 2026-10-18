@@ -435,5 +435,44 @@
     }
   },
   "adminNoPapers": "No question papers yet",
-  "adminNoSubjects": "No subjects yet"
+  "adminNoSubjects": "No subjects yet",
+  "contentBlank": "blank",
+  "questionPremium": "Premium",
+  "readerToggleControls": "Show or hide reading controls",
+  "readerProgress": "Reading progress",
+  "adminReasonTooShort": "Enter at least 3 characters",
+  "adminStatusActive": "Active",
+  "adminStatusSuspended": "Suspended",
+  "adminStatusPendingDeletion": "Pending deletion",
+  "adminStatusDeleted": "Deleted",
+  "adminRoleStudent": "Student",
+  "adminRoleContentEditor": "Content editor",
+  "adminRoleReviewer": "Reviewer",
+  "adminRoleAdmin": "Administrator",
+  "adminRoleSuperAdmin": "Super administrator",
+  "adminNoEmail": "No email",
+  "commonLoading": "Loading",
+  "actionClose": "Close",
+  "adminPageOf": "{page} / {total}",
+  "@adminPageOf": {
+    "placeholders": {
+      "page": {
+        "type": "int",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "readerFontPercent": "{percent}%",
+  "@readerFontPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  }
 }

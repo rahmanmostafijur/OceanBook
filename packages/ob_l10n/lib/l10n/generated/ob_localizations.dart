@@ -2101,6 +2101,120 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'No subjects yet'**
   String get adminNoSubjects;
+
+  /// No description provided for @contentBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'blank'**
+  String get contentBlank;
+
+  /// No description provided for @questionPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get questionPremium;
+
+  /// No description provided for @readerToggleControls.
+  ///
+  /// In en, this message translates to:
+  /// **'Show or hide reading controls'**
+  String get readerToggleControls;
+
+  /// No description provided for @readerProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading progress'**
+  String get readerProgress;
+
+  /// No description provided for @adminReasonTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least 3 characters'**
+  String get adminReasonTooShort;
+
+  /// No description provided for @adminStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get adminStatusActive;
+
+  /// No description provided for @adminStatusSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Suspended'**
+  String get adminStatusSuspended;
+
+  /// No description provided for @adminStatusPendingDeletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending deletion'**
+  String get adminStatusPendingDeletion;
+
+  /// No description provided for @adminStatusDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get adminStatusDeleted;
+
+  /// No description provided for @adminRoleStudent.
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get adminRoleStudent;
+
+  /// No description provided for @adminRoleContentEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Content editor'**
+  String get adminRoleContentEditor;
+
+  /// No description provided for @adminRoleReviewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewer'**
+  String get adminRoleReviewer;
+
+  /// No description provided for @adminRoleAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator'**
+  String get adminRoleAdmin;
+
+  /// No description provided for @adminRoleSuperAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Super administrator'**
+  String get adminRoleSuperAdmin;
+
+  /// No description provided for @adminNoEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'No email'**
+  String get adminNoEmail;
+
+  /// No description provided for @commonLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get commonLoading;
+
+  /// No description provided for @actionClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get actionClose;
+
+  /// No description provided for @adminPageOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{page} / {total}'**
+  String adminPageOf(int page, int total);
+
+  /// No description provided for @readerFontPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String readerFontPercent(int percent);
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

@@ -1,24 +1,24 @@
 # 15 — Phase 2 Status: Catalog, Academics and Question Bank
 
-**Status:** M1–M13 complete; M14 (QA) partly complete, see §2. Verified 2026-10-18.
+**Status:** ✅ Phase 2 complete (M1–M14). Final verification 2026-10-19.
 **Next:** owner decisions in [14 §4](14-phase2-plan.md), then Phase 3.
 
 ## 1. Gate results
 
 | Gate item | Result | How it was verified |
 |-----------|--------|---------------------|
-| Backend tests | ✅ 285 passed (re-run after the M1, M2, M3 and L1 fixes below) | `pytest` against real PostgreSQL 18 and Valkey 8 in Docker |
+| Backend tests | ✅ 294 passed (final run, 2026-10-19, after all fixes below and the seed loader) | `pytest` against real PostgreSQL 18 and Valkey 8 in Docker |
 | Lint / format / types / boundaries | ✅ | `ruff`, `mypy` (133 files), `lint-imports` (2 contracts kept) |
-| Flutter | ✅ | `dart format`, `flutter analyze --fatal-infos`, `flutter test`: mobile 71, admin 40, design_system 25, ob_core 16, reader_core 5 (`ob_l10n` has no tests) |
+| Flutter | ✅ | `dart format`, `flutter analyze --fatal-infos`, `flutter test`: mobile 73, admin 41, design_system 27, ob_core 16, reader_core 5 (`ob_l10n` has no tests) |
 | Docker | ✅ | Backend image builds; `docker compose config` is valid |
 | CI | ✅ by inspection | `backend.yml` runs the whole suite (migration drift and down/up cycle included, so 0005 and 0006 are covered); `flutter.yml` includes `reader_core` |
 
-## 2. M14 items not done
+## 2. Remaining after Phase 2
 
-- Accessibility pass: see §5. Widget tests already check 200 % Bangla text and accessibility guidelines on the new screens.
-- The seed-data loader script and the NCTB source files (the plan is in §4).
-
-Done since the first draft: API reference ([16](16-phase2-api-reference.md)), emulator setup in `docs/development/toolchain.md`, seed-data plan (§4).
+- Reviewed NCTB curriculum files for `seed-academics` (the loader is built, §4).
+- A TalkBack and large-font pass on a device for the items marked "verify" (§5), and the limits listed there.
+- Deployment tasks in the release checklist at the end of this file.
+- Items deferred to later phases are listed in [14](14-phase2-plan.md) §4.
 
 ## 3. Security review of the catalog, provenance and academics surface
 
@@ -30,13 +30,13 @@ Static read-only review. No CRITICAL or HIGH findings. Authorization, SQL inject
 | M2 | Editors can change a published book's table of contents, preview flags, translations and metadata without review | **Fixed**: changing a published book, a published edition (details, table of contents) or a published translation now also needs `BOOKS_PUBLISH` (`require_publish_to_edit_live`). Reviewers keep publish-only roles, so edits to live content go through admin or a reviewer who also edits. Alternative if you prefer: send the record back to review on edit |
 | M3 | A private evidence image could be set as a public cover (`MediaAsset` has no public/private purpose) | **Fixed**: migration 0007 adds `media_assets.purpose` (`public` or `evidence`; existing evidence rows are backfilled). Covers, question images and CDN URLs accept only `public`; provenance evidence accepts only `evidence`. The upload pipeline (M10 deferral) must set the purpose |
 | L1 | Explicit `null` on non-nullable PATCH fields (content sources, provenance, authors, publishers, categories, editions) can cause a 500 | **Fixed**: explicit `null` on required fields is now a 422 (`PatchModel.non_nullable`) |
-| L2 | An expired rights window stays visible until the daily enforcement job runs | Open |
-| L3 | Provenance two-person rule checks authorship, not the submitter | Open |
-| L4 | No per-record separate-reviewer check on book publish | Open |
-| L5 | Audit payloads on updates hold field names only; failed publish-gate attempts are not audited | Open |
+| L2 | An expired rights window stays visible until the enforcement job runs | **Justified, no code change**: the job runs hourly (`crontab(minute=5)`), so the worst-case exposure is under an hour after the window's end date; windows are whole dates. A read-time filter would add a provenance join to every public read for no practical gain. `rights-status` changes withdraw immediately in the same transaction |
+| L3 | Provenance two-person rule checks authorship, not the submitter | **Fixed**: migration 0008 adds `submitted_by`; verification is refused for the creator, last editor and submitter. Regression test `test_separation_of_duties_covers_the_submitter` |
+| L4 | No per-record separate-reviewer check on book publish | **Fixed**: books record `submitted_by`; publish is refused for the creator and the submitter (`SELF_VERIFICATION_FORBIDDEN`). Same test |
+| L5 | Audit payloads on updates hold field names only; failed publish-gate attempts are not audited | **Fixed**: book, translation and edition updates record before and after values (text truncated at 500 characters). Refused publish-gate attempts cannot be audited in the database because the request rolls back, so they are logged (`publish_gate_refused`) with the reasons |
 | L6 | Some book and edition routes skip the archived check | **Fixed**: access, subjects, translation publish, edition update, usage rights and structure now refuse archived books (409). Regression test in `test_review_loop_unpublish_and_archive` |
-| L7 | Academics, categories, tags and content-source lists are unpaginated | Open |
-| L8 | `cf-connecting-ip` is trusted only with `trust_cloudflare_headers`; confirm the origin is not directly reachable when it is on | Check at deployment |
+| L7 | Academics, categories, tags and content-source lists are unpaginated | **Fixed as a safety cap**: reference lists are small by design, so they keep their shape but never return more than `MAX_LIST_ROWS` (1000) rows. Paging them would change the response contract the apps rely on for no present need |
+| L8 | `cf-connecting-ip` is trusted only with `trust_cloudflare_headers` | **Justified, no code change**: deployed environments already refuse to start unless `OB_TRUST_CLOUDFLARE_HEADERS` is set explicitly (`core/config.py`). Setting it true is only safe when the origin accepts traffic from Cloudflare alone; that firewall rule is a deployment task, listed in the release checklist below |
 
 ## 4. Seed-data plan (release readiness)
 
@@ -47,7 +47,7 @@ Already seeded by migration 0005: education levels, boards and instruction media
 3. **Subjects** per curriculum and level. A board paper is a subject row (`board_code`, `paper_number`); `family_key` ties papers of one subject together across curriculum revisions, so keep it stable.
 4. **Chapters** per subject, then **topics** per chapter, in textbook order (`position`).
 
-Plan: keep the source list (NCTB textbook contents) in a reviewed CSV or JSON file in the repo, load it with a small idempotent script that calls the admin API (so every row is audited), and load SSC and HSC separately so a bad file only blocks one level. The planned bulk importer for questions (08 §5) needs these rows to exist first. Until the data is loaded the mobile Study screens show empty subject lists. Not built yet: the loader script and the source files.
+Plan: keep the source list (NCTB textbook contents) in reviewed JSON files in `backend/seed/nctb/`, one per level, so a bad file only blocks one level. The planned bulk importer for questions (08 §5) needs these rows to exist first. Until the data is loaded the mobile Study screens show empty subject lists. The loader is built: `python -m app.cli seed-academics` (insert-only, one transaction, dry run, dev sample refused in deployed environments), documented in `backend/seed/README.md`. Only the reviewed NCTB files are missing.
 
 ## 5. Accessibility pass
 
@@ -62,13 +62,19 @@ Code audit of the Phase 2 mobile and admin screens plus computed WCAG contrast o
 | A wrong answer was not announced to screen readers | New string `questionOptionWrongMark` (en, bn) appended to the option label |
 | The lower half of the home search bar hung outside its parent and could not be tapped | Bar now sits inside the Stack's bounds |
 
-**Open, MEDIUM (device check marks "verify")**
+**Fixed (MEDIUM and LOW), 2026-10-19**
 
-- Study question tile semantics drop marks, difficulty and the premium icon; filter sheet does not announce the current choice.
-- Reader chrome toggles only by tapping the page, and the back and settings buttons leave the semantics tree when hidden.
-- Truncation at large text: home quick tiles and greeting, library book card, admin drawer labels; fixed-height chip rows (verify).
-- Admin: action errors are not live regions; reason dialogs silently ignore input under 3 characters; DataTables have no horizontal scroll (verify).
-- Hard-coded strings: admin users page, `Skeleton` label ("Loading"), blank-answer semantic label `____`; Latin digits in page counters and reader font size under the Bangla locale.
-- Border contrast: chip and option borders use `outlineVariant` (1.6 to 2:1); `outline` would pass.
+- Study question tile announces marks, difficulty and premium; the filter sheet marks the current choice (`selected`).
+- Reader: controls stay visible when assistive navigation is on, the top bar keeps its semantics when faded, the page tap has a localized hint, the progress bar is labelled.
+- Large text: greeting, quick actions and the library author line wrap at scale 1.5 and above; chip rows scale with the text (`AppSizes.chipRowHeight`); admin drawer labels have tooltips.
+- Admin: action errors are live regions; the reason and comment dialogs show an error under 3 characters; tables scroll in both directions (`ScrollableTable`); the users page, loading label, retry label and blank-answer label are localized; page counters and the reader font percent use locale digits.
+- Control borders (chips, option tiles) use `outline` instead of `outlineVariant`.
+- Notification button disabled until implemented; study and library progress indicators labelled; book sheet has a close button and a semantics-free drag handle.
 
-**Open, LOW:** notification button with an empty handler, unlabeled progress indicators, drag handle without semantics and no close button on the book sheet, page and bottom-sheet motion ignore `AppMotion.reduced`, admin compact density below 48 dp (above WCAG 2.2's 24 dp), no skip link or focus move after admin navigation.
+**Still open (documented limits)**
+
+- Admin drawer labels and the library card title and author still truncate visually at the highest text scales, because their containers have fixed heights; tooltips and full semantics labels cover them.
+- Full-page spinners in explore, author, book detail, question and admin screens have no `semanticsLabel`.
+- Page and bottom-sheet transitions do not consult `AppMotion.reduced`; admin compact density is below 48 dp but above WCAG 2.2's 24 dp; no skip link or focus move after admin navigation.
+- Not covered by unit tests: `Skeleton.semanticLabel`, `ContentDocView.blankLabel`, `chipRowHeight` scaling, the reader's accessible-navigation behaviour.
+- Everything marked "verify" in the audit still needs a TalkBack pass on a device.

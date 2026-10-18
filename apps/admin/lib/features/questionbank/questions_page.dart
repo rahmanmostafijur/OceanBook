@@ -6,6 +6,7 @@ import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
+import '../../core/scrollable_table.dart';
 import '../catalog/admin_catalog_api.dart' show Paged;
 import '../catalog/books_page.dart' show StatusChip;
 import 'admin_question_api.dart';
@@ -161,37 +162,34 @@ class _QuestionsTable extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                  showCheckboxColumn: false,
-                  columns: [
-                    DataColumn(label: Text(l10n.adminColumnStem)),
-                    DataColumn(label: Text(l10n.adminColumnType)),
-                    DataColumn(label: Text(l10n.adminColumnStatus)),
-                    DataColumn(label: Text(l10n.adminColumnMarks), numeric: true),
-                    DataColumn(label: Text(l10n.adminColumnUpdated)),
-                  ],
-                  rows: [
-                    for (final q in page.rows)
-                      DataRow(
-                        onSelectChanged: (_) => context.go('/questions/${q.id}'),
-                        cells: [
-                          DataCell(
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 420),
-                              child: Text(q.stem, maxLines: 2, overflow: TextOverflow.ellipsis),
-                            ),
+            child: ScrollableTable(
+              child: DataTable(
+                showCheckboxColumn: false,
+                columns: [
+                  DataColumn(label: Text(l10n.adminColumnStem)),
+                  DataColumn(label: Text(l10n.adminColumnType)),
+                  DataColumn(label: Text(l10n.adminColumnStatus)),
+                  DataColumn(label: Text(l10n.adminColumnMarks), numeric: true),
+                  DataColumn(label: Text(l10n.adminColumnUpdated)),
+                ],
+                rows: [
+                  for (final q in page.rows)
+                    DataRow(
+                      onSelectChanged: (_) => context.go('/questions/${q.id}'),
+                      cells: [
+                        DataCell(
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 420),
+                            child: Text(q.stem, maxLines: 2, overflow: TextOverflow.ellipsis),
                           ),
-                          DataCell(Text(adminQuestionTypeLabel(l10n, q.type))),
-                          DataCell(StatusChip(status: q.pendingStatus ?? q.status)),
-                          DataCell(Text(q.marks == q.marks.roundToDouble() ? '${q.marks.round()}' : '${q.marks}')),
-                          DataCell(Text(MaterialLocalizations.of(context).formatShortDate(q.updatedAt.toLocal()))),
-                        ],
-                      ),
-                  ],
-                ),
+                        ),
+                        DataCell(Text(adminQuestionTypeLabel(l10n, q.type))),
+                        DataCell(StatusChip(status: q.pendingStatus ?? q.status)),
+                        DataCell(Text(q.marks == q.marks.roundToDouble() ? '${q.marks.round()}' : '${q.marks}')),
+                        DataCell(Text(MaterialLocalizations.of(context).formatShortDate(q.updatedAt.toLocal()))),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),
@@ -207,7 +205,7 @@ class _QuestionsTable extends StatelessWidget {
                   onPressed: filter.page > 1 ? () => onPage(filter.copyWith(page: filter.page - 1)) : null,
                   icon: const Icon(Icons.chevron_left),
                 ),
-                Text('${filter.page} / $lastPage'),
+                Text(l10n.adminPageOf(filter.page, lastPage)),
                 IconButton(
                   tooltip: MaterialLocalizations.of(context).nextPageTooltip,
                   onPressed: filter.page < lastPage ? () => onPage(filter.copyWith(page: filter.page + 1)) : null,

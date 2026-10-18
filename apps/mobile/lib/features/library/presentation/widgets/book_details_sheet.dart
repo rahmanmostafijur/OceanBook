@@ -48,15 +48,29 @@ class BookDetailsSheet extends StatelessWidget {
                   controller: controller,
                   padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, AppSpacing.xl),
                   children: [
-                    Center(
-                      child: Container(
-                        width: 32,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(2),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // The handle is decorative; the close button is the accessible way out.
+                        ExcludeSemantics(
+                          child: Container(
+                            width: 32,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
                         ),
-                      ),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: IconButton(
+                            tooltip: l10n.actionClose,
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(Icons.close),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Center(

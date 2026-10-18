@@ -70,6 +70,18 @@ void main() {
     expect(catalog.calls.last, 'unpublish:Cover update');
   });
 
+  testWidgets('a too-short reason shows an error instead of silently doing nothing', (tester) async {
+    final catalog = FakeAdminCatalog(book: fakeAdminBook(status: 'published', publishable: true));
+    await pumpAdmin(tester, restored: staffUser, catalog: catalog, location: '/books/b1');
+    await tester.tap(find.byKey(const Key('action-unpublish')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('reason-field')), 'ab');
+    await tester.tap(find.byKey(const Key('reason-confirm')));
+    await tester.pumpAndSettle();
+    expect(find.text('Enter at least 3 characters'), findsOneWidget);
+    expect(catalog.calls.where((c) => c.startsWith('unpublish')), isEmpty);
+  });
+
   testWidgets('new book dialog validates the slug locally and opens the created draft', (tester) async {
     final catalog = FakeAdminCatalog();
     await pumpAdmin(tester, restored: staffUser, catalog: catalog, location: '/books');

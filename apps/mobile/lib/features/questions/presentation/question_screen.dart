@@ -100,14 +100,18 @@ class _QuestionBodyState extends State<_QuestionBody> {
                           child: Text(l10n.questionStimulus, style: theme.textTheme.titleSmall),
                         ),
                         const SizedBox(height: AppSpacing.xs),
-                        ContentDocView(doc: _detail.stimulus!),
+                        ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: _detail.stimulus!),
                       ],
                     ),
                   ),
                 ),
               ],
               const SizedBox(height: AppSpacing.md),
-              ContentDocView(doc: _detail.stem, style: theme.textTheme.titleMedium?.copyWith(height: 1.5)),
+              ContentDocView(
+                blankLabel: ObLocalizations.of(context).contentBlank,
+                doc: _detail.stem,
+                style: theme.textTheme.titleMedium?.copyWith(height: 1.5),
+              ),
               if (_detail.options.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.md),
                 for (final option in _detail.options)
@@ -178,7 +182,7 @@ class _OptionTile extends StatelessWidget {
         color: background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppShapes.medium),
-          side: BorderSide(color: markColor ?? scheme.outlineVariant, width: markColor == null ? 1 : 2),
+          side: BorderSide(color: markColor ?? scheme.outline, width: markColor == null ? 1 : 2),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(AppShapes.medium),
@@ -194,7 +198,9 @@ class _OptionTile extends StatelessWidget {
                   child: Text(option.label),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                Expanded(child: ContentDocView(doc: option.content)),
+                Expanded(
+                  child: ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: option.content),
+                ),
                 if (correct) Icon(Icons.check_circle, color: markColor),
                 if (wrongPick) Icon(Icons.cancel, color: markColor),
               ],
@@ -245,12 +251,12 @@ class _PartTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xs),
-              ContentDocView(doc: part.prompt),
+              ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: part.prompt),
               if (revealed && part.modelAnswer != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(l10n.questionModelAnswer, style: theme.textTheme.labelLarge),
                 const SizedBox(height: AppSpacing.xxs),
-                ContentDocView(doc: part.modelAnswer!),
+                ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: part.modelAnswer!),
               ],
             ],
           ),
@@ -312,7 +318,7 @@ class _AnswerArea extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             Text(l10n.questionModelAnswer, style: theme.textTheme.titleSmall),
             const SizedBox(height: AppSpacing.xxs),
-            ContentDocView(doc: detail.modelAnswer!),
+            ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: detail.modelAnswer!),
           ],
           if (detail.explanation != null) ...[
             const SizedBox(height: AppSpacing.md),
@@ -321,7 +327,7 @@ class _AnswerArea extends StatelessWidget {
               child: Text(l10n.questionExplanation, style: theme.textTheme.titleSmall),
             ),
             const SizedBox(height: AppSpacing.xxs),
-            ContentDocView(doc: detail.explanation!),
+            ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: detail.explanation!),
           ],
         ],
       ],

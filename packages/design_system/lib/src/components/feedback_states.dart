@@ -48,7 +48,8 @@ class EmptyState extends StatelessWidget {
 
 /// A designed error: what happened, in the user's language, and a way forward.
 class ErrorState extends StatelessWidget {
-  const ErrorState({required this.title, required this.message, this.onRetry, this.retryLabel, super.key});
+  const ErrorState({required this.title, required this.message, this.onRetry, this.retryLabel, super.key})
+    : assert(onRetry == null || retryLabel != null, 'retryLabel (localized) is required with onRetry');
 
   final String title;
   final String message;
@@ -66,7 +67,7 @@ class ErrorState extends StatelessWidget {
           : FilledButton.tonalIcon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: Text(retryLabel ?? 'Retry'),
+              label: Text(retryLabel!),
             ),
     );
   }
@@ -74,11 +75,14 @@ class ErrorState extends StatelessWidget {
 
 /// Content-shaped placeholder while loading. Pulses unless the user prefers reduced motion.
 class Skeleton extends StatefulWidget {
-  const Skeleton({this.width, this.height = 16, this.radius = AppShapes.extraSmall, super.key});
+  const Skeleton({this.width, this.height = 16, this.radius = AppShapes.extraSmall, this.semanticLabel, super.key});
 
   final double? width;
   final double height;
   final double radius;
+
+  /// Localized "loading" label; when null the placeholder is hidden from assistive tech.
+  final String? semanticLabel;
 
   @override
   State<Skeleton> createState() => _SkeletonState();
@@ -109,19 +113,18 @@ class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Semantics(
-      label: 'Loading',
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) => Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: Color.lerp(scheme.surfaceContainerHigh, scheme.surfaceContainerHighest, _controller.value),
-            borderRadius: BorderRadius.circular(widget.radius),
-          ),
+    final box = AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) => Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          color: Color.lerp(scheme.surfaceContainerHigh, scheme.surfaceContainerHighest, _controller.value),
+          borderRadius: BorderRadius.circular(widget.radius),
         ),
       ),
     );
+    final label = widget.semanticLabel;
+    return label == null ? ExcludeSemantics(child: box) : Semantics(label: label, child: box);
   }
 }

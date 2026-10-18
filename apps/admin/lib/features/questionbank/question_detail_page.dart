@@ -155,10 +155,14 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                 ),
                 if (_error != null) ...[
                   const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    _error!,
-                    key: const Key('action-error'),
-                    style: TextStyle(color: theme.colorScheme.error),
+                  Semantics(
+                    liveRegion: true,
+                    container: true,
+                    child: Text(
+                      _error!,
+                      key: const Key('action-error'),
+                      style: TextStyle(color: theme.colorScheme.error),
+                    ),
                   ),
                   for (final reason in _blockReasons) Text('• ${gateReason(l10n, reason)}'),
                   if (_offerDuplicateOverride)
@@ -187,7 +191,11 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                     ),
                 ],
                 SectionHeader(title: l10n.adminColumnStem),
-                ContentDocView(doc: question.stem, style: theme.textTheme.titleMedium?.copyWith(height: 1.5)),
+                ContentDocView(
+                  blankLabel: ObLocalizations.of(context).contentBlank,
+                  doc: question.stem,
+                  style: theme.textTheme.titleMedium?.copyWith(height: 1.5),
+                ),
                 if (question.options.isNotEmpty) ...[
                   const SizedBox(height: AppSpacing.md),
                   for (final option in question.options)
@@ -210,7 +218,7 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                               style: theme.textTheme.titleSmall,
                             ),
                             const SizedBox(height: AppSpacing.xs),
-                            ContentDocView(doc: part.prompt),
+                            ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: part.prompt),
                           ],
                         ),
                       ),
@@ -218,7 +226,7 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                   ),
                 if (question.explanation != null) ...[
                   SectionHeader(title: l10n.questionExplanation),
-                  ContentDocView(doc: question.explanation!),
+                  ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: question.explanation!),
                 ],
               ],
             ),
@@ -246,13 +254,15 @@ class _AdminOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: option.isCorrect ? semantic.successContainer : scheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppShapes.medium),
-          border: Border.all(color: option.isCorrect ? semantic.success : scheme.outlineVariant),
+          border: Border.all(color: option.isCorrect ? semantic.success : scheme.outline),
         ),
         child: Row(
           children: [
             CircleAvatar(radius: 14, child: Text(option.label)),
             const SizedBox(width: AppSpacing.sm),
-            Expanded(child: ContentDocView(doc: option.content)),
+            Expanded(
+              child: ContentDocView(blankLabel: ObLocalizations.of(context).contentBlank, doc: option.content),
+            ),
             if (option.isCorrect) Icon(Icons.check_circle, color: semantic.success),
           ],
         ),
@@ -271,6 +281,7 @@ class _CommentDialog extends StatefulWidget {
 
 class _CommentDialogState extends State<_CommentDialog> {
   final _controller = TextEditingController();
+  bool _tooShort = false;
 
   @override
   void dispose() {
@@ -280,7 +291,11 @@ class _CommentDialogState extends State<_CommentDialog> {
 
   void _confirm() {
     final text = _controller.text.trim();
-    if (text.length >= 3) Navigator.of(context).pop(text); // the server requires a real comment
+    if (text.length >= 3) {
+      Navigator.of(context).pop(text); // the server requires 3..500 characters
+    } else {
+      setState(() => _tooShort = true);
+    }
   }
 
   @override
@@ -293,7 +308,13 @@ class _CommentDialogState extends State<_CommentDialog> {
         controller: _controller,
         autofocus: true,
         maxLength: 500,
-        decoration: InputDecoration(helperText: l10n.adminReasonHint),
+        decoration: InputDecoration(
+          helperText: l10n.adminReasonHint,
+          errorText: _tooShort ? l10n.adminReasonTooShort : null,
+        ),
+        onChanged: (_) {
+          if (_tooShort) setState(() => _tooShort = false);
+        },
         onSubmitted: (_) => _confirm(),
       ),
       actions: [

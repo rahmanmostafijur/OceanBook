@@ -49,6 +49,13 @@ void main() {
   });
 
   group('study screen', () {
+    testWidgets('a question tile announces its marks along with type and stem', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpApp(tester, questions: FakeQuestions(), location: '/study');
+      expect(find.bySemanticsLabel(RegExp(r'^Multiple choice, .*mark.*প্রশ্ন নম্বর 0$')), findsOneWidget);
+      handle.dispose();
+    });
+
     testWidgets('starts at SSC and lists questions', (tester) async {
       final questions = FakeQuestions();
       await pumpApp(tester, questions: questions, location: '/study');
