@@ -75,16 +75,23 @@ jobs:
           tags: oceanbook-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Scan image
-        uses: aquasecurity/trivy-action@v0.33.1
-        env:
-          # Mirror the vulnerability DB on ECR as a fallback: pulls from ghcr.io are rate limited on shared
-          # runners and fail the step with a bare "exit code 1".
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2,ghcr.io/aquasecurity/trivy-db:2
-        with:
-          image-ref: oceanbook-backend:${{ github.sha }}
-          scanners: vuln
-          format: table
-          severity: CRITICAL,HIGH
-          ignore-unfixed: true
-          exit-code: "1"
+      - name: Scan image (Trivy)
+        # Run the scanner directly (pinned) so findings and tool errors are reported as annotations.
+        run: |
+          set +e
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock             -e TRIVY_DB_REPOSITORY=public.ecr.aws/aquasecurity/trivy-db:2,ghcr.io/aquasecurity/trivy-db:2             aquasec/trivy:0.65.0 image --scanners vuln --severity CRITICAL,HIGH --ignore-unfixed             --format json --exit-code 1 oceanbook-backend:${{ github.sha }} > trivy.json 2> trivy.err
+          code=$?
+          python3 - <<'PY'
+          import json
+          try:
+              data = json.load(open("trivy.json"))
+          except ValueError:
+              data = {}
+          for result in data.get("Results", []):
+              for v in result.get("Vulnerabilities") or []:
+                  print(f"::error::{v['VulnerabilityID']} {v['PkgName']} {v['InstalledVersion']} fixed in {v.get('FixedVersion')} ({v['Severity']})")
+          for line in open("trivy.err").read().splitlines()[-6:]:
+              print(f"::error::trivy: {line[:300]}")
+          PY
+          echo "trivy exit code: $code"
+          exit $code
