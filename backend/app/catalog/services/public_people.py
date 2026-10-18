@@ -21,7 +21,7 @@ from app.catalog.models import (
 )
 from app.catalog.schemas import AuthorOut, PublisherOut
 from app.catalog.services.taxonomy import like_pattern
-from app.media.models import MediaAsset, public_url
+from app.media.models import MediaAsset, MediaPurpose, public_url
 
 _LIVE_BOOK = (Book.status == BookStatus.PUBLISHED, Book.deleted_at.is_(None))
 
@@ -115,7 +115,9 @@ class PublicPeople:
         if not ids:
             return {}
         rows = await self.session.execute(
-            select(MediaAsset.id, MediaAsset.storage_key).where(MediaAsset.id.in_(ids))
+            select(MediaAsset.id, MediaAsset.storage_key).where(
+                MediaAsset.id.in_(ids), MediaAsset.purpose == MediaPurpose.PUBLIC
+            )
         )
         return {row.id: public_url(self.media_base_url, row.storage_key) for row in rows}
 

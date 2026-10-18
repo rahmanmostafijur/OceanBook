@@ -25,7 +25,7 @@ from app.core.errors import Conflict, ErrorCode, Forbidden, NotFound, Validation
 from app.core.request_info import ClientInfo
 from app.core.resources import Resources
 from app.identity.services.principal import Principal
-from app.media.models import MediaAsset
+from app.media.models import MediaAsset, MediaPurpose
 from app.platform.audit import ActorType, record_audit
 from app.provenance.enforcement import withdraw_if_unpublishable
 from app.provenance.models import ContentSource, ProvenanceRecord, VerificationStatus
@@ -345,8 +345,10 @@ class ProvenanceService:
             if source is None or not source.is_active:
                 raise ValidationFailed("Unknown or inactive content source", field="source_id")
         asset_id = values.get("evidence_asset_id")
-        if asset_id is not None and await self.session.get(MediaAsset, asset_id) is None:
-            raise ValidationFailed("Unknown evidence asset", field="evidence_asset_id")
+        if asset_id is not None:
+            asset = await self.session.get(MediaAsset, asset_id)
+            if asset is None or asset.purpose != MediaPurpose.EVIDENCE:
+                raise ValidationFailed("Unknown evidence asset", field="evidence_asset_id")
 
     def _audit(
         self,

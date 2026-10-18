@@ -382,6 +382,15 @@ async def test_validation_and_conflicts(client: AsyncClient, team: Team) -> None
     denied = await client.post(f"{API}/admin/books", headers=team.editor, json=open_book)
     assert denied.status_code == 403, denied.text
     assert denied.json()["errors"][0]["details"]["missing_permissions"] == ["books.change_access"]
+    for path, field in (
+        (f"/admin/authors/{refs['author']['id']}", "name"),
+        (f"/admin/publishers/{refs['publisher']['id']}", "name"),
+        (f"/admin/categories/{refs['child']['id']}", "is_active"),
+        (f"/admin/editions/{edition['id']}", "edition_label"),
+        (f"/admin/content-sources/{refs['source']['id']}", "name"),
+    ):
+        nulled = await client.patch(f"{API}{path}", headers=team.editor, json={field: None})
+        assert nulled.status_code == 422, (path, nulled.text)
     bad_isbn = await client.patch(
         f"{API}/admin/editions/{edition['id']}", headers=team.editor, json={"isbn13": "978-0-306-40615-8"}
     )

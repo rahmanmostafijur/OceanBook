@@ -12,7 +12,7 @@ from pydantic import AfterValidator, BaseModel, ConfigDict, Field, HttpUrl, Stri
 from app.catalog.isbn import normalise_isbn10, normalise_isbn13
 from app.catalog.models import AccessLevel, ContentType, ContributorRole, PublisherRole, TranslationOrigin
 from app.core.i18n import LocalizedText, LooseLocalizedText, nfc
-from app.identity.schemas import Reason, StrictModel
+from app.identity.schemas import PatchModel, Reason, StrictModel
 
 Slug = Annotated[str, StringConstraints(pattern=r"^[a-z0-9]+(-[a-z0-9]+)*$", max_length=120)]
 LocaleCode = Annotated[str, StringConstraints(pattern=r"^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2})?$")]
@@ -46,8 +46,10 @@ class CategoryIn(StrictModel):
     position: Annotated[int, Field(ge=0, le=10_000)] = 0
 
 
-class CategoryPatch(StrictModel):
+class CategoryPatch(PatchModel):
     """`parent_id` moves the subtree; send `null` explicitly to move it to the root."""
+
+    non_nullable = frozenset({"name", "position", "is_active"})
 
     parent_id: uuid.UUID | None = None
     name: LocalizedText | None = None
@@ -73,7 +75,9 @@ class AuthorIn(StrictModel):
         return self
 
 
-class AuthorPatch(StrictModel):
+class AuthorPatch(PatchModel):
+    non_nullable = frozenset({"name"})
+
     name: Name | None = None
     name_alt: Name | None = None
     biography: LongText | None = None
@@ -91,7 +95,9 @@ class PublisherIn(StrictModel):
     country_code: CountryCode | None = None
 
 
-class PublisherPatch(StrictModel):
+class PublisherPatch(PatchModel):
+    non_nullable = frozenset({"name"})
+
     name: Name | None = None
     name_alt: Name | None = None
     description: LongText | None = None
@@ -237,7 +243,9 @@ class EditionIn(StrictModel):
     preview_policy: PreviewPolicy | None = None
 
 
-class EditionPatch(StrictModel):
+class EditionPatch(PatchModel):
+    non_nullable = frozenset({"edition_label"})
+
     edition_label: (
         Annotated[str, AfterValidator(nfc), StringConstraints(min_length=1, max_length=100)] | None
     ) = None

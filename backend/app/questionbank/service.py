@@ -22,7 +22,7 @@ from app.core.request_info import ClientInfo
 from app.core.resources import Resources
 from app.entitlements.models import EntitlementDefinition
 from app.identity.services.principal import Principal
-from app.media.models import MediaAsset
+from app.media.models import MediaAsset, MediaPurpose
 from app.platform.audit import ActorType, record_audit
 from app.platform.outbox import publish_event
 from app.questionbank import contentdoc
@@ -583,7 +583,10 @@ class QuestionService:
         if asset_ids:
             found = (
                 await session.execute(
-                    select(func.count()).where(MediaAsset.id.in_([uuid.UUID(a) for a in asset_ids]))
+                    select(func.count()).where(
+                        MediaAsset.id.in_([uuid.UUID(a) for a in asset_ids]),
+                        MediaAsset.purpose == MediaPurpose.PUBLIC,
+                    )
                 )
             ).scalar_one()
             if found != len(asset_ids):

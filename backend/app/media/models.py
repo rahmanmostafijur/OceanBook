@@ -20,16 +20,23 @@ class MediaKind(StrEnum):
     DOCUMENT = "document"
 
 
+class MediaPurpose(StrEnum):
+    PUBLIC = "public"  # covers, photos, logos, question images: may be served from the CDN
+    EVIDENCE = "evidence"  # rights evidence: never given a URL
+
+
 class MediaAsset(UUIDPrimaryKey, CreatedAt, Base):
     __tablename__ = "media_assets"
     __table_args__ = (
         CheckConstraint(check_in("kind", MediaKind), name="kind"),
+        CheckConstraint(check_in("purpose", MediaPurpose), name="purpose"),
         CheckConstraint("size_bytes > 0", name="size_positive"),
         CheckConstraint("octet_length(sha256) = 32", name="sha256_length"),
         CheckConstraint("(width IS NULL) = (height IS NULL)", name="dimensions_together"),
     )
 
     kind: Mapped[str] = mapped_column(Text, nullable=False)
+    purpose: Mapped[str] = mapped_column(Text, nullable=False)
     storage_key: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     mime_type: Mapped[str] = mapped_column(Text, nullable=False)
     size_bytes: Mapped[int] = mapped_column(BigInteger, nullable=False)

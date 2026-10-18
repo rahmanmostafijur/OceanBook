@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.media.models import MediaAsset, MediaKind, MediaPurpose
 from tests.conftest import API
 from tests.integration.catalog_support import (
     Team,
@@ -197,8 +199,18 @@ async def test_editions_publish_withdraw_and_rights(client: AsyncClient, team: T
         status=409,
     )
     assert in_use["code"] == "INVALID_STATE_TRANSITION"  # still the default edition of a published book
+    # Editors prepare, reviewers publish: a live book can only be changed by someone who can publish.
+    live_edit = await call(
+        client,
+        "PATCH",
+        f"/admin/books/{book['id']}",
+        team.editor,
+        {"default_edition_id": second["id"]},
+        status=403,
+    )
+    assert live_edit["details"]["missing_permissions"] == ["books.publish"]
     await call(
-        client, "PATCH", f"/admin/books/{book['id']}", team.editor, {"default_edition_id": second["id"]}
+        client, "PATCH", f"/admin/books/{book['id']}", team.admin, {"default_edition_id": second["id"]}
     )
     withdrawn = await call(
         client, "POST", f"/admin/editions/{first_id}/withdraw", team.reviewer, {"reason": "Old"}
@@ -338,3 +350,54 @@ async def test_retired_categories_take_no_children_and_slugs_stay_unique(
         client, "PATCH", f"/admin/categories/{refs['child']['id']}", team.editor, {"parent_id": None}
     )
     assert (to_root["path"], to_root["depth"], to_root["parent_id"]) == ("novel", 0, None)
+
+
+async def test_media_purpose_keeps_evidence_private(
+    client: AsyncClient, team: Team, db: AsyncSession
+) -> None:
+    refs = await taxonomy(client, team)
+    book, edition = await draft_book(client, team, refs)
+    assets = {}
+    for purpose in (MediaPurpose.PUBLIC, MediaPurpose.EVIDENCE):
+        asset = MediaAsset(
+            kind=MediaKind.IMAGE,
+            purpose=purpose,
+            storage_key=f"test/{purpose}.png",
+            mime_type="image/png",
+            size_bytes=10,
+            sha256=bytes(32),
+        )
+        db.add(asset)
+        assets[purpose] = asset
+    await db.commit()
+
+    leaked = await call(
+        client,
+        "PATCH",
+        f"/admin/books/{book['id']}",
+        team.editor,
+        {"cover_asset_id": str(assets[MediaPurpose.EVIDENCE].id)},
+        status=422,
+    )
+    assert leaked["field"] == "cover_asset_id"
+    await call(
+        client,
+        "PATCH",
+        f"/admin/books/{book['id']}",
+        team.editor,
+        {"cover_asset_id": str(assets[MediaPurpose.PUBLIC].id)},
+    )
+    public_as_evidence = await call(
+        client,
+        "POST",
+        f"/admin/editions/{edition['id']}/provenance",
+        team.editor,
+        {
+            "source_id": refs["source"]["id"],
+            "license_type": "licensed_commercial",
+            "rights_status": "cleared",
+            "evidence_asset_id": str(assets[MediaPurpose.PUBLIC].id),
+        },
+        status=422,
+    )
+    assert public_as_evidence["field"] == "evidence_asset_id"

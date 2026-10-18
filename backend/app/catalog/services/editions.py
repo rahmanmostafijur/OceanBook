@@ -20,7 +20,13 @@ from app.catalog.models import (
     EditionUsageRights,
 )
 from app.catalog.schemas import EditionIn, EditionPatch, StructureIn, UsageRightsIn
-from app.catalog.services.common import audit, get_book, get_edition, replace_publishers
+from app.catalog.services.common import (
+    audit,
+    get_book,
+    get_edition,
+    replace_publishers,
+    require_publish_to_edit_live,
+)
 from app.core.errors import Conflict, ErrorCode
 from app.core.ids import new_id
 from app.core.request_info import ClientInfo
@@ -78,6 +84,7 @@ class EditionService:
 
     async def update(self, actor: Principal, edition_id: uuid.UUID, body: EditionPatch) -> BookEdition:
         edition = await get_edition(self.session, edition_id, lock=True)
+        await require_publish_to_edit_live(self.session, actor, edition.status == EditionStatus.PUBLISHED)
         values = body.model_dump(exclude_unset=True, exclude={"publishers", "preview_policy"})
         for name, value in values.items():
             setattr(edition, name, value)
@@ -132,6 +139,7 @@ class EditionService:
     ) -> tuple[int, int]:
         """Replace the table of contents. Returns (chapters, sections)."""
         edition = await get_edition(self.session, edition_id, lock=True)
+        await require_publish_to_edit_live(self.session, actor, edition.status == EditionStatus.PUBLISHED)
         await self.session.execute(delete(EditionChapter).where(EditionChapter.edition_id == edition.id))
         sections = 0
         for position, chapter_in in enumerate(body.chapters):

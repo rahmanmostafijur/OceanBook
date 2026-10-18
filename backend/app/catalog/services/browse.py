@@ -56,7 +56,7 @@ from app.catalog.services.taxonomy import category_subtree_ids, like_pattern
 from app.core.errors import NotFound, ValidationFailed
 from app.core.i18n import nfc, pick_locale, resolve
 from app.core.pagination import CursorCodec
-from app.media.models import MediaAsset, public_url
+from app.media.models import MediaAsset, MediaPurpose, public_url
 from app.provenance.models import ProvenanceRecord, VerificationStatus
 
 
@@ -258,7 +258,9 @@ class CatalogBrowser:
         if not asset_ids:
             return {}
         rows = await self.session.execute(
-            select(MediaAsset.id, MediaAsset.storage_key).where(MediaAsset.id.in_(asset_ids))
+            select(MediaAsset.id, MediaAsset.storage_key).where(
+                MediaAsset.id.in_(asset_ids), MediaAsset.purpose == MediaPurpose.PUBLIC
+            )
         )
         return {row.id: public_url(self.media_base_url, row.storage_key) for row in rows}
 

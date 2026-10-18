@@ -24,10 +24,33 @@ from app.catalog.models import (
     Tag,
 )
 from app.catalog.schemas import BookCategoryIn, ContributorIn, EditionPublisherIn
-from app.core.errors import NotFound, ValidationFailed
+from app.core.errors import ErrorCode, Forbidden, NotFound, ValidationFailed
 from app.core.request_info import ClientInfo
+from app.identity.permissions import Permission
 from app.identity.services.principal import Principal
 from app.platform.audit import ActorType, record_audit
+
+
+async def require_permission(
+    session: AsyncSession, actor: Principal, permission: Permission, message: str
+) -> None:
+    """Service-level check for rules that depend on the record's state, which a route cannot see."""
+    if permission.value not in await actor.permissions(session):
+        raise Forbidden(
+            message, code=ErrorCode.FORBIDDEN, details={"missing_permissions": [permission.value]}
+        )
+
+
+async def require_publish_to_edit_live(session: AsyncSession, actor: Principal, is_live: bool) -> None:
+    """Editors prepare content and reviewers publish, so changing what readers already see needs
+    the publish permission too."""
+    if is_live:
+        await require_permission(
+            session,
+            actor,
+            Permission.BOOKS_PUBLISH,
+            "Published content can only be changed by someone who can publish",
+        )
 
 
 async def _require_all(session: AsyncSession, model: Any, ids: Sequence[uuid.UUID], field: str) -> None:

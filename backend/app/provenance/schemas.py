@@ -9,7 +9,7 @@ from typing import Annotated, Literal
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, HttpUrl, StringConstraints, model_validator
 
 from app.core.i18n import LocalizedText, LooseLocalizedText, nfc
-from app.identity.schemas import Reason, StrictModel
+from app.identity.schemas import PatchModel, Reason, StrictModel
 from app.provenance.models import LicenseType, RightsStatus, SourceKind
 
 Territory = Annotated[str, StringConstraints(pattern=r"^([A-Z]{2}|\*)$")]
@@ -39,7 +39,9 @@ class ContentSourceIn(StrictModel):
     notes: Note | None = None
 
 
-class ContentSourcePatch(StrictModel):
+class ContentSourcePatch(PatchModel):
+    non_nullable = frozenset({"name", "is_active"})
+
     name: LocalizedText | None = None
     publisher_id: uuid.UUID | None = None
     board_id: uuid.UUID | None = None
@@ -74,7 +76,11 @@ class ProvenanceIn(_ProvenanceFields):
     excluded_territories: Exclusions = Field(default_factory=list)
 
 
-class ProvenancePatch(_ProvenanceFields):
+class ProvenancePatch(PatchModel, _ProvenanceFields):
+    non_nullable = frozenset(
+        {"source_id", "license_type", "rights_status", "territories", "excluded_territories"}
+    )
+
     source_id: uuid.UUID | None = None
     license_type: LicenseType | None = None
     rights_status: RightsStatus | None = None

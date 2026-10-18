@@ -6,7 +6,7 @@ import unicodedata
 import uuid
 import zoneinfo
 from datetime import datetime
-from typing import Annotated, Literal
+from typing import Annotated, ClassVar, Literal
 
 from pydantic import (
     AfterValidator,
@@ -42,6 +42,20 @@ Reason = Annotated[str, AfterValidator(_nfc), StringConstraints(min_length=3, ma
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=False)
+
+
+class PatchModel(StrictModel):
+    """Partial update. Every field is optional, but an explicit `null` is only accepted for the
+    fields that map to nullable columns; the rest would otherwise reach the database as NULL."""
+
+    non_nullable: ClassVar[frozenset[str]] = frozenset()
+
+    @model_validator(mode="after")
+    def _reject_null(self) -> PatchModel:
+        nulled = sorted(n for n in self.model_fields_set & self.non_nullable if getattr(self, n) is None)
+        if nulled:
+            raise ValueError(f"{', '.join(nulled)} cannot be null")
+        return self
 
 
 class DeviceIn(StrictModel):

@@ -36,16 +36,18 @@ from app.catalog.services.common import (
     replace_contributors,
     replace_subjects,
     replace_tags,
+    require_permission,
+    require_publish_to_edit_live,
 )
 from app.catalog.services.taxonomy import like_pattern, slug_conflict
-from app.core.errors import Conflict, ErrorCode, Forbidden, ValidationFailed
+from app.core.errors import Conflict, ErrorCode, ValidationFailed
 from app.core.i18n import pick_locale
 from app.core.request_info import ClientInfo
 from app.core.resources import Resources
 from app.entitlements.models import EntitlementDefinition
 from app.identity.permissions import Permission
 from app.identity.services.principal import Principal
-from app.media.models import MediaAsset, MediaKind
+from app.media.models import MediaAsset, MediaKind, MediaPurpose
 from app.platform.outbox import publish_event
 from app.provenance.service import assert_publishable
 
@@ -122,13 +124,12 @@ class BookService:
         await self._check_access(body.access_level, body.required_entitlement_key)
         if body.access_level != AccessLevel.ENTITLED:
             # Opening a book up needs the same permission as the audited access change.
-            granted = await actor.permissions(self.session)
-            if Permission.BOOKS_CHANGE_ACCESS.value not in granted:
-                raise Forbidden(
-                    "Creating a book with this access level needs permission to change access",
-                    code=ErrorCode.FORBIDDEN,
-                    details={"missing_permissions": [Permission.BOOKS_CHANGE_ACCESS.value]},
-                )
+            await require_permission(
+                self.session,
+                actor,
+                Permission.BOOKS_CHANGE_ACCESS,
+                "Creating a book with this access level needs permission to change access",
+            )
         book = Book(
             slug=body.slug,
             source_locale=body.source_locale,
@@ -173,6 +174,7 @@ class BookService:
     async def update(self, actor: Principal, book_id: uuid.UUID, body: BookPatch) -> Book:
         book = await get_book(self.session, book_id, lock=True)
         self._ensure_not_archived(book)
+        await require_publish_to_edit_live(self.session, actor, book.status == BookStatus.PUBLISHED)
         fields = body.model_fields_set
         if body.slug is not None:
             book.slug = body.slug
@@ -269,6 +271,11 @@ class BookService:
         self._ensure_not_archived(book)
         self._check_locale(locale, "locale")
         translation = await self.session.get(BookTranslation, (book.id, locale))
+        await require_publish_to_edit_live(
+            self.session,
+            actor,
+            translation is not None and translation.status == TranslationStatus.PUBLISHED,
+        )
         created = translation is None
         if translation is None:
             translation = BookTranslation(book_id=book.id, locale=locale, title=body.title)
@@ -454,7 +461,7 @@ class BookService:
         if asset_id is None:
             return
         asset = await self.session.get(MediaAsset, asset_id)
-        if asset is None or asset.kind != MediaKind.IMAGE:
+        if asset is None or asset.kind != MediaKind.IMAGE or asset.purpose != MediaPurpose.PUBLIC:
             raise ValidationFailed("Unknown cover image", field="cover_asset_id")
 
     async def _check_access(self, level: AccessLevel, key: str | None) -> None:
