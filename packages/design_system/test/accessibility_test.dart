@@ -110,11 +110,44 @@ void main() {
       final handle = tester.ensureSemantics();
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: ContentDocView(doc: doc, blankLabel: 'Blank')),
+          home: Scaffold(
+            body: ContentDocView(doc: doc, blankLabel: 'Blank'),
+          ),
         ),
       );
       expect(find.bySemanticsLabel(RegExp('Blank')), findsOneWidget);
       handle.dispose();
+    });
+  });
+
+  group('ReducedMotionTheme', () {
+    Future<InteractiveInkFeatureFactory> splashUnder(WidgetTester tester, {required bool reduced}) async {
+      late InteractiveInkFeatureFactory factory;
+      await tester.pumpWidget(
+        MediaQuery(
+          data: MediaQueryData(disableAnimations: reduced),
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            home: ReducedMotionTheme(
+              child: Builder(
+                builder: (context) {
+                  factory = Theme.of(context).splashFactory;
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      return factory;
+    }
+
+    testWidgets('drops the ink splash when animations are disabled', (tester) async {
+      expect(await splashUnder(tester, reduced: true), same(NoSplash.splashFactory));
+    });
+
+    testWidgets('keeps the sparkle splash otherwise', (tester) async {
+      expect(await splashUnder(tester, reduced: false), same(InkSparkle.splashFactory));
     });
   });
 

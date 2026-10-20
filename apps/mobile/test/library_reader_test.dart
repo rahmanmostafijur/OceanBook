@@ -242,6 +242,27 @@ void main() {
       expect(find.byType(SearchBar), findsOneWidget);
     });
 
+    testWidgets('controls stay shown for screen-reader users even after tapping the page', (tester) async {
+      await openReader(tester);
+      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+        disableAnimations: true,
+        accessibleNavigation: true,
+      );
+      addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+      await tester.pumpAndSettle();
+      double chrome() => tester
+          .widget<FadeTransition>(
+            find.ancestor(of: find.byTooltip('Close reader'), matching: find.byType(FadeTransition)).first,
+          )
+          .opacity
+          .value;
+      expect(chrome(), 1);
+
+      await tester.tapAt(const Offset(200, 500));
+      await tester.pumpAndSettle();
+      expect(chrome(), 1);
+    });
+
     testWidgets('guests cannot open the reader', (tester) async {
       await pumpApp(tester, location: '/library/read/lib-01');
       expect(find.text('Welcome to OceanBook'), findsOneWidget);

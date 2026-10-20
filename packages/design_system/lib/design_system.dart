@@ -9,6 +9,7 @@ export 'src/components/feedback_states.dart';
 export 'src/components/ocean_hero.dart';
 export 'src/components/page_loading.dart';
 export 'src/theme/app_theme.dart';
+export 'src/theme/reduced_motion_theme.dart';
 export 'src/theme/reduced_motion_transitions.dart';
 export 'src/tokens/app_breakpoints.dart';
 export 'src/tokens/app_colors.dart';

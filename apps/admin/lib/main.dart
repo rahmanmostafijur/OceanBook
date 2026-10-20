@@ -29,6 +29,7 @@ class AdminApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: ref.watch(adminRouterProvider),
+      builder: (context, child) => ReducedMotionTheme(child: child ?? const SizedBox.shrink()),
     );
   }
 }

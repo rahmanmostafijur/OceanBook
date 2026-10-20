@@ -27,6 +27,7 @@ class OceanBookApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: ref.watch(routerProvider),
+      builder: (context, child) => ReducedMotionTheme(child: child ?? const SizedBox.shrink()),
     );
   }
 }
