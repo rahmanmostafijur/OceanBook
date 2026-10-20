@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
@@ -139,6 +140,13 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   children: [
+                    if (const {'draft', 'changes_requested', 'published'}.contains(question.workflowStatus))
+                      OutlinedButton.icon(
+                        key: const Key('edit-question'),
+                        icon: const Icon(Icons.edit_outlined),
+                        label: Text(l10n.adminEditQuestion),
+                        onPressed: _busy ? null : () => context.go('/questions/${question.id}/edit'),
+                      ),
                     for (final (index, action) in actions.indexed)
                       index == 0
                           ? FilledButton(

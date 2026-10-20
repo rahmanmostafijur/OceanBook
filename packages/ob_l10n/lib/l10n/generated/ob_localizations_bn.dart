@@ -626,13 +626,13 @@ class ObLocalizationsBn extends ObLocalizations {
   String get adminSourceLanguage => 'মূল ভাষা';
 
   @override
-  String get adminAccessFree => 'ফ্রি';
+  String get adminAccessFree => 'বিনামূল্যে';
 
   @override
-  String get adminAccessRegistered => 'নিবন্ধিত ব্যবহারকারী';
+  String get adminAccessRegistered => 'লগইন করা ব্যবহারকারী';
 
   @override
-  String get adminAccessEntitled => 'প্রিমিয়াম (এনটাইটেলমেন্ট)';
+  String get adminAccessEntitled => 'অধিকারপ্রাপ্ত';
 
   @override
   String get adminTranslations => 'অনুবাদ';
@@ -1188,6 +1188,91 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get adminOfferingOptional => 'ঐচ্ছিক (৪র্থ বিষয়)';
+
+  @override
+  String get adminNewQuestion => 'নতুন প্রশ্ন';
+
+  @override
+  String get adminEditQuestion => 'প্রশ্ন সম্পাদনা';
+
+  @override
+  String get adminFieldType => 'প্রশ্নের ধরন';
+
+  @override
+  String get adminFieldLanguage => 'ভাষা';
+
+  @override
+  String get adminLanguageBangla => 'বাংলা';
+
+  @override
+  String get adminLanguageEnglish => 'ইংরেজি';
+
+  @override
+  String get adminFieldStem => 'প্রশ্ন';
+
+  @override
+  String get adminFieldExplanation => 'ব্যাখ্যা (ঐচ্ছিক)';
+
+  @override
+  String get adminMathHint => 'গণিত ডলার চিহ্নের মধ্যে লিখুন, যেমন \$x^2\$। ফাঁকা লাইন দিলে নতুন অনুচ্ছেদ শুরু হয়।';
+
+  @override
+  String get adminOptionsHeading => 'বিকল্প';
+
+  @override
+  String get adminOptionLabel => 'লেবেল';
+
+  @override
+  String get adminOptionText => 'বিকল্পের লেখা';
+
+  @override
+  String get adminOptionCorrect => 'সঠিক';
+
+  @override
+  String get adminAddOption => 'বিকল্প যোগ করুন';
+
+  @override
+  String get adminRemoveOption => 'বিকল্প মুছুন';
+
+  @override
+  String get adminFieldMarks => 'নম্বর';
+
+  @override
+  String get adminFieldDifficulty => 'কাঠিন্য';
+
+  @override
+  String get adminDifficultyNone => 'নির্ধারিত নয়';
+
+  @override
+  String get adminFieldAccess => 'প্রবেশাধিকার';
+
+  @override
+  String get adminEntitlementKey => 'অধিকার কী';
+
+  @override
+  String get adminFieldSubject => 'বিষয়';
+
+  @override
+  String get adminFieldChapter => 'অধ্যায় (ঐচ্ছিক)';
+
+  @override
+  String get adminFieldTopic => 'টপিক (ঐচ্ছিক)';
+
+  @override
+  String get adminNoneOption => 'নেই';
+
+  @override
+  String get adminChangeNote => 'কী বদলেছে (ঐচ্ছিক)';
+
+  @override
+  String get adminCorrectExactlyOne => 'ঠিক একটি বিকল্পকে সঠিক চিহ্নিত করুন।';
+
+  @override
+  String get adminCorrectAtLeastOne => 'অন্তত একটি বিকল্পকে সঠিক চিহ্নিত করুন।';
+
+  @override
+  String get adminEditorUnsupported =>
+      'এই প্রশ্নে এমন ধরন বা ফরম্যাটিং আছে যা এখানে সম্পাদনা করা যায় না; এখানে বদলালে কিছু অংশ হারিয়ে যেতে পারে।';
 
   @override
   String get adminSkipToContent => 'মূল বিষয়বস্তুতে যান';

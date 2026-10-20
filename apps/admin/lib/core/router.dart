@@ -11,6 +11,7 @@ import '../features/catalog/books_page.dart';
 import '../features/catalog/taxonomy_pages.dart';
 import '../features/questionbank/papers_page.dart';
 import '../features/questionbank/question_detail_page.dart';
+import '../features/questionbank/question_editor_page.dart';
 import '../features/questionbank/questions_page.dart';
 import '../features/questionbank/subjects_page.dart';
 import '../features/rights/content_sources_page.dart';
@@ -64,6 +65,11 @@ final adminRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/books/:id',
             builder: (_, state) => BookDetailPage(bookId: state.pathParameters['id']!),
+          ),
+          GoRoute(path: '/questions/new', builder: (_, _) => const QuestionEditorPage()),
+          GoRoute(
+            path: '/questions/:id/edit',
+            builder: (_, state) => QuestionEditorPage(questionId: state.pathParameters['id']),
           ),
           GoRoute(
             path: '/questions/:id',

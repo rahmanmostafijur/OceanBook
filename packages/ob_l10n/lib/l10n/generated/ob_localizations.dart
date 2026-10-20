@@ -1289,13 +1289,13 @@ abstract class ObLocalizations {
   /// No description provided for @adminAccessRegistered.
   ///
   /// In en, this message translates to:
-  /// **'Registered users'**
+  /// **'Signed-in users'**
   String get adminAccessRegistered;
 
   /// No description provided for @adminAccessEntitled.
   ///
   /// In en, this message translates to:
-  /// **'Premium (entitlement)'**
+  /// **'Entitled'**
   String get adminAccessEntitled;
 
   /// No description provided for @adminTranslations.
@@ -2359,6 +2359,174 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Optional (4th subject)'**
   String get adminOfferingOptional;
+
+  /// No description provided for @adminNewQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'New question'**
+  String get adminNewQuestion;
+
+  /// No description provided for @adminEditQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit question'**
+  String get adminEditQuestion;
+
+  /// No description provided for @adminFieldType.
+  ///
+  /// In en, this message translates to:
+  /// **'Question type'**
+  String get adminFieldType;
+
+  /// No description provided for @adminFieldLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get adminFieldLanguage;
+
+  /// No description provided for @adminLanguageBangla.
+  ///
+  /// In en, this message translates to:
+  /// **'Bangla'**
+  String get adminLanguageBangla;
+
+  /// No description provided for @adminLanguageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get adminLanguageEnglish;
+
+  /// No description provided for @adminFieldStem.
+  ///
+  /// In en, this message translates to:
+  /// **'Question text'**
+  String get adminFieldStem;
+
+  /// No description provided for @adminFieldExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Explanation (optional)'**
+  String get adminFieldExplanation;
+
+  /// No description provided for @adminMathHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write maths between dollar signs, like \$x^2\$. A blank line starts a new paragraph.'**
+  String get adminMathHint;
+
+  /// No description provided for @adminOptionsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get adminOptionsHeading;
+
+  /// No description provided for @adminOptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get adminOptionLabel;
+
+  /// No description provided for @adminOptionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Option text'**
+  String get adminOptionText;
+
+  /// No description provided for @adminOptionCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get adminOptionCorrect;
+
+  /// No description provided for @adminAddOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Add option'**
+  String get adminAddOption;
+
+  /// No description provided for @adminRemoveOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove option'**
+  String get adminRemoveOption;
+
+  /// No description provided for @adminFieldMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Marks'**
+  String get adminFieldMarks;
+
+  /// No description provided for @adminFieldDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get adminFieldDifficulty;
+
+  /// No description provided for @adminDifficultyNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get adminDifficultyNone;
+
+  /// No description provided for @adminFieldAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Access'**
+  String get adminFieldAccess;
+
+  /// No description provided for @adminEntitlementKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Entitlement key'**
+  String get adminEntitlementKey;
+
+  /// No description provided for @adminFieldSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get adminFieldSubject;
+
+  /// No description provided for @adminFieldChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter (optional)'**
+  String get adminFieldChapter;
+
+  /// No description provided for @adminFieldTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic (optional)'**
+  String get adminFieldTopic;
+
+  /// No description provided for @adminNoneOption.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get adminNoneOption;
+
+  /// No description provided for @adminChangeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'What changed (optional)'**
+  String get adminChangeNote;
+
+  /// No description provided for @adminCorrectExactlyOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark exactly one option as correct.'**
+  String get adminCorrectExactlyOne;
+
+  /// No description provided for @adminCorrectAtLeastOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark at least one option as correct.'**
+  String get adminCorrectAtLeastOne;
+
+  /// No description provided for @adminEditorUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This question uses a type or formatting the editor cannot edit yet, so editing it here could lose content.'**
+  String get adminEditorUnsupported;
 
   /// No description provided for @adminSkipToContent.
   ///

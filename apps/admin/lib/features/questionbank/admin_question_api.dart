@@ -90,6 +90,7 @@ class AdminQuestion {
     required this.options,
     required this.parts,
     required this.issues,
+    this.rawContent = const {},
     this.pendingStatus,
     this.difficulty,
     this.stimulusId,
@@ -133,6 +134,7 @@ class AdminQuestion {
         (p) => AdminPart(label: _req(p, 'label'), marks: double.parse('${p['marks']}'), prompt: pick(p['prompt'])),
       ),
       issues: [for (final i in (json['issues'] as List?) ?? const <Object?>[]) '$i'],
+      rawContent: content,
     );
   }
 
@@ -154,6 +156,10 @@ class AdminQuestion {
 
   /// Machine-readable completeness issues the server found in the latest revision.
   final List<String> issues;
+
+  /// The full editable snapshot as the server returned it, so an edit can change some fields and
+  /// send everything else back untouched (other translations, parts, answer spec).
+  final Map<String, Object?> rawContent;
 
   /// The workflow state of the revision being worked on (the pending edit, or the question itself).
   String get workflowStatus => pendingStatus ?? status;
@@ -234,6 +240,8 @@ abstract interface class AdminQuestionRepository {
     int pageSize = 25,
   });
   Future<AdminQuestion> question(String id);
+  Future<AdminQuestion> createQuestion(Map<String, Object?> content, {String? changeNote});
+  Future<AdminQuestion> updateQuestion(String id, Map<String, Object?> content, {String? changeNote});
   Future<AdminQuestion> act(String id, QuestionAction action, {String? comment, bool acknowledgeDuplicates = false});
   Future<Paged<AdminPaper>> papers({String? status, int page = 1, int pageSize = 25});
 }
@@ -275,6 +283,21 @@ class AdminQuestionApi implements AdminQuestionRepository {
 
   @override
   Future<AdminQuestion> question(String id) async => (await api.get('/admin/questions/$id', decode: _question)).data;
+
+  @override
+  Future<AdminQuestion> createQuestion(Map<String, Object?> content, {String? changeNote}) async => (await api.post(
+    '/admin/questions',
+    body: {'content': content, 'change_note': ?changeNote},
+    decode: _question,
+  )).data;
+
+  @override
+  Future<AdminQuestion> updateQuestion(String id, Map<String, Object?> content, {String? changeNote}) async =>
+      (await api.put(
+        '/admin/questions/$id',
+        body: {'content': content, 'change_note': ?changeNote},
+        decode: _question,
+      )).data;
 
   @override
   Future<AdminQuestion> act(

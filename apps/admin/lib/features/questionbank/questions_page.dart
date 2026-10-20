@@ -93,6 +93,12 @@ class QuestionsPage extends ConsumerWidget {
             runSpacing: AppSpacing.sm,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
+              FilledButton.icon(
+                key: const Key('new-question'),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.adminNewQuestion),
+                onPressed: () => context.go('/questions/new'),
+              ),
               DropdownMenu<String?>(
                 key: const Key('questions-status'),
                 initialSelection: filter.status,

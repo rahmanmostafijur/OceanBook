@@ -636,10 +636,10 @@ class ObLocalizationsEn extends ObLocalizations {
   String get adminAccessFree => 'Free';
 
   @override
-  String get adminAccessRegistered => 'Registered users';
+  String get adminAccessRegistered => 'Signed-in users';
 
   @override
-  String get adminAccessEntitled => 'Premium (entitlement)';
+  String get adminAccessEntitled => 'Entitled';
 
   @override
   String get adminTranslations => 'Translations';
@@ -1196,6 +1196,91 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get adminOfferingOptional => 'Optional (4th subject)';
+
+  @override
+  String get adminNewQuestion => 'New question';
+
+  @override
+  String get adminEditQuestion => 'Edit question';
+
+  @override
+  String get adminFieldType => 'Question type';
+
+  @override
+  String get adminFieldLanguage => 'Language';
+
+  @override
+  String get adminLanguageBangla => 'Bangla';
+
+  @override
+  String get adminLanguageEnglish => 'English';
+
+  @override
+  String get adminFieldStem => 'Question text';
+
+  @override
+  String get adminFieldExplanation => 'Explanation (optional)';
+
+  @override
+  String get adminMathHint => 'Write maths between dollar signs, like \$x^2\$. A blank line starts a new paragraph.';
+
+  @override
+  String get adminOptionsHeading => 'Options';
+
+  @override
+  String get adminOptionLabel => 'Label';
+
+  @override
+  String get adminOptionText => 'Option text';
+
+  @override
+  String get adminOptionCorrect => 'Correct';
+
+  @override
+  String get adminAddOption => 'Add option';
+
+  @override
+  String get adminRemoveOption => 'Remove option';
+
+  @override
+  String get adminFieldMarks => 'Marks';
+
+  @override
+  String get adminFieldDifficulty => 'Difficulty';
+
+  @override
+  String get adminDifficultyNone => 'Not set';
+
+  @override
+  String get adminFieldAccess => 'Access';
+
+  @override
+  String get adminEntitlementKey => 'Entitlement key';
+
+  @override
+  String get adminFieldSubject => 'Subject';
+
+  @override
+  String get adminFieldChapter => 'Chapter (optional)';
+
+  @override
+  String get adminFieldTopic => 'Topic (optional)';
+
+  @override
+  String get adminNoneOption => 'None';
+
+  @override
+  String get adminChangeNote => 'What changed (optional)';
+
+  @override
+  String get adminCorrectExactlyOne => 'Mark exactly one option as correct.';
+
+  @override
+  String get adminCorrectAtLeastOne => 'Mark at least one option as correct.';
+
+  @override
+  String get adminEditorUnsupported =>
+      'This question uses a type or formatting the editor cannot edit yet, so editing it here could lose content.';
 
   @override
   String get adminSkipToContent => 'Skip to main content';

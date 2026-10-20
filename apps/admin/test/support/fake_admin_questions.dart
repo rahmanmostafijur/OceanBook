@@ -15,12 +15,49 @@ Map<String, Object?> _doc(String text) => {
   ],
 };
 
+/// The snapshot the server returns for [fakeAdminQuestion], with an English translation the editor
+/// must keep when it saves a Bangla edit.
+Map<String, Object?> fakeRawContent({Map<String, Object?>? stem}) => {
+  'type': 'mcq_single',
+  'source_locale': 'bn',
+  'stimulus_id': null,
+  'education_level_id': 'l1',
+  'subject_id': 's1',
+  'chapter_id': 'c1',
+  'topic_id': 't1',
+  'difficulty': 2,
+  'cognitive_level': null,
+  'marks': '1.00',
+  'answer_spec': <String, Object?>{},
+  'access_level': 'free',
+  'required_entitlement_key': null,
+  'translations': {
+    'bn': {'stem': stem ?? _doc('আলোর বেগ কত?'), 'origin': 'original'},
+    'en': {'stem': _doc('What is the speed of light?'), 'origin': 'human'},
+  },
+  'options': [
+    {
+      'label': 'ক',
+      'is_correct': true,
+      'content': {'bn': _doc('প্রথম উত্তর'), 'en': _doc('First answer')},
+    },
+    {
+      'label': 'খ',
+      'is_correct': false,
+      'content': {'bn': _doc('দ্বিতীয় উত্তর')},
+    },
+  ],
+  'parts': <Object?>[],
+};
+
 AdminQuestion fakeAdminQuestion({
   String status = 'in_review',
   String? pendingStatus,
   List<String> issues = const [],
   int version = 0,
+  Map<String, Object?>? rawContent,
 }) => AdminQuestion(
+  rawContent: rawContent ?? fakeRawContent(),
   id: 'q1',
   type: QuestionType.mcqSingle,
   status: status,
@@ -47,6 +84,10 @@ class FakeAdminQuestions implements AdminQuestionRepository {
   AdminQuestion current;
   Object? actionError;
   final List<String> calls = [];
+  Object? saveError;
+
+  /// Content of the last create/update, as the editor sent it.
+  Map<String, Object?>? savedContent;
 
   @override
   Future<Paged<AdminQuestionRow>> questions({
@@ -78,6 +119,22 @@ class FakeAdminQuestions implements AdminQuestionRepository {
 
   @override
   Future<AdminQuestion> question(String id) async => current;
+
+  @override
+  Future<AdminQuestion> createQuestion(Map<String, Object?> content, {String? changeNote}) async {
+    if (saveError != null) throw saveError!;
+    calls.add('create:${changeNote ?? ''}');
+    savedContent = content;
+    return current;
+  }
+
+  @override
+  Future<AdminQuestion> updateQuestion(String id, Map<String, Object?> content, {String? changeNote}) async {
+    if (saveError != null) throw saveError!;
+    calls.add('update:$id:${changeNote ?? ''}');
+    savedContent = content;
+    return current;
+  }
 
   @override
   Future<AdminQuestion> act(
