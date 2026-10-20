@@ -80,7 +80,7 @@ Code audit of the Phase 2 mobile and admin screens plus computed WCAG contrast o
 **Still open (documented limits)**
 
 - The ink splash (`InkSparkle`) is theme-level and cannot follow reduced motion; the route duration is not shortened (the page appears instantly but the route still runs for its normal time); Material `Switch` and `NavigationBar` keep their own animations.
-- Admin compact density is below 48 dp but above WCAG 2.2's 24 dp; no skip link or focus move after admin navigation.
+- Admin compact density is below 48 dp but above WCAG 2.2's 24 dp; admin has a skip link and moves focus to the main content after navigation (still to verify with a screen reader).
 - Not unit-tested: `Skeleton.semanticLabel`, `ContentDocView.blankLabel`, the reader's accessible-navigation behaviour.
 - **Device-only checks, not performed:** TalkBack, VoiceOver, physical-device largest font and display size, and everything marked "verify" in the audit. Widget tests simulate text scale and semantics but do not replace a real device.
 

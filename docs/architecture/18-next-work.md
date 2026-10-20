@@ -28,5 +28,5 @@ State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`)
 - Catalog additions: category counts, reading time, download counters, file-problem queue (Phase 3).
 - Admin forms to author question content (ContentDoc editor), papers, and curricula, subjects, chapters and topics; admin forms for edition metadata, table of contents and usage rights.
 - Bulk question import (08 §5), saved questions, practice `check` endpoint, quizzes and exams (Phase 3), LaTeX rendering, question image URLs.
-- Accessibility leftovers: reduced-motion for the ink splash and route duration, admin skip link and focus move after navigation, unit tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
+- Accessibility leftovers: reduced-motion for the ink splash and route duration; unit test for the reader's accessible-navigation behaviour. (Done 2026-10-21: admin skip link, focus move after navigation, tests for `Skeleton.semanticLabel` and `ContentDocView.blankLabel`.)
 - Mobile Study screens are empty until curriculum data is loaded.

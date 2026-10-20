@@ -2198,6 +2198,12 @@ abstract class ObLocalizations {
   /// **'Loading'**
   String get commonLoading;
 
+  /// No description provided for @adminSkipToContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip to main content'**
+  String get adminSkipToContent;
+
   /// No description provided for @actionClose.
   ///
   /// In en, this message translates to:

@@ -452,6 +452,7 @@
   "adminRoleSuperAdmin": "Super administrator",
   "adminNoEmail": "No email",
   "commonLoading": "Loading",
+  "adminSkipToContent": "Skip to main content",
   "actionClose": "Close",
   "adminPageOf": "{page} / {total}",
   "@adminPageOf": {

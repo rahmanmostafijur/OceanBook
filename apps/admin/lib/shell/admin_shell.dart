@@ -17,11 +17,37 @@ const double _minTileHeight = 56;
 const double _tileVerticalPadding = 16;
 const double _indicatorWidth = 336;
 
-class AdminShell extends ConsumerWidget {
+class AdminShell extends ConsumerStatefulWidget {
   const AdminShell({required this.location, required this.child, super.key});
 
   final String location;
   final Widget child;
+
+  @override
+  ConsumerState<AdminShell> createState() => _AdminShellState();
+}
+
+class _AdminShellState extends ConsumerState<AdminShell> {
+  final _mainFocus = FocusNode(debugLabel: 'admin main content', skipTraversal: true);
+
+  String get location => widget.location;
+
+  @override
+  void didUpdateWidget(AdminShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Keyboard and screen-reader users land on the new page's content, not back on the drawer item.
+    if (oldWidget.location != widget.location) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _mainFocus.requestFocus();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _mainFocus.dispose();
+    super.dispose();
+  }
 
   int get _selected {
     final items = allAdminItems;
@@ -104,7 +130,7 @@ class AdminShell extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = ObLocalizations.of(context);
     final wide = WindowSize.of(context) >= WindowSize.large;
     final auth = ref.watch(adminAuthProvider).value;
@@ -125,12 +151,20 @@ class AdminShell extends ConsumerWidget {
         const SizedBox(width: AppSpacing.xs),
       ],
     );
-    final body = Align(
-      alignment: Alignment.topLeft,
-      child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 1440), child: child),
+    final body = Focus(
+      focusNode: _mainFocus,
+      child: Semantics(
+        container: true,
+        explicitChildNodes: true,
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 1440), child: widget.child),
+        ),
+      ),
     );
+    final Widget frame;
     if (wide) {
-      return Scaffold(
+      frame = Scaffold(
         body: Row(
           children: [
             _drawer(context, l10n, modal: false),
@@ -140,8 +174,50 @@ class AdminShell extends ConsumerWidget {
           ],
         ),
       );
+    } else {
+      frame = Scaffold(appBar: appBar, drawer: _drawer(context, l10n, modal: true), body: body);
     }
-    return Scaffold(appBar: appBar, drawer: _drawer(context, l10n, modal: true), body: body);
+    // Pinned to the top-left corner so reading-order traversal makes it the first tab stop.
+    return Stack(
+      children: [
+        Positioned.fill(child: frame),
+        Positioned(
+          left: 0,
+          top: 0,
+          child: _SkipLink(label: l10n.adminSkipToContent, onActivate: _mainFocus.requestFocus),
+        ),
+      ],
+    );
+  }
+}
+
+/// First focusable control on every admin page: invisible until it takes keyboard focus.
+class _SkipLink extends StatefulWidget {
+  const _SkipLink({required this.label, required this.onActivate});
+
+  final String label;
+  final VoidCallback onActivate;
+
+  @override
+  State<_SkipLink> createState() => _SkipLinkState();
+}
+
+class _SkipLinkState extends State<_SkipLink> {
+  bool _focused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      ignoring: !_focused,
+      child: Opacity(
+        opacity: _focused ? 1 : 0,
+        child: FilledButton(
+          onFocusChange: (focused) => setState(() => _focused = focused),
+          onPressed: widget.onActivate,
+          child: Text(widget.label),
+        ),
+      ),
+    );
   }
 }
 

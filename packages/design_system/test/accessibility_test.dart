@@ -62,6 +62,62 @@ void main() {
     });
   });
 
+  group('Skeleton.semanticLabel', () {
+    testWidgets('is announced when provided', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        const MediaQuery(
+          data: MediaQueryData(disableAnimations: true),
+          child: MaterialApp(
+            home: Scaffold(body: Skeleton(width: 40, semanticLabel: 'Loading title')),
+          ),
+        ),
+      );
+      expect(find.bySemanticsLabel('Loading title'), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('is hidden from assistive tech when null', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        const MediaQuery(
+          data: MediaQueryData(disableAnimations: true),
+          child: MaterialApp(
+            home: Scaffold(body: Skeleton(width: 40)),
+          ),
+        ),
+      );
+      expect(find.descendant(of: find.byType(Skeleton), matching: find.byType(ExcludeSemantics)), findsWidgets);
+      expect(tester.getSemantics(find.byType(Skeleton)).label, isEmpty);
+      handle.dispose();
+    });
+  });
+
+  group('ContentDocView.blankLabel', () {
+    const doc = {
+      'blocks': [
+        {
+          'type': 'paragraph',
+          'inlines': [
+            {'type': 'text', 'text': 'The capital is '},
+            {'type': 'blank'},
+          ],
+        },
+      ],
+    };
+
+    testWidgets('labels a blank for screen readers', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: ContentDocView(doc: doc, blankLabel: 'Blank')),
+        ),
+      );
+      expect(find.bySemanticsLabel(RegExp('Blank')), findsOneWidget);
+      handle.dispose();
+    });
+  });
+
   group('ReducedMotionPageTransitionsBuilder', () {
     testWidgets('returns the child unchanged when animations are disabled', (tester) async {
       await _pumpTransition(tester, reduced: true);

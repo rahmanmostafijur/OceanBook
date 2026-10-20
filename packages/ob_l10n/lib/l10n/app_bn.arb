@@ -351,6 +351,7 @@
   "adminRoleSuperAdmin": "সুপার প্রশাসক",
   "adminNoEmail": "ইমেইল নেই",
   "commonLoading": "লোড হচ্ছে",
+  "adminSkipToContent": "মূল বিষয়বস্তুতে যান",
   "actionClose": "বন্ধ করুন",
   "adminPageOf": "{page} / {total}",
   "readerFontPercent": "{percent}%"

@@ -1109,6 +1109,9 @@ class ObLocalizationsBn extends ObLocalizations {
   String get commonLoading => 'লোড হচ্ছে';
 
   @override
+  String get adminSkipToContent => 'মূল বিষয়বস্তুতে যান';
+
+  @override
   String get actionClose => 'বন্ধ করুন';
 
   @override

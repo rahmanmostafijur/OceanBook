@@ -1117,6 +1117,9 @@ class ObLocalizationsEn extends ObLocalizations {
   String get commonLoading => 'Loading';
 
   @override
+  String get adminSkipToContent => 'Skip to main content';
+
+  @override
   String get actionClose => 'Close';
 
   @override
