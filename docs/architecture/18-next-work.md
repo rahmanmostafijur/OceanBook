@@ -1,4 +1,4 @@
-# 18 — Next work (saved 2026-10-19)
+# 18 — Next work (saved 2026-10-21)
 
 State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`), Flutter CI is green (`ee9c5eb`). Nothing below can be finished from the repository alone. Detail lives in [15](15-phase2-status.md) and [docs/operations/release-checklist.md](../operations/release-checklist.md).
 
@@ -31,3 +31,19 @@ State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`)
 - Bulk question import (08 §5), saved questions, practice `check` endpoint, quizzes and exams (Phase 3), LaTeX rendering, question image URLs.
 - Accessibility leftovers: route transition *duration* still runs under reduced motion (the page appears instantly, but the route takes its normal time to complete). Done 2026-10-21: admin skip link, focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
 - Mobile Study screens are empty until curriculum data is loaded.
+
+## 5. Done on 2026-10-21 (for context)
+
+- Accessibility: admin skip link and focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
+- Admin curriculum page: add, edit and archive subjects (with group offerings), chapters and topics.
+- Admin question editor: single choice, multiple choice and true/false.
+
+## 6. Suggested order for the next session
+
+1. Creative question type in the editor (stimulus plus parts ক/খ/গ/ঘ); it is the main SSC/HSC format.
+2. Papers form (`/admin/question-papers`, items, publish).
+3. Remaining question types (short answer, fill in the blank, matching), then rich ContentDoc and translations.
+4. Admin forms for levels, curricula and groups (still seed-only).
+5. Upload pipeline, then Phase 3 catalog and assessment items.
+
+Known gap: route transition duration still runs under reduced motion (the page appears instantly but the route takes its normal time).
