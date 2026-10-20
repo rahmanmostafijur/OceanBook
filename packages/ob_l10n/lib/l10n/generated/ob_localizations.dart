@@ -2198,6 +2198,78 @@ abstract class ObLocalizations {
   /// **'Loading'**
   String get commonLoading;
 
+  /// No description provided for @adminAddChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Add chapter'**
+  String get adminAddChapter;
+
+  /// No description provided for @adminAddTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Add topic'**
+  String get adminAddTopic;
+
+  /// No description provided for @adminEditItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get adminEditItem;
+
+  /// No description provided for @actionSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get actionSave;
+
+  /// No description provided for @adminNameBangla.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (Bangla, required)'**
+  String get adminNameBangla;
+
+  /// No description provided for @adminNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (English)'**
+  String get adminNameEnglish;
+
+  /// No description provided for @adminChapterNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter number'**
+  String get adminChapterNumber;
+
+  /// No description provided for @adminArchiveItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get adminArchiveItem;
+
+  /// No description provided for @adminRestoreItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get adminRestoreItem;
+
+  /// No description provided for @adminEditChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit chapter'**
+  String get adminEditChapter;
+
+  /// No description provided for @adminEditTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit topic'**
+  String get adminEditTopic;
+
+  /// No description provided for @adminNoChapters.
+  ///
+  /// In en, this message translates to:
+  /// **'No chapters yet'**
+  String get adminNoChapters;
+
   /// No description provided for @adminSkipToContent.
   ///
   /// In en, this message translates to:

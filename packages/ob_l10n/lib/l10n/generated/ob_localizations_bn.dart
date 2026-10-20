@@ -1109,6 +1109,42 @@ class ObLocalizationsBn extends ObLocalizations {
   String get commonLoading => 'লোড হচ্ছে';
 
   @override
+  String get adminAddChapter => 'অধ্যায় যোগ করুন';
+
+  @override
+  String get adminAddTopic => 'টপিক যোগ করুন';
+
+  @override
+  String get adminEditItem => 'সম্পাদনা';
+
+  @override
+  String get actionSave => 'সংরক্ষণ করুন';
+
+  @override
+  String get adminNameBangla => 'নাম (বাংলা, আবশ্যক)';
+
+  @override
+  String get adminNameEnglish => 'নাম (ইংরেজি)';
+
+  @override
+  String get adminChapterNumber => 'অধ্যায় নম্বর';
+
+  @override
+  String get adminArchiveItem => 'আর্কাইভ করুন';
+
+  @override
+  String get adminRestoreItem => 'পুনরুদ্ধার করুন';
+
+  @override
+  String get adminEditChapter => 'অধ্যায় সম্পাদনা';
+
+  @override
+  String get adminEditTopic => 'টপিক সম্পাদনা';
+
+  @override
+  String get adminNoChapters => 'এখনও কোনো অধ্যায় নেই';
+
+  @override
   String get adminSkipToContent => 'মূল বিষয়বস্তুতে যান';
 
   @override

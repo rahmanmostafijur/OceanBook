@@ -1117,6 +1117,42 @@ class ObLocalizationsEn extends ObLocalizations {
   String get commonLoading => 'Loading';
 
   @override
+  String get adminAddChapter => 'Add chapter';
+
+  @override
+  String get adminAddTopic => 'Add topic';
+
+  @override
+  String get adminEditItem => 'Edit';
+
+  @override
+  String get actionSave => 'Save';
+
+  @override
+  String get adminNameBangla => 'Name (Bangla, required)';
+
+  @override
+  String get adminNameEnglish => 'Name (English)';
+
+  @override
+  String get adminChapterNumber => 'Chapter number';
+
+  @override
+  String get adminArchiveItem => 'Archive';
+
+  @override
+  String get adminRestoreItem => 'Restore';
+
+  @override
+  String get adminEditChapter => 'Edit chapter';
+
+  @override
+  String get adminEditTopic => 'Edit topic';
+
+  @override
+  String get adminNoChapters => 'No chapters yet';
+
+  @override
   String get adminSkipToContent => 'Skip to main content';
 
   @override
