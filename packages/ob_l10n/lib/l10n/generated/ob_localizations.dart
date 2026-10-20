@@ -2270,6 +2270,96 @@ abstract class ObLocalizations {
   /// **'No chapters yet'**
   String get adminNoChapters;
 
+  /// No description provided for @adminAddSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add subject'**
+  String get adminAddSubject;
+
+  /// No description provided for @adminEditSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit subject'**
+  String get adminEditSubject;
+
+  /// No description provided for @adminCurriculum.
+  ///
+  /// In en, this message translates to:
+  /// **'Curriculum'**
+  String get adminCurriculum;
+
+  /// No description provided for @adminLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get adminLevel;
+
+  /// No description provided for @adminFamilyKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Family key (e.g. physics)'**
+  String get adminFamilyKey;
+
+  /// No description provided for @adminBoardCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Board code (optional)'**
+  String get adminBoardCode;
+
+  /// No description provided for @adminPaperNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Paper'**
+  String get adminPaperNumber;
+
+  /// No description provided for @adminPaperNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a paper'**
+  String get adminPaperNone;
+
+  /// No description provided for @adminPaperFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'1st paper'**
+  String get adminPaperFirst;
+
+  /// No description provided for @adminPaperSecond.
+  ///
+  /// In en, this message translates to:
+  /// **'2nd paper'**
+  String get adminPaperSecond;
+
+  /// No description provided for @adminGroupsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get adminGroupsHeading;
+
+  /// No description provided for @adminOfferingNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not offered'**
+  String get adminOfferingNone;
+
+  /// No description provided for @adminOfferingCompulsory.
+  ///
+  /// In en, this message translates to:
+  /// **'Compulsory'**
+  String get adminOfferingCompulsory;
+
+  /// No description provided for @adminOfferingElective.
+  ///
+  /// In en, this message translates to:
+  /// **'Elective'**
+  String get adminOfferingElective;
+
+  /// No description provided for @adminOfferingOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional (4th subject)'**
+  String get adminOfferingOptional;
+
   /// No description provided for @adminSkipToContent.
   ///
   /// In en, this message translates to:

@@ -17,9 +17,67 @@ class FakeAdminCurriculum implements AdminCurriculumRepository {
     ];
   }
 
+  static const hscLevel = CurriculumOption(
+    id: 'l1',
+    key: 'hsc',
+    name: LocalizedText({'bn': 'এইচএসসি', 'en': 'HSC'}),
+  );
+  static const scienceGroup = CurriculumOption(
+    id: 'g1',
+    key: 'science',
+    name: LocalizedText({'bn': 'বিজ্ঞান', 'en': 'Science'}),
+  );
+
+  List<CurriculumSubject> subjectsList = const [
+    CurriculumSubject(
+      id: 's1',
+      curriculumId: 'cur1',
+      educationLevelId: 'l1',
+      slug: 'physics-1st',
+      familyKey: 'physics',
+      boardCode: '174',
+      paperNumber: 1,
+      name: LocalizedText({'bn': 'পদার্থবিজ্ঞান ১ম পত্র', 'en': 'Physics 1st Paper'}),
+      isActive: true,
+      groups: [SubjectGroupLink(groupId: 'g1', offering: 'compulsory')],
+    ),
+  ];
   late List<CurriculumChapter> chaptersList;
   Object? writeError;
   final List<String> calls = [];
+
+  @override
+  Future<List<CurriculumSubject>> subjects() async => subjectsList;
+
+  @override
+  Future<List<CurriculumOption>> levels() async => const [hscLevel];
+
+  @override
+  Future<List<CurriculumOption>> curricula() async => const [
+    CurriculumOption(id: 'cur1', key: 'nctb_2012', name: LocalizedText({'bn': 'এনসিটিবি ২০১২', 'en': 'NCTB 2012'})),
+  ];
+
+  @override
+  Future<List<CurriculumOption>> groups(String levelId) async => const [scienceGroup];
+
+  @override
+  Future<void> createSubject({
+    required String curriculumId,
+    required String levelId,
+    required String slug,
+    required SubjectFields fields,
+  }) async {
+    _check();
+    calls.add(
+      'createSubject:$curriculumId:$levelId:$slug:${fields.familyKey}:${fields.name.values}:${fields.boardCode}:${fields.paperNumber}:${fields.groups.map((g) => "${g.groupId}=${g.offering}")}',
+    );
+  }
+
+  @override
+  Future<void> updateSubject(String id, {SubjectFields? fields, bool? isActive}) async {
+    _check();
+    calls.add('updateSubject:$id:${fields?.familyKey}:${fields?.name.values}:${fields?.paperNumber}:$isActive');
+  }
 
   @override
   Future<List<CurriculumChapter>> chapters(String subjectId) async => chaptersList;

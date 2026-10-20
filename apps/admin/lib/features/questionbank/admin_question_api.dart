@@ -193,25 +193,6 @@ class AdminPaper {
   final int itemCount;
 }
 
-@immutable
-class AdminSubject {
-  const AdminSubject({required this.id, required this.name, required this.familyKey, this.paperNumber, this.boardCode});
-
-  factory AdminSubject.fromJson(Map<String, Object?> json, String locale) => AdminSubject(
-    id: _req(json, 'id'),
-    name: LocalizedText.fromJson(json['name']).resolve(locale),
-    familyKey: _req(json, 'family_key'),
-    paperNumber: json['paper_number'] as int?,
-    boardCode: json['board_code'] as String?,
-  );
-
-  final String id;
-  final String name;
-  final String familyKey;
-  final int? paperNumber;
-  final String? boardCode;
-}
-
 /// The reviewer's decision, or another workflow step. Reason/comment-bearing ones are audited server-side.
 enum QuestionAction {
   submit('submit'),
@@ -255,8 +236,6 @@ abstract interface class AdminQuestionRepository {
   Future<AdminQuestion> question(String id);
   Future<AdminQuestion> act(String id, QuestionAction action, {String? comment, bool acknowledgeDuplicates = false});
   Future<Paged<AdminPaper>> papers({String? status, int page = 1, int pageSize = 25});
-  Future<List<AdminSubject>> subjects();
-  Future<List<ChapterRef>> chapters(String subjectId);
 }
 
 class AdminQuestionApi implements AdminQuestionRepository {
@@ -324,18 +303,6 @@ class AdminQuestionApi implements AdminQuestionRepository {
     );
     return Paged(rows: response.data, total: _total(response, response.data.length));
   }
-
-  @override
-  Future<List<AdminSubject>> subjects() async => (await api.get(
-    '/admin/academics/subjects',
-    decode: (j) => _list(j, (s) => AdminSubject.fromJson(s, locale)),
-  )).data;
-
-  @override
-  Future<List<ChapterRef>> chapters(String subjectId) async => (await api.get(
-    '/admin/academics/subjects/$subjectId/chapters',
-    decode: (j) => _list(j, (c) => ChapterRef.fromJson(c, locale)),
-  )).data;
 }
 
 final adminQuestionRepositoryProvider = Provider<AdminQuestionRepository>(

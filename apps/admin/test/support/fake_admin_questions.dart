@@ -109,19 +109,4 @@ class FakeAdminQuestions implements AdminQuestionRepository {
       total: 1,
     );
   }
-
-  @override
-  Future<List<AdminSubject>> subjects() async => const [
-    AdminSubject(id: 's1', name: 'Physics 1st Paper', familyKey: 'physics', paperNumber: 1, boardCode: '174'),
-  ];
-
-  @override
-  Future<List<ChapterRef>> chapters(String subjectId) async => const [
-    ChapterRef(
-      id: 'c1',
-      number: 1,
-      name: 'Physical world',
-      topics: [TopicRef(id: 't1', name: 'Measurement')],
-    ),
-  ];
 }

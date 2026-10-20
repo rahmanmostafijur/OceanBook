@@ -26,7 +26,7 @@ State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`)
 - Upload pipeline: presigned upload, malware scan, preview generation; new upload routes must use `register_asset` (`app/media/service.py`).
 - Reader and library backend, entitlement events and projection (Phase 4; decision in 14 §4).
 - Catalog additions: category counts, reading time, download counters, file-problem queue (Phase 3).
-- Admin forms to author question content (ContentDoc editor), papers, and curricula and subjects (chapters and topics: add, rename, archive done 2026-10-21 on the Subjects page); admin forms for edition metadata, table of contents and usage rights.
+- Admin forms to author question content (ContentDoc editor), papers, and curricula (subjects, chapters and topics: add, edit, archive done 2026-10-21 on the Subjects page; levels, curricula and groups still seed-only); admin forms for edition metadata, table of contents and usage rights.
 - Bulk question import (08 §5), saved questions, practice `check` endpoint, quizzes and exams (Phase 3), LaTeX rendering, question image URLs.
 - Accessibility leftovers: route transition *duration* still runs under reduced motion (the page appears instantly, but the route takes its normal time to complete). Done 2026-10-21: admin skip link, focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
 - Mobile Study screens are empty until curriculum data is loaded.

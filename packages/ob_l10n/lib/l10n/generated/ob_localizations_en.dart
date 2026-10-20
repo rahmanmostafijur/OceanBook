@@ -1153,6 +1153,51 @@ class ObLocalizationsEn extends ObLocalizations {
   String get adminNoChapters => 'No chapters yet';
 
   @override
+  String get adminAddSubject => 'Add subject';
+
+  @override
+  String get adminEditSubject => 'Edit subject';
+
+  @override
+  String get adminCurriculum => 'Curriculum';
+
+  @override
+  String get adminLevel => 'Level';
+
+  @override
+  String get adminFamilyKey => 'Family key (e.g. physics)';
+
+  @override
+  String get adminBoardCode => 'Board code (optional)';
+
+  @override
+  String get adminPaperNumber => 'Paper';
+
+  @override
+  String get adminPaperNone => 'Not a paper';
+
+  @override
+  String get adminPaperFirst => '1st paper';
+
+  @override
+  String get adminPaperSecond => '2nd paper';
+
+  @override
+  String get adminGroupsHeading => 'Groups';
+
+  @override
+  String get adminOfferingNone => 'Not offered';
+
+  @override
+  String get adminOfferingCompulsory => 'Compulsory';
+
+  @override
+  String get adminOfferingElective => 'Elective';
+
+  @override
+  String get adminOfferingOptional => 'Optional (4th subject)';
+
+  @override
   String get adminSkipToContent => 'Skip to main content';
 
   @override

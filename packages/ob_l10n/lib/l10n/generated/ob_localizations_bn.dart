@@ -1145,6 +1145,51 @@ class ObLocalizationsBn extends ObLocalizations {
   String get adminNoChapters => 'এখনও কোনো অধ্যায় নেই';
 
   @override
+  String get adminAddSubject => 'বিষয় যোগ করুন';
+
+  @override
+  String get adminEditSubject => 'বিষয় সম্পাদনা';
+
+  @override
+  String get adminCurriculum => 'শিক্ষাক্রম';
+
+  @override
+  String get adminLevel => 'স্তর';
+
+  @override
+  String get adminFamilyKey => 'পরিবার কী (যেমন physics)';
+
+  @override
+  String get adminBoardCode => 'বোর্ড কোড (ঐচ্ছিক)';
+
+  @override
+  String get adminPaperNumber => 'পত্র';
+
+  @override
+  String get adminPaperNone => 'পত্র নয়';
+
+  @override
+  String get adminPaperFirst => '১ম পত্র';
+
+  @override
+  String get adminPaperSecond => '২য় পত্র';
+
+  @override
+  String get adminGroupsHeading => 'বিভাগ';
+
+  @override
+  String get adminOfferingNone => 'নেই';
+
+  @override
+  String get adminOfferingCompulsory => 'আবশ্যিক';
+
+  @override
+  String get adminOfferingElective => 'নির্বাচনী';
+
+  @override
+  String get adminOfferingOptional => 'ঐচ্ছিক (৪র্থ বিষয়)';
+
+  @override
   String get adminSkipToContent => 'মূল বিষয়বস্তুতে যান';
 
   @override

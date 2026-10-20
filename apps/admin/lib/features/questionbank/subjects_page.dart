@@ -6,10 +6,10 @@ import 'package:ob_l10n/ob_l10n.dart';
 import '../../core/messages.dart';
 import '../academics/admin_curriculum_api.dart';
 import '../academics/name_dialog.dart';
-import 'admin_question_api.dart';
+import '../academics/subject_dialog.dart';
 
-final adminSubjectsProvider = FutureProvider.autoDispose<List<AdminSubject>>(
-  (ref) => ref.watch(adminQuestionRepositoryProvider).subjects(),
+final adminSubjectsProvider = FutureProvider.autoDispose<List<CurriculumSubject>>(
+  (ref) => ref.watch(adminCurriculumRepositoryProvider).subjects(),
 );
 
 final _chaptersProvider = FutureProvider.autoDispose.family<List<CurriculumChapter>, String>(
@@ -24,32 +24,52 @@ class SubjectsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = ObLocalizations.of(context);
-    return switch (ref.watch(adminSubjectsProvider)) {
-      AsyncData(:final value) when value.isEmpty => EmptyState(
-        icon: Icons.library_books_outlined,
-        title: l10n.adminNoSubjects,
-      ),
-      AsyncData(:final value) => ListView(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        children: [
-          for (final subject in value) _SubjectTile(subject: subject),
-        ],
-      ),
-      AsyncError(:final error) => ErrorState(
-        title: l10n.errorTitle,
-        message: adminFailureMessage(l10n, error),
-        retryLabel: l10n.actionRetry,
-        onRetry: () => ref.invalidate(adminSubjectsProvider),
-      ),
-      _ => PageLoading(semanticLabel: l10n.commonLoading),
-    };
+    final subjects = ref.watch(adminSubjectsProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.md, AppSpacing.xl, 0),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: FilledButton.icon(
+              key: const Key('add-subject'),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.adminAddSubject),
+              onPressed: () => showSubjectDialog(context, onSaved: () => ref.invalidate(adminSubjectsProvider)),
+            ),
+          ),
+        ),
+        Expanded(
+          child: switch (subjects) {
+            AsyncData(:final value) when value.isEmpty => EmptyState(
+              icon: Icons.library_books_outlined,
+              title: l10n.adminNoSubjects,
+            ),
+            AsyncData(:final value) => ListView(
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              children: [
+                for (final subject in value) _SubjectTile(subject: subject),
+              ],
+            ),
+            AsyncError(:final error) => ErrorState(
+              title: l10n.errorTitle,
+              message: adminFailureMessage(l10n, error),
+              retryLabel: l10n.actionRetry,
+              onRetry: () => ref.invalidate(adminSubjectsProvider),
+            ),
+            _ => PageLoading(semanticLabel: l10n.commonLoading),
+          },
+        ),
+      ],
+    );
   }
 }
 
 class _SubjectTile extends ConsumerWidget {
   const _SubjectTile({required this.subject});
 
-  final AdminSubject subject;
+  final CurriculumSubject subject;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,17 +77,52 @@ class _SubjectTile extends ConsumerWidget {
     final l10n = ObLocalizations.of(context);
     final repo = ref.read(adminCurriculumRepositoryProvider);
     final provider = _chaptersProvider(subject.id);
+    final locale = Localizations.localeOf(context).languageCode;
     return Card(
       margin: const EdgeInsets.only(bottom: AppSpacing.xs),
       child: ExpansionTile(
         expansionAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
         key: Key('subject-${subject.id}'),
-        title: Text(subject.name),
+        title: Text(subject.name.resolve(locale)),
         subtitle: Text(
-          [subject.familyKey, ?subject.boardCode].join(' · '),
+          [subject.familyKey, ?subject.boardCode, if (!subject.isActive) l10n.adminStatusArchived].join(' · '),
           style: theme.textTheme.bodySmall,
         ),
         children: [
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Wrap(
+              children: [
+                IconButton(
+                  key: Key('edit-subject-${subject.id}'),
+                  tooltip: l10n.adminEditSubject,
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () => showSubjectDialog(
+                    context,
+                    subject: subject,
+                    onSaved: () => ref.invalidate(adminSubjectsProvider),
+                  ),
+                ),
+                IconButton(
+                  key: Key('toggle-subject-${subject.id}'),
+                  tooltip: subject.isActive ? l10n.adminArchiveItem : l10n.adminRestoreItem,
+                  icon: Icon(subject.isActive ? Icons.archive_outlined : Icons.unarchive_outlined),
+                  onPressed: () async {
+                    try {
+                      await repo.updateSubject(subject.id, isActive: !subject.isActive);
+                      ref.invalidate(adminSubjectsProvider);
+                    } on Object catch (error) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(adminFailureMessage(l10n, error))));
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
           Consumer(
             builder: (context, ref, _) => switch (ref.watch(provider)) {
               AsyncData(:final value) => Column(
