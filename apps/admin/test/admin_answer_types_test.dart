@@ -231,4 +231,59 @@ void main() {
     );
     expect(find.textContaining('cannot edit yet'), findsOneWidget);
   });
+
+  group('rich text', () {
+    testWidgets('formatting, lists, tables and display maths are sent as document blocks', (tester) async {
+      final questions = await _openCreate(tester, 'Short answer');
+      await _type(tester, 'question-stem', 'Name the **two** units:\n\n- joule\n- newton\n\n\$\$E=mc^2\$\$');
+      await _type(tester, 'question-model-answer', '| a | b |\n| c | d |');
+      await _classify(tester);
+      await _tap(tester, 'question-save');
+
+      final t = _bnTranslation(questions.savedContent!);
+      final blocks = ((t['stem']! as Map)['blocks']! as List).cast<Map<String, Object?>>();
+      expect(blocks.map((b) => b['type']), ['paragraph', 'list', 'paragraph']);
+      expect((blocks.first['inlines'] as List)[1], {'type': 'text', 'text': 'two', 'bold': true});
+      expect((blocks.last['inlines'] as List).single, {'type': 'math', 'tex': 'E=mc^2', 'display': true});
+      expect((((t['model_answer']! as Map)['blocks']! as List).single as Map)['type'], 'table');
+    });
+
+    testWidgets('a question with a list in its text can be edited', (tester) async {
+      final stem = {
+        'type': 'doc',
+        'v': 1,
+        'blocks': [
+          {
+            'type': 'list',
+            'style': 'bullet',
+            'items': [
+              [
+                {'type': 'text', 'text': 'first', 'italic': true},
+              ],
+            ],
+          },
+        ],
+      };
+      final question = fakeTypedQuestion(QuestionType.mcqSingle, {
+        'translations': {
+          'bn': {'stem': stem, 'origin': 'original'},
+        },
+        'options': [
+          {
+            'label': 'A',
+            'is_correct': true,
+            'content': {'bn': stem},
+          },
+        ],
+      });
+      await pumpAdmin(
+        tester,
+        size: _tall,
+        restored: staffUser,
+        questions: FakeAdminQuestions(question: question),
+        location: '/questions/q1/edit',
+      );
+      expect(find.widgetWithText(TextFormField, '- *first*'), findsWidgets);
+    });
+  });
 }

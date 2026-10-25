@@ -2827,6 +2827,18 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Remove item'**
   String get adminRemoveItem;
+
+  /// No description provided for @adminFormatHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Formatting help'**
+  String get adminFormatHelpTitle;
+
+  /// No description provided for @adminFormatHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'**bold**  *italic*  __underline__  H~2~O  x^2^\n\$x^2\$ for maths in a line, \$\$x^2\$\$ for maths on its own line\nA blank line starts a new paragraph\n- bullet list   1. numbered list   i. roman list   ক. Bangla list (one item per line)\n| cell | cell | for a table (one row per line, the same number of cells in each)\nA backslash writes the next character as it is: \\* \\\$ \\\\'**
+  String get adminFormatHelp;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

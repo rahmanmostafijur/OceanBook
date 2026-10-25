@@ -574,7 +574,14 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         helperMaxLines: 3,
       ),
       onChanged: _isFillBlank ? (v) => setState(() => _blanks.syncWith(v)) : null,
-      validator: (v) => _required(l10n, v),
+      validator: (v) => isValidContentText(v ?? '', allowBlanks: _isFillBlank) ? null : l10n.errorValidation,
+    ),
+    ExpansionTile(
+      key: const Key('format-help'),
+      tilePadding: EdgeInsets.zero,
+      title: Text(l10n.adminFormatHelpTitle, style: Theme.of(context).textTheme.bodyMedium),
+      expandedAlignment: AlignmentDirectional.centerStart,
+      children: [Text(l10n.adminFormatHelp, style: Theme.of(context).textTheme.bodySmall)],
     ),
     if (_isFillBlank) ...[
       if (_blanksInvalid)
