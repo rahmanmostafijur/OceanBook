@@ -1,50 +1,68 @@
-# 18 — Next work (saved 2026-10-21)
+# 18 — Next work (saved 2026-10-26)
 
-State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`), Flutter CI is green (`ee9c5eb`). Nothing below can be finished from the repository alone. Detail lives in [15](15-phase2-status.md) and [docs/operations/release-checklist.md](../operations/release-checklist.md).
+State: Phase 2 is complete. On 2026-10-26 the personal-library slice of Phase 4 was built ahead of schedule (owner decision, see §5), and all gates pass locally. Migration head is `0010`. Background lives in [15](15-phase2-status.md) and the [release checklist](../operations/release-checklist.md).
 
 ## 1. Needs a device
 
-- TalkBack and VoiceOver pass on the new mobile screens, and the admin app with a screen reader.
-- Physical-device check at the largest font and display size (widget tests only simulate text scale).
+- TalkBack and VoiceOver pass on the mobile screens, including the new Library tabs (Books, Shelves, Insights), the book details sheet and the grouped Profile settings, and the admin app with a screen reader.
+- Physical-device check at the largest font and display size (widget tests only simulate text scale; the emulator check on 2026-10-26 was at the default size).
 - Everything marked "verify" in the accessibility audit (15 §5).
 
 ## 2. Needs infrastructure or accounts
 
 - Cloudflare: Transform Rule that sets `X-Origin-Verify`, then restrict the origin to Cloudflare's IP ranges; verify with the steps in the checklist §1 before setting `OB_TRUST_CLOUDFLARE_HEADERS=true`.
-- Production secrets (names in checklist §3), database, cache and migration run (`alembic upgrade head`, head is `0009`).
+- Production secrets (names in checklist §3), database, cache and migration run (`alembic upgrade head`, head is `0010`).
 - Storage: `public/` behind the CDN, private `evidence/`; set the media public base URL.
 - Android upload keystore and `key.properties`; build with `API_BASE_URL`. Build and host the admin web with the production API URL and matching CORS origin.
 - Restore drill with a written result.
+- Local demo content: the development database has no published books (publishing needs provenance and rights cleared by two people), so the Library can only be tried end to end once some books are published through the admin app.
 
 ## 3. Needs an owner decision or outside input
 
 - Cloud and storage provider. The repository documents Cloudflare, ECS, RDS and R2 and has no Render or Vercel configuration.
 - Reviewed NCTB curriculum files for SSC and HSC (list of what is needed: `backend/seed/README.md`), loaded with `seed-academics --file` after a dry run.
+- Premium: which insights or library features, if any, should be premium once commerce exists (Phase 5). Today everything in the Library is free and Profile says plans cannot be bought yet.
 
-## 4. Engineering backlog (deferred, not blocked)
+## 4. Engineering backlog
+
+### Library and reader (rest of Phase 4)
+
+- Reading progress, bookmarks, highlights, notes; `/sync/push` and `/sync/pull`; the offline store (06). The tables written so far already carry `server_version` and per-user advisory locks for this.
+- Insights that need reading progress: pages read (today the tile counts pages of finished books only), reading streaks, reading time.
+- Entitlement events and projection; the reader itself (the reader route still shows sample text).
+- Review follow-ups not yet done (low severity):
+  - Rapid repeated taps on one book or shelf can apply server answers out of order; serialise mutations per book or shelf, or disable the control while a call is pending.
+  - `GET /me/collections` returns every shelf's full `book_ids` (bounded by the caps, but large near them); return ids only for a single shelf or page them.
+  - Timestamps come from `now()` (transaction start); with concurrent writes of one user they can be older than an earlier-committed row. Use `clock_timestamp()` after taking the lock if timestamp order must match sync order.
+  - Library tests to add: concurrent caps and duplicate names, cross-user client-id collision, increasing `server_version` on cascaded tombstones; accessibility-guideline tests for the details sheet, Insights, Shelves and the shelf page.
+  - Saving a preference (language, theme) does not report a failed write.
+- Deliberately not built: lending (no such concept for licensed ebooks), purchases and restore (Phase 5), cloud backup, CSV import, haptics.
+
+### Content and admin
 
 - Upload pipeline: presigned upload, malware scan, preview generation; new upload routes must use `register_asset` (`app/media/service.py`).
-- Reader and library backend, entitlement events and projection (Phase 4; decision in 14 §4).
-- Catalog additions: category counts, reading time, download counters, file-problem queue (Phase 3).
-- Admin question editor: single choice, multiple choice, true/false and creative (stimulus plus parts, marks derived from the parts) in one source language with plain text and `$maths$` is done (`question_editor_page.dart`, `creative_parts.dart`); a changed passage is saved as a new stimulus because stimuli of live questions are immutable; short answer (model answer, marking guidance), fill in the blank (`[[1]]` gap markers, accepted answers per gap) and matching (two columns and pairs) are done too (`answer_drafts.dart`); still to do: part model answers and marking guidance, sharing one stimulus between questions (a stimulus picker), images (they need the upload pipeline) and a side-by-side view of the two languages. Content the editor cannot reproduce is shown as not editable rather than risked. Papers form, and
-- Papers: create, edit (drafts), choose questions, publish and archive are done (`paper_editor_page.dart`, `paper_detail_page.dart`, `paper_items_dialog.dart`); still to do: reorder items and edit item numbers or per-paper marks, and showing a paper's provenance. Admin forms to author curricula (subjects, chapters and topics: add, edit, archive done 2026-10-21 on the Subjects page; levels, groups, curricula, boards and instruction media: add and edit done on the Academic setup page, `academic_setup_page.dart`, with archive for levels, boards and media); admin forms for edition metadata, table of contents and usage rights.
+- Catalog additions: category counts, reading time, download counters, file-problem queue (Phase 3). Edition page counts are optional in the admin, so most books have none yet; the longest/shortest insights stay empty until they are filled in.
+- Admin question editor still to do: part model answers and marking guidance, a stimulus picker to share one stimulus between questions, images (need the upload pipeline), a side-by-side view of the two languages. Content the editor cannot reproduce stays shown as not editable.
+- Papers still to do: reorder items, edit item numbers and per-paper marks, show a paper's provenance.
+- Admin forms for edition metadata, table of contents and usage rights.
 - Bulk question import (08 §5), saved questions, practice `check` endpoint, quizzes and exams (Phase 3), LaTeX rendering, question image URLs.
-- Accessibility leftovers: route transition *duration* still runs under reduced motion (the page appears instantly, but the route takes its normal time to complete). Done 2026-10-21: admin skip link, focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
+
+### Other
+
+- Route transition *duration* still runs under reduced motion (the page appears instantly, but the route takes its normal time).
 - Mobile Study screens are empty until curriculum data is loaded.
+- A repo-wide check: text inputs outside the library module may still accept NUL and other control characters (PostgreSQL rejects NUL, giving a 500). The library schemas now reject them.
 
-## 5. Done on 2026-10-21 (for context)
+## 5. Done on 2026-10-26
 
-- Accessibility: admin skip link and focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
-- Admin curriculum page: add, edit and archive subjects (with group offerings), chapters and topics.
-- Admin question editor: single choice, multiple choice and true/false.
-- Admin question editor: creative questions (stimulus plus parts).
-- Admin papers: create, edit, choose questions, publish, archive.
-- Admin Academic setup page: levels, groups, curricula, boards and instruction media.
-- Admin question editor: short answer, fill in the blank, matching; rich text as markers (bold, italic, underline, sub/superscript, display maths, lists, tables, backslash escapes) in `content_text.dart`; second-language translation of text, options, parts, passage and model answer (`translation_fields.dart`, origin `human_translation`).
+- Backend `app/library`: shelf status and favourites (`user_books`, with a `deleted_at` tombstone), shelves (`collections`, `collection_items`), migration `0010`, routes `/me/library`, `/me/books/{id}`, `/me/collections[/{id}[/items/{book_id}]]` (04 §2.5). Per-user caps (2,000 books, 100 shelves), write rate limit, visibility rule shared with the catalog, control characters rejected, idempotent client shelf ids.
+- Mobile Library tab: Books (search, status and favourite filters with counts, sort, cover grid, details sheet for status, favourite, shelves and removal), Shelves (create, edit, delete, add and remove books), Insights computed on the device (totals, finished per week/month/year/all time, status, top categories, languages, publishers, books added per month, longest and shortest, highest rated). Add, status and favourite on the catalog book page.
+- Profile as grouped settings; language and theme saved on the device (`shared_preferences`).
+- Design system: `SurfaceCard`, `StatTile`, `ColumnChart`, `RankedBars`, `SettingsSection`; small placeholder covers show a book glyph.
+- Independent security and Flutter reviews; all medium findings fixed with regression tests.
 
 ## 6. Suggested order for the next session
 
-1. Upload pipeline, then images in question text.
-2. Phase 3 catalog and assessment items.
-
-Known gap: route transition duration still runs under reduced motion (the page appears instantly but the route takes its normal time).
+1. Push CI check for this work, then a TalkBack pass on the Library screens.
+2. Upload pipeline, then images in question text.
+3. Phase 3 catalog and assessment items, or the rest of Phase 4 (progress and sync) if the owner prefers.
