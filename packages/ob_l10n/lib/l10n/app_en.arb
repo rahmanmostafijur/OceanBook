@@ -602,5 +602,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "adminNavAcademicSetup": "Academic setup",
+  "adminSetupLevels": "Levels",
+  "adminSetupGroups": "Groups",
+  "adminSetupCurricula": "Curricula",
+  "adminSetupBoards": "Boards",
+  "adminSetupMedia": "Media",
+  "adminSetupAdd": "Add",
+  "adminSetupEdit": "Edit",
+  "adminSetupEmpty": "Nothing here yet",
+  "adminSetupKey": "Key",
+  "adminSetupKeyHint": "Lowercase letters, digits and underscores. It cannot be changed later.",
+  "adminSetupPosition": "Order",
+  "adminSetupBoardType": "Board type",
+  "adminSetupBoardGeneral": "General",
+  "adminSetupBoardMadrasah": "Madrasah",
+  "adminSetupBoardTechnical": "Technical",
+  "adminSetupContentLocale": "Language of the content",
+  "adminSetupYearFrom": "From year",
+  "adminSetupYearTo": "To year",
+  "adminSetupIsCurrent": "Current curriculum",
+  "adminSetupPickLevel": "Level"
 }

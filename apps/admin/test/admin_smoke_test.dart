@@ -38,6 +38,7 @@ void main() {
         '/subjects',
         '/chapters',
         '/topics',
+        '/academic-setup',
         '/question-papers',
         '/quizzes',
         '/exams',

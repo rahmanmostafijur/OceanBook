@@ -481,5 +481,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "adminNavAcademicSetup": "একাডেমিক সেটআপ",
+  "adminSetupLevels": "স্তর",
+  "adminSetupGroups": "বিভাগ",
+  "adminSetupCurricula": "শিক্ষাক্রম",
+  "adminSetupBoards": "বোর্ড",
+  "adminSetupMedia": "মাধ্যম",
+  "adminSetupAdd": "যোগ করুন",
+  "adminSetupEdit": "সম্পাদনা",
+  "adminSetupEmpty": "এখনও কিছু নেই",
+  "adminSetupKey": "কী",
+  "adminSetupKeyHint": "ইংরেজি ছোট হাতের অক্ষর, সংখ্যা ও আন্ডারস্কোর। পরে বদলানো যাবে না।",
+  "adminSetupPosition": "ক্রম",
+  "adminSetupBoardType": "বোর্ডের ধরন",
+  "adminSetupBoardGeneral": "সাধারণ",
+  "adminSetupBoardMadrasah": "মাদ্রাসা",
+  "adminSetupBoardTechnical": "কারিগরি",
+  "adminSetupContentLocale": "বিষয়বস্তুর ভাষা",
+  "adminSetupYearFrom": "শুরুর বছর",
+  "adminSetupYearTo": "শেষের বছর",
+  "adminSetupIsCurrent": "চলমান শিক্ষাক্রম",
+  "adminSetupPickLevel": "স্তর"
 }

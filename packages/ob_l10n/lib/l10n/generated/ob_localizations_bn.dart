@@ -1459,4 +1459,67 @@ class ObLocalizationsBn extends ObLocalizations {
   @override
   String get adminTranslationUnsupported =>
       'এই অনুবাদে এমন বিন্যাস আছে যা এখানে এখনও সম্পাদনা করা যায় না। এটি যেমন আছে তেমনই থাকবে।';
+
+  @override
+  String get adminNavAcademicSetup => 'একাডেমিক সেটআপ';
+
+  @override
+  String get adminSetupLevels => 'স্তর';
+
+  @override
+  String get adminSetupGroups => 'বিভাগ';
+
+  @override
+  String get adminSetupCurricula => 'শিক্ষাক্রম';
+
+  @override
+  String get adminSetupBoards => 'বোর্ড';
+
+  @override
+  String get adminSetupMedia => 'মাধ্যম';
+
+  @override
+  String get adminSetupAdd => 'যোগ করুন';
+
+  @override
+  String get adminSetupEdit => 'সম্পাদনা';
+
+  @override
+  String get adminSetupEmpty => 'এখনও কিছু নেই';
+
+  @override
+  String get adminSetupKey => 'কী';
+
+  @override
+  String get adminSetupKeyHint => 'ইংরেজি ছোট হাতের অক্ষর, সংখ্যা ও আন্ডারস্কোর। পরে বদলানো যাবে না।';
+
+  @override
+  String get adminSetupPosition => 'ক্রম';
+
+  @override
+  String get adminSetupBoardType => 'বোর্ডের ধরন';
+
+  @override
+  String get adminSetupBoardGeneral => 'সাধারণ';
+
+  @override
+  String get adminSetupBoardMadrasah => 'মাদ্রাসা';
+
+  @override
+  String get adminSetupBoardTechnical => 'কারিগরি';
+
+  @override
+  String get adminSetupContentLocale => 'বিষয়বস্তুর ভাষা';
+
+  @override
+  String get adminSetupYearFrom => 'শুরুর বছর';
+
+  @override
+  String get adminSetupYearTo => 'শেষের বছর';
+
+  @override
+  String get adminSetupIsCurrent => 'চলমান শিক্ষাক্রম';
+
+  @override
+  String get adminSetupPickLevel => 'স্তর';
 }

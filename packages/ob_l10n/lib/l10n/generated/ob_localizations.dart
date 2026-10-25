@@ -2857,6 +2857,132 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'This translation uses formatting the editor cannot edit yet. It is kept as it is.'**
   String get adminTranslationUnsupported;
+
+  /// No description provided for @adminNavAcademicSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic setup'**
+  String get adminNavAcademicSetup;
+
+  /// No description provided for @adminSetupLevels.
+  ///
+  /// In en, this message translates to:
+  /// **'Levels'**
+  String get adminSetupLevels;
+
+  /// No description provided for @adminSetupGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get adminSetupGroups;
+
+  /// No description provided for @adminSetupCurricula.
+  ///
+  /// In en, this message translates to:
+  /// **'Curricula'**
+  String get adminSetupCurricula;
+
+  /// No description provided for @adminSetupBoards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get adminSetupBoards;
+
+  /// No description provided for @adminSetupMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Media'**
+  String get adminSetupMedia;
+
+  /// No description provided for @adminSetupAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get adminSetupAdd;
+
+  /// No description provided for @adminSetupEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get adminSetupEdit;
+
+  /// No description provided for @adminSetupEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get adminSetupEmpty;
+
+  /// No description provided for @adminSetupKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Key'**
+  String get adminSetupKey;
+
+  /// No description provided for @adminSetupKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowercase letters, digits and underscores. It cannot be changed later.'**
+  String get adminSetupKeyHint;
+
+  /// No description provided for @adminSetupPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get adminSetupPosition;
+
+  /// No description provided for @adminSetupBoardType.
+  ///
+  /// In en, this message translates to:
+  /// **'Board type'**
+  String get adminSetupBoardType;
+
+  /// No description provided for @adminSetupBoardGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get adminSetupBoardGeneral;
+
+  /// No description provided for @adminSetupBoardMadrasah.
+  ///
+  /// In en, this message translates to:
+  /// **'Madrasah'**
+  String get adminSetupBoardMadrasah;
+
+  /// No description provided for @adminSetupBoardTechnical.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical'**
+  String get adminSetupBoardTechnical;
+
+  /// No description provided for @adminSetupContentLocale.
+  ///
+  /// In en, this message translates to:
+  /// **'Language of the content'**
+  String get adminSetupContentLocale;
+
+  /// No description provided for @adminSetupYearFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From year'**
+  String get adminSetupYearFrom;
+
+  /// No description provided for @adminSetupYearTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To year'**
+  String get adminSetupYearTo;
+
+  /// No description provided for @adminSetupIsCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current curriculum'**
+  String get adminSetupIsCurrent;
+
+  /// No description provided for @adminSetupPickLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get adminSetupPickLevel;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

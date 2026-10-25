@@ -68,6 +68,12 @@ final List<AdminNavSection> adminNavigation = [
       AdminNavItem(path: '/chapters', icon: Icons.format_list_numbered, label: (l) => l.adminNavChapters, phase: 2),
       AdminNavItem(path: '/topics', icon: Icons.label_outline, label: (l) => l.adminNavTopics, phase: 2),
       AdminNavItem(
+        path: '/academic-setup',
+        icon: Icons.tune_outlined,
+        label: (l) => l.adminNavAcademicSetup,
+        phase: 2,
+      ),
+      AdminNavItem(
         path: '/question-papers',
         icon: Icons.description_outlined,
         label: (l) => l.adminNavQuestionPapers,

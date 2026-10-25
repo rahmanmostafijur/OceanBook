@@ -1466,4 +1466,67 @@ class ObLocalizationsEn extends ObLocalizations {
   @override
   String get adminTranslationUnsupported =>
       'This translation uses formatting the editor cannot edit yet. It is kept as it is.';
+
+  @override
+  String get adminNavAcademicSetup => 'Academic setup';
+
+  @override
+  String get adminSetupLevels => 'Levels';
+
+  @override
+  String get adminSetupGroups => 'Groups';
+
+  @override
+  String get adminSetupCurricula => 'Curricula';
+
+  @override
+  String get adminSetupBoards => 'Boards';
+
+  @override
+  String get adminSetupMedia => 'Media';
+
+  @override
+  String get adminSetupAdd => 'Add';
+
+  @override
+  String get adminSetupEdit => 'Edit';
+
+  @override
+  String get adminSetupEmpty => 'Nothing here yet';
+
+  @override
+  String get adminSetupKey => 'Key';
+
+  @override
+  String get adminSetupKeyHint => 'Lowercase letters, digits and underscores. It cannot be changed later.';
+
+  @override
+  String get adminSetupPosition => 'Order';
+
+  @override
+  String get adminSetupBoardType => 'Board type';
+
+  @override
+  String get adminSetupBoardGeneral => 'General';
+
+  @override
+  String get adminSetupBoardMadrasah => 'Madrasah';
+
+  @override
+  String get adminSetupBoardTechnical => 'Technical';
+
+  @override
+  String get adminSetupContentLocale => 'Language of the content';
+
+  @override
+  String get adminSetupYearFrom => 'From year';
+
+  @override
+  String get adminSetupYearTo => 'To year';
+
+  @override
+  String get adminSetupIsCurrent => 'Current curriculum';
+
+  @override
+  String get adminSetupPickLevel => 'Level';
 }

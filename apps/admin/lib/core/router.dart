@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
+import '../features/academics/academic_setup_page.dart';
 import '../features/auth/admin_sign_in_page.dart';
 import '../features/catalog/book_detail_page.dart';
 import '../features/catalog/books_page.dart';
@@ -44,6 +45,7 @@ Widget _pageFor(AdminNavItem item) => switch (item.path) {
   '/questions' => const QuestionsPage(),
   '/question-papers' => const PapersPage(),
   '/subjects' || '/chapters' || '/topics' => const SubjectsPage(),
+  '/academic-setup' => const AcademicSetupPage(),
   '/' => const _Dashboard(),
   _ => PlannedPage(item: item),
 };

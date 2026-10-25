@@ -27,7 +27,7 @@ State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`)
 - Reader and library backend, entitlement events and projection (Phase 4; decision in 14 §4).
 - Catalog additions: category counts, reading time, download counters, file-problem queue (Phase 3).
 - Admin question editor: single choice, multiple choice, true/false and creative (stimulus plus parts, marks derived from the parts) in one source language with plain text and `$maths$` is done (`question_editor_page.dart`, `creative_parts.dart`); a changed passage is saved as a new stimulus because stimuli of live questions are immutable; short answer (model answer, marking guidance), fill in the blank (`[[1]]` gap markers, accepted answers per gap) and matching (two columns and pairs) are done too (`answer_drafts.dart`); still to do: part model answers and marking guidance, sharing one stimulus between questions (a stimulus picker), images (they need the upload pipeline) and a side-by-side view of the two languages. Content the editor cannot reproduce is shown as not editable rather than risked. Papers form, and
-- Papers: create, edit (drafts), choose questions, publish and archive are done (`paper_editor_page.dart`, `paper_detail_page.dart`, `paper_items_dialog.dart`); still to do: reorder items and edit item numbers or per-paper marks, and showing a paper's provenance. Admin forms to author curricula (subjects, chapters and topics: add, edit, archive done 2026-10-21 on the Subjects page; levels, curricula and groups still seed-only); admin forms for edition metadata, table of contents and usage rights.
+- Papers: create, edit (drafts), choose questions, publish and archive are done (`paper_editor_page.dart`, `paper_detail_page.dart`, `paper_items_dialog.dart`); still to do: reorder items and edit item numbers or per-paper marks, and showing a paper's provenance. Admin forms to author curricula (subjects, chapters and topics: add, edit, archive done 2026-10-21 on the Subjects page; levels, groups, curricula, boards and instruction media: add and edit done on the Academic setup page, `academic_setup_page.dart`, with archive for levels, boards and media); admin forms for edition metadata, table of contents and usage rights.
 - Bulk question import (08 §5), saved questions, practice `check` endpoint, quizzes and exams (Phase 3), LaTeX rendering, question image URLs.
 - Accessibility leftovers: route transition *duration* still runs under reduced motion (the page appears instantly, but the route takes its normal time to complete). Done 2026-10-21: admin skip link, focus move after navigation, ink splash off under reduced motion (`ReducedMotionTheme`), tests for `Skeleton.semanticLabel`, `ContentDocView.blankLabel` and the reader's accessible-navigation behaviour.
 - Mobile Study screens are empty until curriculum data is loaded.
@@ -39,12 +39,12 @@ State: Phase 2 is complete and pushed to `main`. Backend CI is green (`dd5b38c`)
 - Admin question editor: single choice, multiple choice and true/false.
 - Admin question editor: creative questions (stimulus plus parts).
 - Admin papers: create, edit, choose questions, publish, archive.
+- Admin Academic setup page: levels, groups, curricula, boards and instruction media.
 - Admin question editor: short answer, fill in the blank, matching; rich text as markers (bold, italic, underline, sub/superscript, display maths, lists, tables, backslash escapes) in `content_text.dart`; second-language translation of text, options, parts, passage and model answer (`translation_fields.dart`, origin `human_translation`).
 
 ## 6. Suggested order for the next session
 
-1. Admin forms for levels, curricula and groups (still seed-only).
-2. Upload pipeline, then images in question text.
-3. Phase 3 catalog and assessment items.
+1. Upload pipeline, then images in question text.
+2. Phase 3 catalog and assessment items.
 
 Known gap: route transition duration still runs under reduced motion (the page appears instantly but the route takes its normal time).
