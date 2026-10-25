@@ -1,18 +1,17 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
-import '../../domain/library_book.dart';
+import '../library_labels.dart';
 
 const int _titleMaxLines = 3;
 const int _authorMaxLines = 2;
-const int _progressMaxLines = 2;
-const double _progressBarHeight = 4;
+const double _badgeHeight = 22;
 const double _heightSlack = 4;
 
 /// Height the text block under a cover needs at the user's current text scale: title (up to 3 lines),
-/// author (up to 2), the progress bar and the progress label (up to 2), plus paddings. Ellipsis only
-/// happens beyond those line counts.
+/// authors (up to 2) and the status badge, plus paddings. Ellipsis only happens beyond those line counts.
 double libraryCardTextHeight(BuildContext context) {
   final text = Theme.of(context).textTheme;
   final scaler = MediaQuery.textScalerOf(context);
@@ -22,19 +21,16 @@ double libraryCardTextHeight(BuildContext context) {
       lines(text.titleSmall, _titleMaxLines) +
       lines(text.bodySmall, _authorMaxLines) +
       AppSpacing.xs +
-      _progressBarHeight +
-      AppSpacing.xxs +
-      lines(text.labelSmall, _progressMaxLines) +
+      scaler.scale(_badgeHeight) +
       _heightSlack;
 }
 
-/// Cover, thin progress bar, title, author and a progress label. One labelled button for assistive
-/// tech. The grid reserves the cover's height plus [libraryCardTextHeight], so
-/// the text sits right under the cover and any spare height falls below the card.
+/// Cover (with a favourite mark), title, authors and the reading status in words. One labelled button
+/// for assistive tech. The grid reserves the cover's height plus [libraryCardTextHeight].
 class LibraryBookCard extends StatelessWidget {
   const LibraryBookCard({required this.book, required this.onTap, super.key});
 
-  final LibraryBook book;
+  final LibraryItem book;
   final VoidCallback onTap;
 
   @override
@@ -42,10 +38,15 @@ class LibraryBookCard extends StatelessWidget {
     final l10n = ObLocalizations.of(context);
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final progress = l10n.libraryProgress(book.progressPercent);
+    final authors = authorsOrUnknown(l10n, book);
+    final label = [
+      l10n.bookCardLabel(book.title, authors),
+      shelfStatusLabel(l10n, book.status),
+      if (book.isFavorite) l10n.libraryFavorite,
+    ].join(', ');
     return Semantics(
       button: true,
-      label: '${l10n.bookCardLabel(book.title, book.author)}, $progress',
+      label: label,
       excludeSemantics: true,
       child: InkWell(
         borderRadius: BorderRadius.circular(AppShapes.medium),
@@ -55,7 +56,23 @@ class LibraryBookCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BookCover(title: book.title, imageUrl: book.coverUrl),
+              Stack(
+                children: [
+                  BookCover(title: book.title, imageUrl: book.coverUrl),
+                  if (book.isFavorite)
+                    PositionedDirectional(
+                      top: AppSpacing.xxs,
+                      end: AppSpacing.xxs,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: scheme.surface.withValues(alpha: 0.9), shape: BoxShape.circle),
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.xxs),
+                          child: Icon(Icons.favorite, size: AppSizes.iconSmall, color: scheme.error),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
               const SizedBox(height: AppSpacing.xs),
               Text(
                 book.title,
@@ -64,27 +81,13 @@ class LibraryBookCard extends StatelessWidget {
                 style: theme.textTheme.titleSmall,
               ),
               Text(
-                book.author,
+                authors,
                 maxLines: _authorMaxLines,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
               ),
               const SizedBox(height: AppSpacing.xs),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppShapes.extraSmall),
-                child: LinearProgressIndicator(
-                  value: book.progressPercent / 100,
-                  minHeight: _progressBarHeight,
-                  semanticsLabel: progress,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxs),
-              Text(
-                progress,
-                maxLines: _progressMaxLines,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelSmall?.copyWith(color: scheme.onSurfaceVariant),
-              ),
+              ShelfStatusBadge(status: book.status),
             ],
           ),
         ),

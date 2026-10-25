@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../library/data/library_providers.dart';
-import '../../library/domain/library_book.dart';
 import 'reader_settings_controller.dart';
 import 'reader_settings_sheet.dart';
 
@@ -69,19 +68,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
     _progress.value = max <= 0 ? 0 : (_scroll.offset / max).clamp(0, 1);
   }
 
-  LibraryBook? _book() {
-    for (final book in ref.read(libraryBooksProvider)) {
-      if (book.id == widget.bookId) return book;
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = ObLocalizations.of(context);
     final settings = ref.watch(readerSettingsProvider);
     final palette = paletteFor(settings.theme);
-    final book = _book();
+    final book = ref.watch(libraryItemProvider(widget.bookId));
     final chromeDuration = AppMotion.of(context, AppMotion.short4);
     final chromeShown = _chromeVisible || MediaQuery.accessibleNavigationOf(context);
     final overlay = palette.brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;

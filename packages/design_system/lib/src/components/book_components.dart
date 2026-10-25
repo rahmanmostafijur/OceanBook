@@ -4,6 +4,9 @@ import '../tokens/app_colors.dart';
 import '../tokens/app_shapes.dart';
 import '../tokens/app_spacing.dart';
 
+/// Narrower than this, a placeholder cover cannot show a readable title.
+const double _minTitleWidth = 72;
+
 /// Book cover at a fixed 2:3 ratio (no layout shift while loading). Missing or failed images show a
 /// tonal placeholder with the title, so the grid never has holes.
 class BookCover extends StatelessWidget {
@@ -21,17 +24,28 @@ class BookCover extends StatelessWidget {
     final placeholder = ExcludeSemantics(
       child: ColoredBox(
         color: scheme.secondaryContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xs),
-          child: Center(
-            child: Text(
-              title,
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.onSecondaryContainer),
-            ),
-          ),
+        // Thumbnails too narrow for a legible title show a book glyph instead of clipped letters.
+        child: LayoutBuilder(
+          builder: (context, constraints) => constraints.maxWidth < _minTitleWidth
+              ? Center(
+                  child: Icon(
+                    Icons.menu_book_outlined,
+                    size: constraints.maxWidth * 0.5,
+                    color: scheme.onSecondaryContainer,
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(AppSpacing.xs),
+                  child: Center(
+                    child: Text(
+                      title,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.onSecondaryContainer),
+                    ),
+                  ),
+                ),
         ),
       ),
     );

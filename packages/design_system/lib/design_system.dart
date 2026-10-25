@@ -6,6 +6,7 @@ export 'src/components/app_search_bar.dart';
 export 'src/components/book_components.dart';
 export 'src/components/content_doc_view.dart';
 export 'src/components/feedback_states.dart';
+export 'src/components/insight_components.dart';
 export 'src/components/ocean_hero.dart';
 export 'src/components/page_loading.dart';
 export 'src/theme/app_theme.dart';

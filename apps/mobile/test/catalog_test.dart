@@ -53,6 +53,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(BookDetailScreen), findsOneWidget);
     expect(find.text('নন্দিত নরকে'), findsWidgets);
+    // The library actions sit above the contents, so scroll the (lazily built) page to them.
+    await tester.scrollUntilVisible(
+      find.text('এক'),
+      200,
+      scrollable: find.descendant(of: find.byType(BookDetailScreen), matching: find.byType(Scrollable)).first,
+    );
     expect(find.text('এক'), findsOneWidget);
     expect(find.text('অন্যপ্রকাশ'), findsOneWidget);
     expect(find.text('9780306406157'), findsOneWidget);

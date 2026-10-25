@@ -346,7 +346,7 @@
     }
   },
   "libraryNoMatches": "No books match your search",
-  "libraryNoMatchesHint": "Try a different word or pick another category.",
+  "libraryNoMatchesHint": "Try a different word or another filter.",
   "bookSynopsis": "Synopsis",
   "bookReadMore": "Read more",
   "bookReadLess": "Read less",
@@ -623,5 +623,263 @@
   "adminSetupYearFrom": "From year",
   "adminSetupYearTo": "To year",
   "adminSetupIsCurrent": "Current curriculum",
-  "adminSetupPickLevel": "Level"
+  "adminSetupPickLevel": "Level",
+  "librarySubtitle": "Your books, shelves and reading at a glance",
+  "libraryTabBooks": "Books",
+  "libraryTabShelves": "Shelves",
+  "libraryTabInsights": "Insights",
+  "libraryStatusWantToRead": "Want to read",
+  "libraryStatusReading": "Reading",
+  "libraryStatusFinished": "Finished",
+  "libraryStatusLabel": "Reading status",
+  "libraryFilterFavorites": "Favourites",
+  "libraryFilterLabel": "{label} ({count})",
+  "@libraryFilterLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "libraryFiltersLabel": "Filter books",
+  "libraryBookCount": "{count, plural, =0{No books} =1{1 book} other{{count} books}}",
+  "@libraryBookCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "librarySort": "Sort books",
+  "librarySortRecent": "Recently added",
+  "librarySortUpdated": "Recently updated",
+  "librarySortTitle": "Title",
+  "libraryEmptyTitle": "Your library is empty",
+  "libraryEmptyMessage": "Add books from Explore to keep track of what you want to read, are reading and have finished.",
+  "libraryExploreAction": "Explore books",
+  "libraryFilterEmpty": "No books here yet",
+  "libraryFilterEmptyHint": "Books you mark this way will appear here.",
+  "libraryFavorite": "Favourite",
+  "libraryAddToLibrary": "Add to library",
+  "libraryInLibrary": "In your library",
+  "librarySignInToAdd": "Sign in to save books to your library.",
+  "libraryAdded": "Added to your library",
+  "libraryRemove": "Remove from library",
+  "libraryRemoveConfirmTitle": "Remove this book?",
+  "libraryRemoveConfirmMessage": "“{title}” will be removed from your library and from all your shelves. It stays in the catalog, and you can add it again later.",
+  "@libraryRemoveConfirmMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "libraryRemoveAction": "Remove",
+  "libraryRemoved": "Removed from your library",
+  "libraryMarkFavorite": "Add to favourites",
+  "libraryUnmarkFavorite": "Remove from favourites",
+  "libraryOpenBookPage": "View book page",
+  "libraryAddedOn": "Added {date}",
+  "@libraryAddedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "libraryStartedOn": "Started {date}",
+  "@libraryStartedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "libraryFinishedOn": "Finished {date}",
+  "@libraryFinishedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "libraryUnknownAuthor": "Author not listed",
+  "libraryBookOptions": "Options for {title}",
+  "@libraryBookOptions": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLibraryFull": "Your library has reached its limit. Remove a book to add another.",
+  "errorCollectionLimit": "You've reached the maximum number of shelves.",
+  "errorCollectionNameTaken": "You already have a shelf with this name.",
+  "errorNotInLibrary": "Add the book to your library first.",
+  "shelvesNew": "New shelf",
+  "shelvesCount": "{count, plural, =1{1 shelf} other{{count} shelves}}",
+  "@shelvesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "shelvesEmptyTitle": "Organise your books into shelves",
+  "shelvesEmptyMessage": "Create shelves such as “Weekend reads” or “Exam prep” and add books from your library.",
+  "shelfName": "Shelf name",
+  "shelfDescription": "Description (optional)",
+  "shelfNameRequired": "Enter a name.",
+  "shelfCreate": "Create",
+  "shelfSave": "Save",
+  "shelfEdit": "Edit shelf",
+  "shelfDelete": "Delete shelf",
+  "shelfDeleteConfirmTitle": "Delete “{name}”?",
+  "@shelfDeleteConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shelfDeleteConfirmMessage": "The shelf will be deleted. Its books stay in your library.",
+  "shelfDeleteAction": "Delete",
+  "shelfDeleted": "Shelf deleted",
+  "shelfOptions": "Options for {name}",
+  "@shelfOptions": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shelfAddBooks": "Add books",
+  "shelfEmptyTitle": "This shelf is empty",
+  "shelfEmptyMessage": "Add books from your library to this shelf.",
+  "shelfRemoveBook": "Remove from shelf",
+  "shelfPickerTitle": "Add books to {name}",
+  "@shelfPickerTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shelfPickerEmpty": "Every book in your library is already on this shelf.",
+  "shelfPickerLibraryEmpty": "Your library is empty. Add books from Explore first.",
+  "shelfDone": "Done",
+  "shelfNone": "You have no shelves yet.",
+  "insightsTotalBooks": "Books",
+  "insightsFinishedYear": "Finished in {year}",
+  "@insightsFinishedYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsReadingNow": "Reading now",
+  "insightsPagesFinished": "Pages finished",
+  "insightsPagesUnknown": "{count, plural, =1{1 finished book has no page count} other{{count} finished books have no page count}}",
+  "@insightsPagesUnknown": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsFinishedTitle": "Books finished",
+  "insightsPeriodWeek": "Week",
+  "insightsPeriodMonth": "Month",
+  "insightsPeriodYear": "Year",
+  "insightsPeriodLifetime": "All time",
+  "insightsFinishedInPeriod": "{count, plural, =0{None in this period} =1{1 book in this period} other{{count} books in this period}}",
+  "@insightsFinishedInPeriod": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsNothingFinished": "Nothing finished in this period",
+  "insightsNothingFinishedHint": "Mark a book as finished and it shows up here.",
+  "insightsShareFinished": "{percent}% of your library is finished",
+  "@insightsShareFinished": {
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsGenresTitle": "Top categories",
+  "insightsGenresSubtitle": "From your books’ catalog categories",
+  "insightsLanguagesTitle": "Languages",
+  "insightsPublishersTitle": "Top publishers",
+  "insightsGrowthTitle": "Books added",
+  "insightsGrowthSubtitle": "Per month, last 12 months",
+  "insightsLongestTitle": "Longest books",
+  "insightsShortestTitle": "Shortest books",
+  "insightsTopRatedTitle": "Highest rated by readers",
+  "insightsTopRatedSubtitle": "Average rating in the catalog",
+  "insightsPages": "{count, plural, =1{1 page} other{{count} pages}}",
+  "@insightsPages": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsRatingValue": "{rating} from {count, plural, =1{1 rating} other{{count} ratings}}",
+  "@insightsRatingValue": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsNoCategories": "None of your books has a category yet.",
+  "insightsNoPageCounts": "None of your books has a page count yet.",
+  "insightsNoRatings": "None of your books has been rated yet.",
+  "insightsNoPublishers": "None of your books lists a publisher yet.",
+  "insightsNoLanguages": "None of your books lists a language yet.",
+  "insightsOthers": "Other",
+  "insightsChartItem": "{label}: {count}",
+  "@insightsChartItem": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "insightsEmptyTitle": "Insights appear as your library grows",
+  "insightsEmptyMessage": "Add a few books and update their reading status to see your patterns.",
+  "settingsAccount": "Account",
+  "settingsAppearance": "Appearance",
+  "settingsPremium": "Premium",
+  "settingsPremiumUnavailable": "Premium plans aren't available to buy yet.",
+  "settingsAbout": "About",
+  "settingsVersion": "Version",
+  "settingsGuestTitle": "You're browsing as a guest",
+  "settingsGuestMessage": "Sign in to keep a library, shelves and reading insights on all your devices.",
+  "settingsSignOutConfirmTitle": "Sign out?",
+  "settingsSignOutConfirmMessage": "Your library is saved to your account. You can sign in again at any time.",
+  "settingsSavedOnDevice": "Language and theme are saved on this device."
 }

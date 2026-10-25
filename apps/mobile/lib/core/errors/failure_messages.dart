@@ -24,6 +24,10 @@ String failureMessage(ObLocalizations l10n, Object error) {
       ApiErrorCode.reauthRequired => l10n.errorReauthRequired,
       ApiErrorCode.accountSuspended => l10n.errorAccountSuspended,
       ApiErrorCode.deviceLimitReached => l10n.errorDeviceLimit,
+      ApiErrorCode.libraryFull => l10n.errorLibraryFull,
+      ApiErrorCode.collectionLimit => l10n.errorCollectionLimit,
+      ApiErrorCode.collectionNameTaken => l10n.errorCollectionNameTaken,
+      ApiErrorCode.notInLibrary => l10n.errorNotInLibrary,
       ApiErrorCode.tokenExpired ||
       ApiErrorCode.tokenRevoked ||
       ApiErrorCode.unauthenticated => l10n.errorSessionExpired,

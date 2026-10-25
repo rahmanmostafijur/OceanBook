@@ -1691,7 +1691,7 @@ abstract class ObLocalizations {
   /// No description provided for @libraryNoMatchesHint.
   ///
   /// In en, this message translates to:
-  /// **'Try a different word or pick another category.'**
+  /// **'Try a different word or another filter.'**
   String get libraryNoMatchesHint;
 
   /// No description provided for @bookSynopsis.
@@ -2983,6 +2983,690 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Level'**
   String get adminSetupPickLevel;
+
+  /// No description provided for @librarySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your books, shelves and reading at a glance'**
+  String get librarySubtitle;
+
+  /// No description provided for @libraryTabBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get libraryTabBooks;
+
+  /// No description provided for @libraryTabShelves.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelves'**
+  String get libraryTabShelves;
+
+  /// No description provided for @libraryTabInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights'**
+  String get libraryTabInsights;
+
+  /// No description provided for @libraryStatusWantToRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Want to read'**
+  String get libraryStatusWantToRead;
+
+  /// No description provided for @libraryStatusReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get libraryStatusReading;
+
+  /// No description provided for @libraryStatusFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get libraryStatusFinished;
+
+  /// No description provided for @libraryStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading status'**
+  String get libraryStatusLabel;
+
+  /// No description provided for @libraryFilterFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourites'**
+  String get libraryFilterFavorites;
+
+  /// No description provided for @libraryFilterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} ({count})'**
+  String libraryFilterLabel(String label, int count);
+
+  /// No description provided for @libraryFiltersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter books'**
+  String get libraryFiltersLabel;
+
+  /// No description provided for @libraryBookCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No books} =1{1 book} other{{count} books}}'**
+  String libraryBookCount(int count);
+
+  /// No description provided for @librarySort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort books'**
+  String get librarySort;
+
+  /// No description provided for @librarySortRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently added'**
+  String get librarySortRecent;
+
+  /// No description provided for @librarySortUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated'**
+  String get librarySortUpdated;
+
+  /// No description provided for @librarySortTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get librarySortTitle;
+
+  /// No description provided for @libraryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is empty'**
+  String get libraryEmptyTitle;
+
+  /// No description provided for @libraryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add books from Explore to keep track of what you want to read, are reading and have finished.'**
+  String get libraryEmptyMessage;
+
+  /// No description provided for @libraryExploreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore books'**
+  String get libraryExploreAction;
+
+  /// No description provided for @libraryFilterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No books here yet'**
+  String get libraryFilterEmpty;
+
+  /// No description provided for @libraryFilterEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Books you mark this way will appear here.'**
+  String get libraryFilterEmptyHint;
+
+  /// No description provided for @libraryFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourite'**
+  String get libraryFavorite;
+
+  /// No description provided for @libraryAddToLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to library'**
+  String get libraryAddToLibrary;
+
+  /// No description provided for @libraryInLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'In your library'**
+  String get libraryInLibrary;
+
+  /// No description provided for @librarySignInToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to save books to your library.'**
+  String get librarySignInToAdd;
+
+  /// No description provided for @libraryAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your library'**
+  String get libraryAdded;
+
+  /// No description provided for @libraryRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from library'**
+  String get libraryRemove;
+
+  /// No description provided for @libraryRemoveConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this book?'**
+  String get libraryRemoveConfirmTitle;
+
+  /// No description provided for @libraryRemoveConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” will be removed from your library and from all your shelves. It stays in the catalog, and you can add it again later.'**
+  String libraryRemoveConfirmMessage(String title);
+
+  /// No description provided for @libraryRemoveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get libraryRemoveAction;
+
+  /// No description provided for @libraryRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from your library'**
+  String get libraryRemoved;
+
+  /// No description provided for @libraryMarkFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourites'**
+  String get libraryMarkFavorite;
+
+  /// No description provided for @libraryUnmarkFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get libraryUnmarkFavorite;
+
+  /// No description provided for @libraryOpenBookPage.
+  ///
+  /// In en, this message translates to:
+  /// **'View book page'**
+  String get libraryOpenBookPage;
+
+  /// No description provided for @libraryAddedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {date}'**
+  String libraryAddedOn(String date);
+
+  /// No description provided for @libraryStartedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Started {date}'**
+  String libraryStartedOn(String date);
+
+  /// No description provided for @libraryFinishedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished {date}'**
+  String libraryFinishedOn(String date);
+
+  /// No description provided for @libraryUnknownAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Author not listed'**
+  String get libraryUnknownAuthor;
+
+  /// No description provided for @libraryBookOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options for {title}'**
+  String libraryBookOptions(String title);
+
+  /// No description provided for @errorLibraryFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library has reached its limit. Remove a book to add another.'**
+  String get errorLibraryFull;
+
+  /// No description provided for @errorCollectionLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the maximum number of shelves.'**
+  String get errorCollectionLimit;
+
+  /// No description provided for @errorCollectionNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a shelf with this name.'**
+  String get errorCollectionNameTaken;
+
+  /// No description provided for @errorNotInLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the book to your library first.'**
+  String get errorNotInLibrary;
+
+  /// No description provided for @shelvesNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New shelf'**
+  String get shelvesNew;
+
+  /// No description provided for @shelvesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 shelf} other{{count} shelves}}'**
+  String shelvesCount(int count);
+
+  /// No description provided for @shelvesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Organise your books into shelves'**
+  String get shelvesEmptyTitle;
+
+  /// No description provided for @shelvesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create shelves such as “Weekend reads” or “Exam prep” and add books from your library.'**
+  String get shelvesEmptyMessage;
+
+  /// No description provided for @shelfName.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf name'**
+  String get shelfName;
+
+  /// No description provided for @shelfDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description (optional)'**
+  String get shelfDescription;
+
+  /// No description provided for @shelfNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get shelfNameRequired;
+
+  /// No description provided for @shelfCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get shelfCreate;
+
+  /// No description provided for @shelfSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get shelfSave;
+
+  /// No description provided for @shelfEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit shelf'**
+  String get shelfEdit;
+
+  /// No description provided for @shelfDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete shelf'**
+  String get shelfDelete;
+
+  /// No description provided for @shelfDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}”?'**
+  String shelfDeleteConfirmTitle(String name);
+
+  /// No description provided for @shelfDeleteConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The shelf will be deleted. Its books stay in your library.'**
+  String get shelfDeleteConfirmMessage;
+
+  /// No description provided for @shelfDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get shelfDeleteAction;
+
+  /// No description provided for @shelfDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf deleted'**
+  String get shelfDeleted;
+
+  /// No description provided for @shelfOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options for {name}'**
+  String shelfOptions(String name);
+
+  /// No description provided for @shelfAddBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Add books'**
+  String get shelfAddBooks;
+
+  /// No description provided for @shelfEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This shelf is empty'**
+  String get shelfEmptyTitle;
+
+  /// No description provided for @shelfEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add books from your library to this shelf.'**
+  String get shelfEmptyMessage;
+
+  /// No description provided for @shelfRemoveBook.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from shelf'**
+  String get shelfRemoveBook;
+
+  /// No description provided for @shelfPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add books to {name}'**
+  String shelfPickerTitle(String name);
+
+  /// No description provided for @shelfPickerEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Every book in your library is already on this shelf.'**
+  String get shelfPickerEmpty;
+
+  /// No description provided for @shelfPickerLibraryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is empty. Add books from Explore first.'**
+  String get shelfPickerLibraryEmpty;
+
+  /// No description provided for @shelfDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get shelfDone;
+
+  /// No description provided for @shelfNone.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no shelves yet.'**
+  String get shelfNone;
+
+  /// No description provided for @insightsTotalBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get insightsTotalBooks;
+
+  /// No description provided for @insightsFinishedYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished in {year}'**
+  String insightsFinishedYear(String year);
+
+  /// No description provided for @insightsReadingNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading now'**
+  String get insightsReadingNow;
+
+  /// No description provided for @insightsPagesFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages finished'**
+  String get insightsPagesFinished;
+
+  /// No description provided for @insightsPagesUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 finished book has no page count} other{{count} finished books have no page count}}'**
+  String insightsPagesUnknown(int count);
+
+  /// No description provided for @insightsFinishedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Books finished'**
+  String get insightsFinishedTitle;
+
+  /// No description provided for @insightsPeriodWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get insightsPeriodWeek;
+
+  /// No description provided for @insightsPeriodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get insightsPeriodMonth;
+
+  /// No description provided for @insightsPeriodYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get insightsPeriodYear;
+
+  /// No description provided for @insightsPeriodLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get insightsPeriodLifetime;
+
+  /// No description provided for @insightsFinishedInPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{None in this period} =1{1 book in this period} other{{count} books in this period}}'**
+  String insightsFinishedInPeriod(int count);
+
+  /// No description provided for @insightsNothingFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing finished in this period'**
+  String get insightsNothingFinished;
+
+  /// No description provided for @insightsNothingFinishedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark a book as finished and it shows up here.'**
+  String get insightsNothingFinishedHint;
+
+  /// No description provided for @insightsShareFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of your library is finished'**
+  String insightsShareFinished(int percent);
+
+  /// No description provided for @insightsGenresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top categories'**
+  String get insightsGenresTitle;
+
+  /// No description provided for @insightsGenresSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From your books’ catalog categories'**
+  String get insightsGenresSubtitle;
+
+  /// No description provided for @insightsLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get insightsLanguagesTitle;
+
+  /// No description provided for @insightsPublishersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top publishers'**
+  String get insightsPublishersTitle;
+
+  /// No description provided for @insightsGrowthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Books added'**
+  String get insightsGrowthTitle;
+
+  /// No description provided for @insightsGrowthSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Per month, last 12 months'**
+  String get insightsGrowthSubtitle;
+
+  /// No description provided for @insightsLongestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest books'**
+  String get insightsLongestTitle;
+
+  /// No description provided for @insightsShortestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortest books'**
+  String get insightsShortestTitle;
+
+  /// No description provided for @insightsTopRatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest rated by readers'**
+  String get insightsTopRatedTitle;
+
+  /// No description provided for @insightsTopRatedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Average rating in the catalog'**
+  String get insightsTopRatedSubtitle;
+
+  /// No description provided for @insightsPages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 page} other{{count} pages}}'**
+  String insightsPages(int count);
+
+  /// No description provided for @insightsRatingValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{rating} from {count, plural, =1{1 rating} other{{count} ratings}}'**
+  String insightsRatingValue(String rating, int count);
+
+  /// No description provided for @insightsNoCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your books has a category yet.'**
+  String get insightsNoCategories;
+
+  /// No description provided for @insightsNoPageCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your books has a page count yet.'**
+  String get insightsNoPageCounts;
+
+  /// No description provided for @insightsNoRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your books has been rated yet.'**
+  String get insightsNoRatings;
+
+  /// No description provided for @insightsNoPublishers.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your books lists a publisher yet.'**
+  String get insightsNoPublishers;
+
+  /// No description provided for @insightsNoLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your books lists a language yet.'**
+  String get insightsNoLanguages;
+
+  /// No description provided for @insightsOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get insightsOthers;
+
+  /// No description provided for @insightsChartItem.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}: {count}'**
+  String insightsChartItem(String label, int count);
+
+  /// No description provided for @insightsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights appear as your library grows'**
+  String get insightsEmptyTitle;
+
+  /// No description provided for @insightsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a few books and update their reading status to see your patterns.'**
+  String get insightsEmptyMessage;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get settingsPremium;
+
+  /// No description provided for @settingsPremiumUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium plans aren\'t available to buy yet.'**
+  String get settingsPremiumUnavailable;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settingsVersion;
+
+  /// No description provided for @settingsGuestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re browsing as a guest'**
+  String get settingsGuestTitle;
+
+  /// No description provided for @settingsGuestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to keep a library, shelves and reading insights on all your devices.'**
+  String get settingsGuestMessage;
+
+  /// No description provided for @settingsSignOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get settingsSignOutConfirmTitle;
+
+  /// No description provided for @settingsSignOutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is saved to your account. You can sign in again at any time.'**
+  String get settingsSignOutConfirmMessage;
+
+  /// No description provided for @settingsSavedOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Language and theme are saved on this device.'**
+  String get settingsSavedOnDevice;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

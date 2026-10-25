@@ -2,18 +2,21 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
-import '../../domain/library_book.dart';
+import '../../data/library_providers.dart';
+import '../library_labels.dart';
+import 'shelf_dialogs.dart';
 
-const int _collapsedSynopsisLines = 4;
-const double _coverWidth = 148;
+const double _coverWidth = 132;
 const double _backdropBlur = 28;
 
-/// Opens the details sheet for [book]. The sheet drags between 60 % and 95 % of the screen and
-/// pops itself before navigating to the reader.
-Future<void> showBookDetailsSheet(BuildContext context, LibraryBook book) => showModalBottomSheet<void>(
+/// Opens the details sheet for [book]: reading status, favourite, shelves, dates and the way to the
+/// book page. The sheet drags between 60 % and 95 % of the screen.
+Future<void> showBookDetailsSheet(BuildContext context, LibraryItem book) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   sheetAnimationStyle: AppMotion.reduced(context) ? AnimationStyle.noAnimation : null,
@@ -22,18 +25,26 @@ Future<void> showBookDetailsSheet(BuildContext context, LibraryBook book) => sho
   constraints: const BoxConstraints(maxWidth: AppSizes.maxReadableWidth),
   shape: AppShapes.bottomSheet,
   clipBehavior: Clip.antiAlias,
-  builder: (_) => BookDetailsSheet(book: book),
+  builder: (_) => BookDetailsSheet(bookId: book.bookId, initial: book),
 );
 
-class BookDetailsSheet extends StatelessWidget {
-  const BookDetailsSheet({required this.book, super.key});
+/// Follows the live library entry, so every change made here (or elsewhere) shows at once.
+class BookDetailsSheet extends ConsumerWidget {
+  const BookDetailsSheet({required this.bookId, required this.initial, super.key});
 
-  final LibraryBook book;
+  final String bookId;
+  final LibraryItem initial;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = ObLocalizations.of(context);
+    final book = ref.watch(libraryItemProvider(bookId)) ?? initial;
+    final dates = [
+      l10n.libraryAddedOn(shortDate(context, book.addedAt)),
+      if (book.startedAt != null) l10n.libraryStartedOn(shortDate(context, book.startedAt!)),
+      if (book.finishedAt != null) l10n.libraryFinishedOn(shortDate(context, book.finishedAt!)),
+    ];
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.85,
@@ -73,7 +84,6 @@ class BookDetailsSheet extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.xl),
                     Center(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
@@ -89,22 +99,45 @@ class BookDetailsSheet extends StatelessWidget {
                         child: BookCover(title: book.title, imageUrl: book.coverUrl, width: _coverWidth),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.xl),
+                    const SizedBox(height: AppSpacing.lg),
                     Semantics(
                       header: true,
                       child: Text(book.title, textAlign: TextAlign.center, style: theme.textTheme.headlineSmall),
                     ),
                     const SizedBox(height: AppSpacing.xxs),
                     Text(
-                      book.author,
+                      authorsOrUnknown(l10n, book),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                     ),
-                    const SizedBox(height: AppSpacing.md),
-                    Center(child: RatingStars(rating: book.rating)),
+                    if (book.ratingCount > 0) ...[
+                      const SizedBox(height: AppSpacing.sm),
+                      Center(child: RatingStars(rating: book.ratingAvg)),
+                    ],
                     const SizedBox(height: AppSpacing.xl),
-                    SectionHeaderLabel(l10n.bookSynopsis),
-                    ExpandableSynopsis(text: book.synopsis),
+                    SectionHeaderLabel(l10n.libraryStatusLabel),
+                    _StatusPicker(book: book),
+                    const SizedBox(height: AppSpacing.sm),
+                    _FavoriteToggle(book: book),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      dates.join(' · '),
+                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeaderLabel(l10n.libraryTabShelves),
+                    _ShelfChips(book: book),
+                    const SizedBox(height: AppSpacing.xl),
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: TextButton.icon(
+                        key: const Key('library-remove'),
+                        style: TextButton.styleFrom(foregroundColor: theme.colorScheme.error),
+                        onPressed: () => _remove(context, ref, book),
+                        icon: const Icon(Icons.delete_outline),
+                        label: Text(l10n.libraryRemove),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -115,13 +148,139 @@ class BookDetailsSheet extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _remove(BuildContext context, WidgetRef ref, LibraryItem book) async {
+    final l10n = ObLocalizations.of(context);
+    final confirmed = await confirmDestructive(
+      context,
+      title: l10n.libraryRemoveConfirmTitle,
+      message: l10n.libraryRemoveConfirmMessage(book.title),
+      confirmLabel: l10n.libraryRemoveAction,
+    );
+    if (!confirmed || !context.mounted) return;
+    final removed = await runReporting(
+      context,
+      () => ref.read(libraryProvider.notifier).remove(book.bookId),
+      success: l10n.libraryRemoved,
+    );
+    // The sheet may already be gone (dismissed while the call ran); never pop the page beneath it.
+    if (removed && context.mounted) Navigator.of(context).pop();
+  }
 }
 
-/// The primary action stays reachable without scrolling the sheet.
+class _StatusPicker extends ConsumerWidget {
+  const _StatusPicker({required this.book});
+
+  final LibraryItem book;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = ObLocalizations.of(context);
+    // Chips rather than a segmented button: they wrap instead of clipping at large text sizes.
+    return Wrap(
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
+      children: [
+        for (final status in ShelfStatus.values)
+          ChoiceChip(
+            avatar: Icon(shelfStatusIcon(status), size: AppSizes.iconSmall),
+            showCheckmark: false,
+            label: Text(shelfStatusLabel(l10n, status)),
+            selected: book.status == status,
+            onSelected: (_) {
+              if (book.status == status) return;
+              runReporting(context, () => ref.read(libraryProvider.notifier).save(book.bookId, status: status));
+            },
+          ),
+      ],
+    );
+  }
+}
+
+class _FavoriteToggle extends ConsumerWidget {
+  const _FavoriteToggle({required this.book});
+
+  final LibraryItem book;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = ObLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return OutlinedButton.icon(
+      key: const Key('library-favorite'),
+      onPressed: () => runReporting(
+        context,
+        () => ref.read(libraryProvider.notifier).save(book.bookId, isFavorite: !book.isFavorite),
+      ),
+      icon: Icon(
+        book.isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: book.isFavorite ? scheme.error : null,
+      ),
+      label: Text(book.isFavorite ? l10n.libraryUnmarkFavorite : l10n.libraryMarkFavorite),
+    );
+  }
+}
+
+/// One chip per shelf; selected chips are the shelves this book is on.
+class _ShelfChips extends ConsumerWidget {
+  const _ShelfChips({required this.book});
+
+  final LibraryItem book;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = ObLocalizations.of(context);
+    final state = ref.watch(collectionsProvider);
+    final shelves = state.value;
+    if (shelves == null) {
+      // Until shelves load, offer nothing that would act on an incomplete list.
+      return state.hasError
+          ? Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: () => ref.invalidate(collectionsProvider),
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.actionRetry),
+              ),
+            )
+          : const LinearProgressIndicator();
+    }
+    final controller = ref.read(collectionsProvider.notifier);
+    return Wrap(
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        if (shelves.isEmpty) Text(l10n.shelfNone, style: Theme.of(context).textTheme.bodyMedium),
+        for (final shelf in shelves)
+          FilterChip(
+            label: Text(shelf.name),
+            selected: shelf.contains(book.bookId),
+            onSelected: (add) => runReporting(
+              context,
+              () => add ? controller.addBook(shelf.id, book.bookId) : controller.removeBook(shelf.id, book.bookId),
+            ),
+          ),
+        ActionChip(
+          avatar: const Icon(Icons.add, size: AppSizes.iconSmall),
+          label: Text(l10n.shelvesNew),
+          onPressed: () async {
+            final created = await showShelfEditor(context);
+            if (created != null && context.mounted) {
+              await runReporting(context, () => controller.addBook(created.id, book.bookId));
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
+
+/// The way on to the catalog page (access, reading, contents) stays reachable without scrolling.
 class _PinnedAction extends StatelessWidget {
   const _PinnedAction({required this.book});
 
-  final LibraryBook book;
+  final LibraryItem book;
 
   @override
   Widget build(BuildContext context) {
@@ -136,10 +295,10 @@ class _PinnedAction extends StatelessWidget {
           child: FilledButton.icon(
             onPressed: () {
               Navigator.of(context).pop();
-              context.push('/library/read/${book.id}');
+              context.go('/explore/books/${Uri.encodeComponent(book.slug)}');
             },
-            icon: const Icon(Icons.auto_stories_outlined),
-            label: Text(book.isStarted ? l10n.bookContinueReading : l10n.bookStartReading),
+            icon: const Icon(Icons.menu_book_outlined),
+            label: Text(l10n.libraryOpenBookPage),
             style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(AppSizes.minTouchTarget + 8)),
           ),
         ),
@@ -152,7 +311,7 @@ class _PinnedAction extends StatelessWidget {
 class _BlurredBackdrop extends StatelessWidget {
   const _BlurredBackdrop({required this.book});
 
-  final LibraryBook book;
+  final LibraryItem book;
 
   @override
   Widget build(BuildContext context) {
@@ -243,74 +402,6 @@ class RatingStars extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Synopsis clamped to a few lines with a "Read more" toggle, which appears only when the text
-/// actually overflows.
-class ExpandableSynopsis extends StatefulWidget {
-  const ExpandableSynopsis({required this.text, super.key});
-
-  final String text;
-
-  @override
-  State<ExpandableSynopsis> createState() => _ExpandableSynopsisState();
-}
-
-class _ExpandableSynopsisState extends State<ExpandableSynopsis> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = ObLocalizations.of(context);
-    final theme = Theme.of(context);
-    final style = theme.textTheme.bodyLarge?.copyWith(height: 1.6);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final painter = TextPainter(
-          text: TextSpan(text: widget.text, style: style),
-          maxLines: _collapsedSynopsisLines,
-          textDirection: Directionality.of(context),
-          textScaler: MediaQuery.textScalerOf(context),
-        )..layout(maxWidth: constraints.maxWidth);
-        final overflows = painter.didExceedMaxLines;
-        painter.dispose();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _maybeAnimated(
-              context,
-              Text(
-                widget.text,
-                style: style,
-                maxLines: _expanded ? null : _collapsedSynopsisLines,
-                overflow: _expanded ? TextOverflow.visible : TextOverflow.ellipsis,
-              ),
-            ),
-            if (overflows)
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: TextButton(
-                  onPressed: () => setState(() => _expanded = !_expanded),
-                  child: Text(_expanded ? l10n.bookReadLess : l10n.bookReadMore),
-                ),
-              ),
-          ],
-        );
-      },
-    );
-  }
-
-  /// AnimatedSize asserts in debug builds when given a zero duration, so under reduced motion the text
-  /// simply changes size without an animation wrapper.
-  Widget _maybeAnimated(BuildContext context, Widget child) {
-    if (AppMotion.reduced(context)) return child;
-    return AnimatedSize(
-      duration: AppMotion.medium2,
-      curve: AppMotion.standard,
-      alignment: Alignment.topCenter,
-      child: child,
     );
   }
 }

@@ -848,7 +848,7 @@ class ObLocalizationsBn extends ObLocalizations {
   String get libraryNoMatches => 'আপনার খোঁজের সাথে কোনো বই মেলেনি';
 
   @override
-  String get libraryNoMatchesHint => 'অন্য শব্দ লিখুন বা আরেকটি বিভাগ বেছে নিন।';
+  String get libraryNoMatchesHint => 'অন্য কোনো শব্দ বা অন্য ফিল্টার দিয়ে চেষ্টা করুন।';
 
   @override
   String get bookSynopsis => 'সারসংক্ষেপ';
@@ -1522,4 +1522,444 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get adminSetupPickLevel => 'স্তর';
+
+  @override
+  String get librarySubtitle => 'আপনার বই, তাক আর পড়ার হিসাব এক জায়গায়';
+
+  @override
+  String get libraryTabBooks => 'বই';
+
+  @override
+  String get libraryTabShelves => 'তাক';
+
+  @override
+  String get libraryTabInsights => 'পরিসংখ্যান';
+
+  @override
+  String get libraryStatusWantToRead => 'পড়তে চাই';
+
+  @override
+  String get libraryStatusReading => 'পড়ছি';
+
+  @override
+  String get libraryStatusFinished => 'পড়া শেষ';
+
+  @override
+  String get libraryStatusLabel => 'পড়ার অবস্থা';
+
+  @override
+  String get libraryFilterFavorites => 'প্রিয়';
+
+  @override
+  String libraryFilterLabel(String label, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$label ($countString)';
+  }
+
+  @override
+  String get libraryFiltersLabel => 'বই বাছাই';
+
+  @override
+  String libraryBookCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countStringটি বই',
+      zero: 'কোনো বই নেই',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get librarySort => 'বই সাজান';
+
+  @override
+  String get librarySortRecent => 'সম্প্রতি যোগ করা';
+
+  @override
+  String get librarySortUpdated => 'সম্প্রতি হালনাগাদ';
+
+  @override
+  String get librarySortTitle => 'নাম অনুযায়ী';
+
+  @override
+  String get libraryEmptyTitle => 'আপনার লাইব্রেরি এখনো খালি';
+
+  @override
+  String get libraryEmptyMessage =>
+      'এক্সপ্লোর থেকে বই যোগ করুন, তারপর কোনটি পড়তে চান, পড়ছেন বা পড়া শেষ করেছেন তা গুছিয়ে রাখুন।';
+
+  @override
+  String get libraryExploreAction => 'বই খুঁজুন';
+
+  @override
+  String get libraryFilterEmpty => 'এখানে এখনো কোনো বই নেই';
+
+  @override
+  String get libraryFilterEmptyHint => 'এভাবে চিহ্নিত বইগুলো এখানে দেখা যাবে।';
+
+  @override
+  String get libraryFavorite => 'প্রিয়';
+
+  @override
+  String get libraryAddToLibrary => 'লাইব্রেরিতে যোগ করুন';
+
+  @override
+  String get libraryInLibrary => 'আপনার লাইব্রেরিতে আছে';
+
+  @override
+  String get librarySignInToAdd => 'লাইব্রেরিতে বই রাখতে সাইন ইন করুন।';
+
+  @override
+  String get libraryAdded => 'আপনার লাইব্রেরিতে যোগ হয়েছে';
+
+  @override
+  String get libraryRemove => 'লাইব্রেরি থেকে সরান';
+
+  @override
+  String get libraryRemoveConfirmTitle => 'বইটি সরাবেন?';
+
+  @override
+  String libraryRemoveConfirmMessage(String title) {
+    return '“$title” আপনার লাইব্রেরি ও সব তাক থেকে সরে যাবে। বইটি ক্যাটালগে থাকবে, পরে আবার যোগ করতে পারবেন।';
+  }
+
+  @override
+  String get libraryRemoveAction => 'সরান';
+
+  @override
+  String get libraryRemoved => 'লাইব্রেরি থেকে সরানো হয়েছে';
+
+  @override
+  String get libraryMarkFavorite => 'প্রিয় তালিকায় রাখুন';
+
+  @override
+  String get libraryUnmarkFavorite => 'প্রিয় তালিকা থেকে সরান';
+
+  @override
+  String get libraryOpenBookPage => 'বইয়ের পাতা দেখুন';
+
+  @override
+  String libraryAddedOn(String date) {
+    return 'যোগ করেছেন $date';
+  }
+
+  @override
+  String libraryStartedOn(String date) {
+    return 'শুরু করেছেন $date';
+  }
+
+  @override
+  String libraryFinishedOn(String date) {
+    return 'শেষ করেছেন $date';
+  }
+
+  @override
+  String get libraryUnknownAuthor => 'লেখকের নাম নেই';
+
+  @override
+  String libraryBookOptions(String title) {
+    return '$title-এর অপশন';
+  }
+
+  @override
+  String get errorLibraryFull => 'আপনার লাইব্রেরি সীমায় পৌঁছেছে। নতুন বই যোগ করতে একটি বই সরান।';
+
+  @override
+  String get errorCollectionLimit => 'আপনি সর্বোচ্চ সংখ্যক তাক তৈরি করে ফেলেছেন।';
+
+  @override
+  String get errorCollectionNameTaken => 'এই নামে আপনার একটি তাক আগে থেকেই আছে।';
+
+  @override
+  String get errorNotInLibrary => 'আগে বইটি লাইব্রেরিতে যোগ করুন।';
+
+  @override
+  String get shelvesNew => 'নতুন তাক';
+
+  @override
+  String shelvesCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countStringটি তাক',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shelvesEmptyTitle => 'বইগুলো তাকে সাজিয়ে রাখুন';
+
+  @override
+  String get shelvesEmptyMessage =>
+      '“ছুটির দিনের বই” বা “পরীক্ষার প্রস্তুতি”-র মতো তাক বানান, তারপর লাইব্রেরি থেকে বই যোগ করুন।';
+
+  @override
+  String get shelfName => 'তাকের নাম';
+
+  @override
+  String get shelfDescription => 'বিবরণ (ঐচ্ছিক)';
+
+  @override
+  String get shelfNameRequired => 'একটি নাম লিখুন।';
+
+  @override
+  String get shelfCreate => 'তৈরি করুন';
+
+  @override
+  String get shelfSave => 'সংরক্ষণ করুন';
+
+  @override
+  String get shelfEdit => 'তাক সম্পাদনা';
+
+  @override
+  String get shelfDelete => 'তাক মুছুন';
+
+  @override
+  String shelfDeleteConfirmTitle(String name) {
+    return '“$name” মুছবেন?';
+  }
+
+  @override
+  String get shelfDeleteConfirmMessage => 'তাকটি মুছে যাবে, তবে এর বইগুলো আপনার লাইব্রেরিতে থেকে যাবে।';
+
+  @override
+  String get shelfDeleteAction => 'মুছুন';
+
+  @override
+  String get shelfDeleted => 'তাক মুছে ফেলা হয়েছে';
+
+  @override
+  String shelfOptions(String name) {
+    return '$name-এর অপশন';
+  }
+
+  @override
+  String get shelfAddBooks => 'বই যোগ করুন';
+
+  @override
+  String get shelfEmptyTitle => 'এই তাকটি খালি';
+
+  @override
+  String get shelfEmptyMessage => 'লাইব্রেরি থেকে এই তাকে বই যোগ করুন।';
+
+  @override
+  String get shelfRemoveBook => 'তাক থেকে সরান';
+
+  @override
+  String shelfPickerTitle(String name) {
+    return '$name-এ বই যোগ করুন';
+  }
+
+  @override
+  String get shelfPickerEmpty => 'আপনার লাইব্রেরির সব বই এই তাকে আছে।';
+
+  @override
+  String get shelfPickerLibraryEmpty => 'আপনার লাইব্রেরি খালি। আগে এক্সপ্লোর থেকে বই যোগ করুন।';
+
+  @override
+  String get shelfDone => 'সম্পন্ন';
+
+  @override
+  String get shelfNone => 'আপনার এখনো কোনো তাক নেই।';
+
+  @override
+  String get insightsTotalBooks => 'মোট বই';
+
+  @override
+  String insightsFinishedYear(String year) {
+    return '$year সালে শেষ';
+  }
+
+  @override
+  String get insightsReadingNow => 'এখন পড়ছেন';
+
+  @override
+  String get insightsPagesFinished => 'শেষ করা পৃষ্ঠা';
+
+  @override
+  String insightsPagesUnknown(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countStringটি শেষ করা বইয়ের পৃষ্ঠাসংখ্যা জানা নেই',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsFinishedTitle => 'শেষ করা বই';
+
+  @override
+  String get insightsPeriodWeek => 'সপ্তাহ';
+
+  @override
+  String get insightsPeriodMonth => 'মাস';
+
+  @override
+  String get insightsPeriodYear => 'বছর';
+
+  @override
+  String get insightsPeriodLifetime => 'সব সময়';
+
+  @override
+  String insightsFinishedInPeriod(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'এই সময়ে $countStringটি বই',
+      zero: 'এই সময়ে কোনোটি নয়',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsNothingFinished => 'এই সময়ে কোনো বই শেষ হয়নি';
+
+  @override
+  String get insightsNothingFinishedHint => 'কোনো বই শেষ হলে সেটিকে “পড়া শেষ” চিহ্নিত করুন, এখানে দেখা যাবে।';
+
+  @override
+  String insightsShareFinished(int percent) {
+    final intl.NumberFormat percentNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String percentString = percentNumberFormat.format(percent);
+
+    return 'লাইব্রেরির $percentString% বই পড়া শেষ';
+  }
+
+  @override
+  String get insightsGenresTitle => 'শীর্ষ বিভাগ';
+
+  @override
+  String get insightsGenresSubtitle => 'আপনার বইগুলোর ক্যাটালগ বিভাগ থেকে';
+
+  @override
+  String get insightsLanguagesTitle => 'ভাষা';
+
+  @override
+  String get insightsPublishersTitle => 'শীর্ষ প্রকাশক';
+
+  @override
+  String get insightsGrowthTitle => 'যোগ করা বই';
+
+  @override
+  String get insightsGrowthSubtitle => 'প্রতি মাসে, গত ১২ মাস';
+
+  @override
+  String get insightsLongestTitle => 'সবচেয়ে বড় বই';
+
+  @override
+  String get insightsShortestTitle => 'সবচেয়ে ছোট বই';
+
+  @override
+  String get insightsTopRatedTitle => 'পাঠকদের সর্বোচ্চ রেটিং';
+
+  @override
+  String get insightsTopRatedSubtitle => 'ক্যাটালগে গড় রেটিং';
+
+  @override
+  String insightsPages(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString পৃষ্ঠা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsRatingValue(String rating, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countStringটি রেটিংয়ে $rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsNoCategories => 'আপনার কোনো বইয়ের বিভাগ এখনো নেই।';
+
+  @override
+  String get insightsNoPageCounts => 'আপনার কোনো বইয়ের পৃষ্ঠাসংখ্যা এখনো জানা নেই।';
+
+  @override
+  String get insightsNoRatings => 'আপনার কোনো বইয়ের রেটিং এখনো নেই।';
+
+  @override
+  String get insightsNoPublishers => 'আপনার কোনো বইয়ের প্রকাশকের নাম এখনো নেই।';
+
+  @override
+  String get insightsNoLanguages => 'আপনার কোনো বইয়ের ভাষা এখনো জানা নেই।';
+
+  @override
+  String get insightsOthers => 'অন্যান্য';
+
+  @override
+  String insightsChartItem(String label, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$label: $countString';
+  }
+
+  @override
+  String get insightsEmptyTitle => 'লাইব্রেরি বাড়লে পরিসংখ্যান দেখা যাবে';
+
+  @override
+  String get insightsEmptyMessage => 'কয়েকটি বই যোগ করে পড়ার অবস্থা হালনাগাদ করুন, তাহলে আপনার পড়ার ধরন দেখা যাবে।';
+
+  @override
+  String get settingsAccount => 'অ্যাকাউন্ট';
+
+  @override
+  String get settingsAppearance => 'প্রদর্শন';
+
+  @override
+  String get settingsPremium => 'প্রিমিয়াম';
+
+  @override
+  String get settingsPremiumUnavailable => 'প্রিমিয়াম প্ল্যান এখনো কেনা যাচ্ছে না।';
+
+  @override
+  String get settingsAbout => 'সম্পর্কে';
+
+  @override
+  String get settingsVersion => 'সংস্করণ';
+
+  @override
+  String get settingsGuestTitle => 'আপনি অতিথি হিসেবে দেখছেন';
+
+  @override
+  String get settingsGuestMessage => 'সব ডিভাইসে লাইব্রেরি, তাক আর পড়ার পরিসংখ্যান রাখতে সাইন ইন করুন।';
+
+  @override
+  String get settingsSignOutConfirmTitle => 'সাইন আউট করবেন?';
+
+  @override
+  String get settingsSignOutConfirmMessage =>
+      'আপনার লাইব্রেরি অ্যাকাউন্টে সংরক্ষিত আছে। যেকোনো সময় আবার সাইন ইন করতে পারবেন।';
+
+  @override
+  String get settingsSavedOnDevice => 'ভাষা ও থিম এই ডিভাইসে সংরক্ষিত থাকে।';
 }

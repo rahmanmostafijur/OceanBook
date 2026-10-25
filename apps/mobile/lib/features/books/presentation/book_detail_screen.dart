@@ -7,6 +7,7 @@ import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../../core/errors/failure_messages.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../library/presentation/widgets/library_actions.dart';
 import '../data/catalog_providers.dart';
 import 'access_panel.dart';
 import 'widgets/book_tile.dart';
@@ -54,7 +55,14 @@ class _Body extends ConsumerWidget {
     final gutter = AppSpacing.gutter(MediaQuery.sizeOf(context).width);
     final uiLocale = ref.watch(localeProvider).languageCode;
     final header = _Header(book: book, uiLocale: uiLocale, centered: !wide);
-    final actions = AccessPanel(access: book.access, returnTo: returnTo);
+    final actions = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AccessPanel(access: book.access, returnTo: returnTo),
+        const SizedBox(height: AppSpacing.sm),
+        LibraryActions(bookId: book.card.id, title: book.card.title, returnTo: returnTo),
+      ],
+    );
     final details = _Details(book: book);
     if (!wide) {
       return ListView(

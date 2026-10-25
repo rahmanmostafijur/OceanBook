@@ -8,12 +8,16 @@ import 'package:oceanbook_mobile/core/router/app_router.dart';
 import 'package:oceanbook_mobile/core/settings/app_settings.dart';
 import 'package:oceanbook_mobile/features/auth/presentation/auth_controller.dart';
 import 'package:oceanbook_mobile/features/books/data/catalog_providers.dart';
+import 'package:oceanbook_mobile/features/library/data/library_providers.dart';
+import 'package:oceanbook_mobile/features/library/presentation/insights_tab.dart';
 import 'package:oceanbook_mobile/features/questions/data/question_providers.dart';
 
 import 'fake_catalog.dart';
+import 'fake_library.dart';
 import 'fake_questions.dart';
 
 export 'fake_catalog.dart';
+export 'fake_library.dart';
 export 'fake_questions.dart';
 
 const testUser = AppUser(
@@ -77,6 +81,8 @@ Future<FakeAuthRepository> pumpApp(
   SessionEvents? events,
   FakeCatalog? catalog,
   FakeQuestions? questions,
+  FakeLibrary? library,
+  PreferenceStore? preferences,
   String? location,
   bool reduceMotion = true,
 }) async {
@@ -100,6 +106,9 @@ Future<FakeAuthRepository> pumpApp(
         localeProvider.overrideWith(() => _FixedLocale(locale)),
         catalogRepositoryProvider.overrideWithValue(catalog ?? FakeCatalog()),
         questionRepositoryProvider.overrideWithValue(questions ?? FakeQuestions()),
+        libraryRepositoryProvider.overrideWithValue(library ?? FakeLibrary()),
+        clockProvider.overrideWithValue(() => testNow),
+        if (preferences != null) preferenceStoreProvider.overrideWithValue(preferences),
       ],
       child: const OceanBookApp(),
     ),

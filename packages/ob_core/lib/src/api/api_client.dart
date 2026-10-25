@@ -86,6 +86,10 @@ class ApiClient {
   Future<void> delete(String path, {Map<String, String>? headers}) =>
       _send<void>(path, 'DELETE', decode: (_) {}, headers: headers);
 
+  /// For DELETE routes that answer with the updated resource instead of 204.
+  Future<ApiResponse<T>> deleteWithBody<T>(String path, {required Decoder<T> decode}) =>
+      _send(path, 'DELETE', decode: decode);
+
   Future<void> postNoContent(String path, {Object? body, Map<String, String>? headers}) =>
       _send<void>(path, 'POST', decode: (_) {}, body: body, headers: headers);
 

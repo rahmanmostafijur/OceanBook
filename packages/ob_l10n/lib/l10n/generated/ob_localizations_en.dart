@@ -856,7 +856,7 @@ class ObLocalizationsEn extends ObLocalizations {
   String get libraryNoMatches => 'No books match your search';
 
   @override
-  String get libraryNoMatchesHint => 'Try a different word or pick another category.';
+  String get libraryNoMatchesHint => 'Try a different word or another filter.';
 
   @override
   String get bookSynopsis => 'Synopsis';
@@ -1529,4 +1529,450 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get adminSetupPickLevel => 'Level';
+
+  @override
+  String get librarySubtitle => 'Your books, shelves and reading at a glance';
+
+  @override
+  String get libraryTabBooks => 'Books';
+
+  @override
+  String get libraryTabShelves => 'Shelves';
+
+  @override
+  String get libraryTabInsights => 'Insights';
+
+  @override
+  String get libraryStatusWantToRead => 'Want to read';
+
+  @override
+  String get libraryStatusReading => 'Reading';
+
+  @override
+  String get libraryStatusFinished => 'Finished';
+
+  @override
+  String get libraryStatusLabel => 'Reading status';
+
+  @override
+  String get libraryFilterFavorites => 'Favourites';
+
+  @override
+  String libraryFilterLabel(String label, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$label ($countString)';
+  }
+
+  @override
+  String get libraryFiltersLabel => 'Filter books';
+
+  @override
+  String libraryBookCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString books',
+      one: '1 book',
+      zero: 'No books',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get librarySort => 'Sort books';
+
+  @override
+  String get librarySortRecent => 'Recently added';
+
+  @override
+  String get librarySortUpdated => 'Recently updated';
+
+  @override
+  String get librarySortTitle => 'Title';
+
+  @override
+  String get libraryEmptyTitle => 'Your library is empty';
+
+  @override
+  String get libraryEmptyMessage =>
+      'Add books from Explore to keep track of what you want to read, are reading and have finished.';
+
+  @override
+  String get libraryExploreAction => 'Explore books';
+
+  @override
+  String get libraryFilterEmpty => 'No books here yet';
+
+  @override
+  String get libraryFilterEmptyHint => 'Books you mark this way will appear here.';
+
+  @override
+  String get libraryFavorite => 'Favourite';
+
+  @override
+  String get libraryAddToLibrary => 'Add to library';
+
+  @override
+  String get libraryInLibrary => 'In your library';
+
+  @override
+  String get librarySignInToAdd => 'Sign in to save books to your library.';
+
+  @override
+  String get libraryAdded => 'Added to your library';
+
+  @override
+  String get libraryRemove => 'Remove from library';
+
+  @override
+  String get libraryRemoveConfirmTitle => 'Remove this book?';
+
+  @override
+  String libraryRemoveConfirmMessage(String title) {
+    return '“$title” will be removed from your library and from all your shelves. It stays in the catalog, and you can add it again later.';
+  }
+
+  @override
+  String get libraryRemoveAction => 'Remove';
+
+  @override
+  String get libraryRemoved => 'Removed from your library';
+
+  @override
+  String get libraryMarkFavorite => 'Add to favourites';
+
+  @override
+  String get libraryUnmarkFavorite => 'Remove from favourites';
+
+  @override
+  String get libraryOpenBookPage => 'View book page';
+
+  @override
+  String libraryAddedOn(String date) {
+    return 'Added $date';
+  }
+
+  @override
+  String libraryStartedOn(String date) {
+    return 'Started $date';
+  }
+
+  @override
+  String libraryFinishedOn(String date) {
+    return 'Finished $date';
+  }
+
+  @override
+  String get libraryUnknownAuthor => 'Author not listed';
+
+  @override
+  String libraryBookOptions(String title) {
+    return 'Options for $title';
+  }
+
+  @override
+  String get errorLibraryFull => 'Your library has reached its limit. Remove a book to add another.';
+
+  @override
+  String get errorCollectionLimit => 'You\'ve reached the maximum number of shelves.';
+
+  @override
+  String get errorCollectionNameTaken => 'You already have a shelf with this name.';
+
+  @override
+  String get errorNotInLibrary => 'Add the book to your library first.';
+
+  @override
+  String get shelvesNew => 'New shelf';
+
+  @override
+  String shelvesCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString shelves',
+      one: '1 shelf',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shelvesEmptyTitle => 'Organise your books into shelves';
+
+  @override
+  String get shelvesEmptyMessage =>
+      'Create shelves such as “Weekend reads” or “Exam prep” and add books from your library.';
+
+  @override
+  String get shelfName => 'Shelf name';
+
+  @override
+  String get shelfDescription => 'Description (optional)';
+
+  @override
+  String get shelfNameRequired => 'Enter a name.';
+
+  @override
+  String get shelfCreate => 'Create';
+
+  @override
+  String get shelfSave => 'Save';
+
+  @override
+  String get shelfEdit => 'Edit shelf';
+
+  @override
+  String get shelfDelete => 'Delete shelf';
+
+  @override
+  String shelfDeleteConfirmTitle(String name) {
+    return 'Delete “$name”?';
+  }
+
+  @override
+  String get shelfDeleteConfirmMessage => 'The shelf will be deleted. Its books stay in your library.';
+
+  @override
+  String get shelfDeleteAction => 'Delete';
+
+  @override
+  String get shelfDeleted => 'Shelf deleted';
+
+  @override
+  String shelfOptions(String name) {
+    return 'Options for $name';
+  }
+
+  @override
+  String get shelfAddBooks => 'Add books';
+
+  @override
+  String get shelfEmptyTitle => 'This shelf is empty';
+
+  @override
+  String get shelfEmptyMessage => 'Add books from your library to this shelf.';
+
+  @override
+  String get shelfRemoveBook => 'Remove from shelf';
+
+  @override
+  String shelfPickerTitle(String name) {
+    return 'Add books to $name';
+  }
+
+  @override
+  String get shelfPickerEmpty => 'Every book in your library is already on this shelf.';
+
+  @override
+  String get shelfPickerLibraryEmpty => 'Your library is empty. Add books from Explore first.';
+
+  @override
+  String get shelfDone => 'Done';
+
+  @override
+  String get shelfNone => 'You have no shelves yet.';
+
+  @override
+  String get insightsTotalBooks => 'Books';
+
+  @override
+  String insightsFinishedYear(String year) {
+    return 'Finished in $year';
+  }
+
+  @override
+  String get insightsReadingNow => 'Reading now';
+
+  @override
+  String get insightsPagesFinished => 'Pages finished';
+
+  @override
+  String insightsPagesUnknown(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString finished books have no page count',
+      one: '1 finished book has no page count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsFinishedTitle => 'Books finished';
+
+  @override
+  String get insightsPeriodWeek => 'Week';
+
+  @override
+  String get insightsPeriodMonth => 'Month';
+
+  @override
+  String get insightsPeriodYear => 'Year';
+
+  @override
+  String get insightsPeriodLifetime => 'All time';
+
+  @override
+  String insightsFinishedInPeriod(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString books in this period',
+      one: '1 book in this period',
+      zero: 'None in this period',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsNothingFinished => 'Nothing finished in this period';
+
+  @override
+  String get insightsNothingFinishedHint => 'Mark a book as finished and it shows up here.';
+
+  @override
+  String insightsShareFinished(int percent) {
+    final intl.NumberFormat percentNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String percentString = percentNumberFormat.format(percent);
+
+    return '$percentString% of your library is finished';
+  }
+
+  @override
+  String get insightsGenresTitle => 'Top categories';
+
+  @override
+  String get insightsGenresSubtitle => 'From your books’ catalog categories';
+
+  @override
+  String get insightsLanguagesTitle => 'Languages';
+
+  @override
+  String get insightsPublishersTitle => 'Top publishers';
+
+  @override
+  String get insightsGrowthTitle => 'Books added';
+
+  @override
+  String get insightsGrowthSubtitle => 'Per month, last 12 months';
+
+  @override
+  String get insightsLongestTitle => 'Longest books';
+
+  @override
+  String get insightsShortestTitle => 'Shortest books';
+
+  @override
+  String get insightsTopRatedTitle => 'Highest rated by readers';
+
+  @override
+  String get insightsTopRatedSubtitle => 'Average rating in the catalog';
+
+  @override
+  String insightsPages(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString pages',
+      one: '1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String insightsRatingValue(String rating, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString ratings',
+      one: '1 rating',
+    );
+    return '$rating from $_temp0';
+  }
+
+  @override
+  String get insightsNoCategories => 'None of your books has a category yet.';
+
+  @override
+  String get insightsNoPageCounts => 'None of your books has a page count yet.';
+
+  @override
+  String get insightsNoRatings => 'None of your books has been rated yet.';
+
+  @override
+  String get insightsNoPublishers => 'None of your books lists a publisher yet.';
+
+  @override
+  String get insightsNoLanguages => 'None of your books lists a language yet.';
+
+  @override
+  String get insightsOthers => 'Other';
+
+  @override
+  String insightsChartItem(String label, int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$label: $countString';
+  }
+
+  @override
+  String get insightsEmptyTitle => 'Insights appear as your library grows';
+
+  @override
+  String get insightsEmptyMessage => 'Add a few books and update their reading status to see your patterns.';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get settingsPremium => 'Premium';
+
+  @override
+  String get settingsPremiumUnavailable => 'Premium plans aren\'t available to buy yet.';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get settingsVersion => 'Version';
+
+  @override
+  String get settingsGuestTitle => 'You\'re browsing as a guest';
+
+  @override
+  String get settingsGuestMessage => 'Sign in to keep a library, shelves and reading insights on all your devices.';
+
+  @override
+  String get settingsSignOutConfirmTitle => 'Sign out?';
+
+  @override
+  String get settingsSignOutConfirmMessage =>
+      'Your library is saved to your account. You can sign in again at any time.';
+
+  @override
+  String get settingsSavedOnDevice => 'Language and theme are saved on this device.';
 }

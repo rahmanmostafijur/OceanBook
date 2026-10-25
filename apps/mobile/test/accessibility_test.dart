@@ -9,7 +9,6 @@ import 'package:ob_core/ob_core.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 import 'package:oceanbook_mobile/app.dart';
 import 'package:oceanbook_mobile/core/router/app_router.dart';
-import 'package:oceanbook_mobile/features/library/domain/library_book.dart';
 import 'package:oceanbook_mobile/features/library/presentation/widgets/library_book_card.dart';
 
 import 'support/harness.dart';
@@ -24,7 +23,7 @@ class _PendingCatalog extends FakeCatalog {
   Future<BookDetail> book(String idOrSlug) => Completer<BookDetail>().future;
 }
 
-Future<void> _pumpCard(WidgetTester tester, Locale locale, LibraryBook book, double scale) async {
+Future<void> _pumpCard(WidgetTester tester, Locale locale, LibraryItem book, double scale) async {
   tester.view.physicalSize = const Size(600, 3000);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -55,21 +54,18 @@ Future<void> _pumpCard(WidgetTester tester, Locale locale, LibraryBook book, dou
 }
 
 void main() {
-  const english = LibraryBook(
-    id: 'e',
-    title: 'Cosmos Sea',
-    author: 'Carl Sagan',
-    category: 'Fiction',
-    synopsis: '',
-    progressPercent: 64,
+  final english = libraryItem(
+    'e',
+    'Cosmos Sea',
+    status: ShelfStatus.reading,
+    favorite: true,
+    contributors: const [Contributor(id: 'a', slug: 'sagan', name: 'Carl Sagan', role: 'author')],
   );
-  const bangla = LibraryBook(
-    id: 'b',
-    title: 'কসমস',
-    author: 'আহমেদ',
-    category: 'Fiction',
-    synopsis: '',
-    progressPercent: 64,
+  final bangla = libraryItem(
+    'b',
+    'কসমস',
+    status: ShelfStatus.finished,
+    contributors: const [Contributor(id: 'a', slug: 'ahmed', name: 'আহমেদ', role: 'author')],
   );
 
   for (final (name, locale, book) in [
@@ -80,7 +76,7 @@ void main() {
       testWidgets('library card shows full $name text without overflow at ${scale * 100} % text', (tester) async {
         await _pumpCard(tester, locale, book, scale);
         expect(tester.takeException(), isNull);
-        for (final text in [book.title, book.author]) {
+        for (final text in [book.title, book.authorNames.single]) {
           // The cover placeholder repeats the title first; the card's own text is the last match.
           final paragraph = tester.renderObject<RenderParagraph>(find.text(text).last);
           expect(paragraph.didExceedMaxLines, isFalse, reason: '$text truncated');

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:oceanbook_mobile/features/library/domain/library_book.dart';
-import 'package:oceanbook_mobile/features/library/presentation/widgets/category_pills.dart';
+import 'package:ob_core/ob_core.dart';
+import 'package:oceanbook_mobile/features/books/presentation/book_detail_screen.dart';
+import 'package:oceanbook_mobile/features/library/data/library_providers.dart';
+import 'package:oceanbook_mobile/features/library/presentation/widgets/book_details_sheet.dart';
+import 'package:oceanbook_mobile/features/library/presentation/widgets/filter_pills.dart';
 import 'package:oceanbook_mobile/features/library/presentation/widgets/library_book_card.dart';
 import 'package:oceanbook_mobile/features/reader/presentation/reader_settings_controller.dart';
 import 'package:reader_core/reader_core.dart';
@@ -11,71 +14,130 @@ import 'support/harness.dart';
 
 const _novel = 'নন্দিত নরকে';
 const _science = 'কসমস';
+const _unread = 'পথের পাঁচালী';
 
 /// The card for a title (the cover placeholder repeats the title, so plain text finders match twice).
 Finder card(String title) => find.byWidgetPredicate((w) => w is LibraryBookCard && w.book.title == title);
 
+Finder chip(String label) => find.widgetWithText(ChoiceChip, label);
+
+/// Taps a status filter, scrolling the chip row to it first (backwards with a negative [delta]).
+Future<void> selectFilter(WidgetTester tester, String label, {double delta = 100}) async {
+  await tester.scrollUntilVisible(
+    chip(label),
+    delta,
+    scrollable: find.descendant(of: find.byType(FilterPills<LibraryShelfFilter>), matching: find.byType(Scrollable)),
+  );
+  await tester.ensureVisible(chip(label));
+  await tester.pumpAndSettle();
+  await tester.tap(chip(label));
+  await tester.pumpAndSettle();
+}
+
+/// Taps something in the details sheet, scrolling its lazily built list to it first.
+Future<void> tapInSheet(WidgetTester tester, Finder finder) async {
+  await tester.scrollUntilVisible(
+    finder,
+    150,
+    scrollable: find.descendant(of: find.byType(BookDetailsSheet), matching: find.byType(Scrollable)).first,
+  );
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
+/// Dismisses a modal sheet by tapping the barrier above it.
+Future<void> closeSheet(WidgetTester tester) async {
+  await tester.tapAt(const Offset(20, 20));
+  await tester.pumpAndSettle();
+}
+
+Future<void> openTab(WidgetTester tester, String tab) async {
+  await tester.tap(find.widgetWithText(Tab, tab));
+  await tester.pumpAndSettle();
+}
+
+Future<void> openSheet(WidgetTester tester, String title) async {
+  await tester.tap(card(title));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapVisible(WidgetTester tester, Finder finder) async {
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
+BookCollection shelf(String id, String name, List<String> ids) => BookCollection(
+  id: id,
+  name: name,
+  position: 0,
+  bookIds: ids,
+  createdAt: testNow,
+  updatedAt: testNow,
+);
+
 void main() {
-  group('LibraryBook', () {
-    test('matches title or author, ignoring case and surrounding space', () {
-      const book = LibraryBook(
-        id: 'b',
-        title: 'Cosmos',
-        author: 'Carl Sagan',
-        category: 'Science',
-        synopsis: '',
-      );
-      expect(book.matches(''), isTrue);
-      expect(book.matches('  cos '), isTrue);
-      expect(book.matches('SAGAN'), isTrue);
-      expect(book.matches('novel'), isFalse);
-    });
-
-    test('progress outside 0-100 is rejected', () {
-      expect(
-        () => LibraryBook(id: 'b', title: 't', author: 'a', category: 'c', synopsis: '', progressPercent: 101),
-        throwsAssertionError,
-      );
-    });
-  });
-
-  group('library dashboard', () {
-    testWidgets('shows the grid with progress, filters by search and category', (tester) async {
+  group('library books', () {
+    testWidgets('lists the books with their status and filters by status, favourite and search', (tester) async {
       await pumpApp(tester, restored: testUser, location: '/library');
       expect(card(_novel), findsOneWidget);
-      expect(find.text('64% read'), findsOneWidget);
-      expect(find.byType(LinearProgressIndicator), findsWidgets);
+      expect(card(_science), findsOneWidget);
+      expect(find.text('5 books'), findsOneWidget);
 
+      await selectFilter(tester, 'Finished (2)');
+      expect(card(_science), findsOneWidget);
+      expect(card('A Brief History'), findsOneWidget);
+      expect(card(_novel), findsNothing);
+
+      await selectFilter(tester, 'Favourites (1)');
+      expect(card(_novel), findsOneWidget);
+      expect(card(_science), findsNothing);
+
+      await selectFilter(tester, 'All (5)', delta: -100);
       await tester.enterText(find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)), 'কসমস');
       await tester.pumpAndSettle();
       expect(card(_science), findsOneWidget);
       expect(card(_novel), findsNothing);
 
-      await tester.enterText(
-        find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)),
-        'zzz-no-match',
-      );
+      await tester.enterText(find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)), 'zzz');
       await tester.pumpAndSettle();
       expect(find.text('No books match your search'), findsOneWidget);
+    });
 
-      await tester.enterText(find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)), '');
+    testWidgets('search text survives switching tabs', (tester) async {
+      await pumpApp(tester, restored: testUser, location: '/library');
+      await tester.enterText(find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)), 'কসমস');
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
-        find.widgetWithText(ChoiceChip, 'বিজ্ঞান'),
-        100,
-        scrollable: find.descendant(of: find.byType(CategoryPills), matching: find.byType(Scrollable)),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ChoiceChip, 'বিজ্ঞান'));
-      await tester.pumpAndSettle();
-      expect(card(_science), findsOneWidget);
+      await openTab(tester, 'Insights');
+      await openTab(tester, 'Books');
+      expect(find.descendant(of: find.byType(SearchBar), matching: find.text('কসমস')), findsOneWidget);
       expect(card(_novel), findsNothing);
+    });
 
-      await tester.drag(find.byType(CategoryPills), const Offset(600, 0));
+    testWidgets('sorts by title', (tester) async {
+      await pumpApp(tester, restored: testUser, location: '/library');
+      await tester.tap(find.byTooltip('Sort books'));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ChoiceChip, 'All'));
+      await tester.tap(find.widgetWithText(CheckedPopupMenuItem<LibrarySort>, 'Title'));
       await tester.pumpAndSettle();
-      expect(card(_novel), findsOneWidget);
+      final first = tester.getTopLeft(card('A Brief History'));
+      expect(first.dy, lessThanOrEqualTo(tester.getTopLeft(card(_novel)).dy));
+      expect(first.dx, lessThan(tester.getTopLeft(card(_novel)).dx + 1));
+    });
+
+    testWidgets('an empty library invites the user to explore', (tester) async {
+      await pumpApp(
+        tester,
+        restored: testUser,
+        location: '/library',
+        library: FakeLibrary(items: []),
+      );
+      expect(find.text('Your library is empty'), findsOneWidget);
+      await tester.tap(find.text('Explore books'));
+      await tester.pumpAndSettle();
+      expect(find.text('Your library is empty'), findsNothing);
     });
 
     testWidgets('lays out two columns on a phone and more on a tablet', (tester) async {
@@ -87,9 +149,9 @@ void main() {
       final tabletTile = tester.getSize(find.byType(LibraryBookCard).at(0));
       expect(tabletTile.width, lessThan(phoneTile.width + 60));
       final firstRowTops = {
-        for (var i = 0; i < 6; i++) tester.getTopLeft(find.byType(LibraryBookCard).at(i)).dy,
+        for (var i = 0; i < 5; i++) tester.getTopLeft(find.byType(LibraryBookCard).at(i)).dy,
       };
-      expect(firstRowTops.length, lessThan(3), reason: 'six tiles fit in at most two rows on a wide screen');
+      expect(firstRowTops.length, 1, reason: 'five tiles fit in one row on a wide screen');
     });
 
     testWidgets('has no overflow at 200 % text', (tester) async {
@@ -109,48 +171,232 @@ void main() {
   });
 
   group('book details sheet', () {
-    testWidgets('shows details, toggles the synopsis and offers Continue for a started book', (tester) async {
-      await pumpApp(tester, restored: testUser, location: '/library');
-      await tester.tap(card(_novel));
-      await tester.pumpAndSettle();
+    testWidgets('changes the status and favourite through the server', (tester) async {
+      final library = FakeLibrary();
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openSheet(tester, _unread);
+      await tapInSheet(tester, chip('Reading'));
+      expect(library.calls, contains('save:lib-03:reading:null'));
+      expect(find.textContaining('Started'), findsOneWidget);
 
-      expect(find.text('Synopsis'), findsOneWidget);
-      expect(find.bySemanticsLabel('Rated 4.5 out of 5'), findsOneWidget);
-      expect(find.text('Continue reading'), findsOneWidget);
-      expect(find.text('Read more'), findsOneWidget);
+      await tapInSheet(tester, find.byKey(const Key('library-favorite')));
+      expect(library.calls, contains('save:lib-03:null:true'));
+      expect(find.text('Remove from favourites'), findsOneWidget);
 
-      await tester.ensureVisible(find.text('Read more'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Read more'));
-      await tester.pumpAndSettle();
-      expect(find.text('Read less'), findsOneWidget);
-      await tester.ensureVisible(find.text('Read less'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Read less'));
-      await tester.pumpAndSettle();
-      expect(find.text('Read more'), findsOneWidget);
+      await closeSheet(tester);
+      expect(chip('Reading (2)'), findsOneWidget);
+      await selectFilter(tester, 'Favourites (2)');
+      expect(card(_unread), findsOneWidget);
     });
 
-    testWidgets('a book not started yet says Start reading', (tester) async {
-      await pumpApp(tester, restored: testUser, location: '/library');
-      await tester.enterText(
-        find.descendant(of: find.byType(SearchBar), matching: find.byType(TextField)),
-        'পথের পাঁচালী',
+    testWidgets('a failed change is reported and nothing changes', (tester) async {
+      final library = FakeLibrary()
+        ..failNext = const ServerFailure(
+          status: 500,
+          errors: [ApiErrorItem(code: ApiErrorCode.internalError, message: 'x')],
+        );
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openSheet(tester, _unread);
+      await tapInSheet(tester, chip('Finished'));
+      expect(find.text("We're having trouble right now. Please try again shortly."), findsOneWidget);
+      expect(tester.widget<ChoiceChip>(chip('Want to read')).selected, isTrue);
+    });
+
+    testWidgets('removing asks first; cancelling keeps the book', (tester) async {
+      final library = FakeLibrary(
+        shelves: [
+          shelf('s1', 'Weekend', ['lib-01']),
+        ],
       );
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openSheet(tester, _novel);
+      await tapInSheet(tester, find.byKey(const Key('library-remove')));
+      expect(find.text('Remove this book?'), findsOneWidget);
+      await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
-      await tester.tap(card('পথের পাঁচালী'));
+      expect(library.calls.where((c) => c.startsWith('remove')), isEmpty);
+
+      await tapInSheet(tester, find.byKey(const Key('library-remove')));
+      await tester.tap(find.widgetWithText(FilledButton, 'Remove'));
       await tester.pumpAndSettle();
-      expect(find.text('Start reading'), findsOneWidget);
+      expect(library.calls, contains('remove:lib-01'));
+      expect(card(_novel), findsNothing);
+      expect(find.text('Removed from your library'), findsOneWidget);
+
+      await openTab(tester, 'Shelves');
+      expect(find.text('No books'), findsOneWidget, reason: 'the book left its shelf too');
     });
 
-    testWidgets('the call to action opens the reader', (tester) async {
+    testWidgets('offers the book page', (tester) async {
       await pumpApp(tester, restored: testUser, location: '/library');
-      await tester.tap(card(_novel));
+      await openSheet(tester, _novel);
+      await tester.tap(find.text('View book page'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Continue reading'));
+      expect(find.byType(BookDetailScreen), findsOneWidget);
+    });
+  });
+
+  group('shelves', () {
+    testWidgets('create a shelf, add a book from the picker and see it on the shelf', (tester) async {
+      final library = FakeLibrary();
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openTab(tester, 'Shelves');
+      expect(find.text('Organise your books into shelves'), findsOneWidget);
+
+      await tester.tap(find.text('New shelf'));
       await tester.pumpAndSettle();
-      expect(find.byTooltip('Reading settings'), findsOneWidget);
-      expect(find.byTooltip('Close reader'), findsOneWidget);
+      await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a name.'), findsOneWidget);
+      await tester.enterText(find.widgetWithText(TextFormField, 'Shelf name'), 'Weekend');
+      await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+      expect(library.calls, contains('create:Weekend'));
+
+      await tester.tap(find.text('Weekend'));
+      await tester.pumpAndSettle();
+      expect(find.text('This shelf is empty'), findsOneWidget);
+      await tester.tap(find.text('Add books'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(CheckboxListTile, _science).first);
+      await tester.pumpAndSettle();
+      expect(library.calls.last, startsWith('add:'));
+      await tester.tap(find.text('Done'));
+      await tester.pumpAndSettle();
+      expect(find.text('1 book'), findsOneWidget);
+      expect(find.text(_science), findsWidgets);
+
+      await tester.tap(find.byTooltip('Remove from shelf'));
+      await tester.pumpAndSettle();
+      expect(find.text('This shelf is empty'), findsOneWidget);
+    });
+
+    testWidgets('a duplicate name shows the server message in the form', (tester) async {
+      await pumpApp(
+        tester,
+        restored: testUser,
+        location: '/library',
+        library: FakeLibrary(shelves: [shelf('s1', 'Weekend', const [])]),
+      );
+      await openTab(tester, 'Shelves');
+      await tester.tap(find.text('New shelf'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.widgetWithText(TextFormField, 'Shelf name'), 'weekend');
+      await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+      expect(find.text('You already have a shelf with this name.'), findsOneWidget);
+    });
+
+    testWidgets('deleting a shelf asks first and keeps its books in the library', (tester) async {
+      final library = FakeLibrary(
+        shelves: [
+          shelf('s1', 'Weekend', ['lib-01', 'lib-02']),
+        ],
+      );
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openTab(tester, 'Shelves');
+      expect(find.text('2 books'), findsOneWidget);
+      await tester.tap(find.byTooltip('Options for Weekend'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete shelf'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete “Weekend”?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+      await tester.pumpAndSettle();
+      expect(library.calls, contains('delete:s1'));
+      expect(find.text('Organise your books into shelves'), findsOneWidget);
+      await openTab(tester, 'Books');
+      expect(card(_novel), findsOneWidget);
+    });
+
+    testWidgets('the details sheet puts a book on a shelf', (tester) async {
+      final library = FakeLibrary(shelves: [shelf('s1', 'Weekend', const [])]);
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openSheet(tester, _novel);
+      await tapInSheet(tester, find.widgetWithText(FilterChip, 'Weekend'));
+      expect(library.calls, contains('add:s1:lib-01'));
+      expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'Weekend')).selected, isTrue);
+    });
+  });
+
+  group('insights', () {
+    testWidgets('figures come from the library and the period picker changes the chart', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpApp(tester, restored: testUser, location: '/library');
+      await openTab(tester, 'Insights');
+      expect(find.bySemanticsLabel('Books, 5'), findsOneWidget);
+      expect(find.bySemanticsLabel('Finished in 2026, 2'), findsOneWidget);
+      expect(find.bySemanticsLabel('Reading now, 1'), findsOneWidget);
+      expect(find.bySemanticsLabel('Pages finished, 608'), findsOneWidget);
+      expect(find.text('2 books in this period'), findsOneWidget);
+
+      await tester.tap(chip('Week'));
+      await tester.pumpAndSettle();
+      expect(find.text('1 book in this period'), findsOneWidget);
+      await tester.tap(chip('All time'));
+      await tester.pumpAndSettle();
+      expect(find.text('2 books in this period'), findsOneWidget);
+
+      await tester.scrollUntilVisible(find.text('Top categories'), 200, scrollable: find.byType(Scrollable).last);
+      expect(find.text('উপন্যাস'), findsOneWidget);
+      expect(find.text('বিজ্ঞান'), findsOneWidget);
+      handle.dispose();
+    });
+
+    testWidgets('a week without finished books says so instead of an empty chart', (tester) async {
+      final library = FakeLibrary(items: [libraryItem('x', 'Old', status: ShelfStatus.finished, finishedDaysAgo: 40)]);
+      await pumpApp(tester, restored: testUser, location: '/library', library: library);
+      await openTab(tester, 'Insights');
+      await tester.tap(chip('Week'));
+      await tester.pumpAndSettle();
+      expect(find.text('Nothing finished in this period'), findsOneWidget);
+    });
+
+    testWidgets('an empty library explains where insights come from', (tester) async {
+      await pumpApp(
+        tester,
+        restored: testUser,
+        location: '/library',
+        library: FakeLibrary(items: []),
+      );
+      await openTab(tester, 'Insights');
+      expect(find.text('Insights appear as your library grows'), findsOneWidget);
+    });
+
+    for (final size in [const Size(320, 640), const Size(1280, 900)]) {
+      testWidgets('insights have no overflow at 200 % text on ${size.width.toInt()} dp', (tester) async {
+        tester.platformDispatcher.textScaleFactorTestValue = 2;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await pumpApp(tester, restored: testUser, location: '/library', size: size);
+        await openTab(tester, 'Insights');
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
+  group('book page library actions', () {
+    testWidgets('guests are asked to sign in', (tester) async {
+      await pumpApp(tester, location: '/explore/books/book-0');
+      await tester.ensureVisible(find.byKey(const Key('library-add')));
+      await tester.tap(find.byKey(const Key('library-add')));
+      await tester.pumpAndSettle();
+      expect(find.text('Welcome to OceanBook'), findsOneWidget);
+    });
+
+    testWidgets('signed-in users add the book, then change status and favourite', (tester) async {
+      final library = FakeLibrary(items: []);
+      await pumpApp(tester, restored: testUser, location: '/explore/books/book-0', library: library);
+      await tapVisible(tester, find.byKey(const Key('library-add')));
+      expect(library.calls, ['save:book-0:null:null']);
+      expect(find.text('Added to your library'), findsOneWidget);
+
+      await tapVisible(tester, find.byKey(const Key('library-status')));
+      await tester.tap(find.widgetWithText(MenuItemButton, 'Finished'));
+      await tester.pumpAndSettle();
+      expect(library.calls.last, 'save:book-0:finished:null');
+
+      await tapVisible(tester, find.byKey(const Key('library-favorite')));
+      expect(library.calls.last, 'save:book-0:null:true');
     });
   });
 
