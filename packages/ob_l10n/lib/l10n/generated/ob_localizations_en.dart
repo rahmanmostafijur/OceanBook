@@ -1454,4 +1454,16 @@ class ObLocalizationsEn extends ObLocalizations {
   @override
   String get adminFormatHelp =>
       '**bold**  *italic*  __underline__  H~2~O  x^2^\n\$x^2\$ for maths in a line, \$\$x^2\$\$ for maths on its own line\nA blank line starts a new paragraph\n- bullet list   1. numbered list   i. roman list   ক. Bangla list (one item per line)\n| cell | cell | for a table (one row per line, the same number of cells in each)\nA backslash writes the next character as it is: \\* \\\$ \\\\';
+
+  @override
+  String adminTranslationHeading(String language) {
+    return 'Translation ($language)';
+  }
+
+  @override
+  String get adminTranslationHint => 'Optional. Leave every field empty for no translation.';
+
+  @override
+  String get adminTranslationUnsupported =>
+      'This translation uses formatting the editor cannot edit yet. It is kept as it is.';
 }

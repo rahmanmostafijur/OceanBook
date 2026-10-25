@@ -1447,4 +1447,16 @@ class ObLocalizationsBn extends ObLocalizations {
   @override
   String get adminFormatHelp =>
       '**গাঢ়**  *তির্যক*  __আন্ডারলাইন__  H~2~O  x^2^\nলাইনের মধ্যে গণিতের জন্য \$x^2\$, আলাদা লাইনে গণিতের জন্য \$\$x^2\$\$\nএকটি ফাঁকা লাইন নতুন অনুচ্ছেদ শুরু করে\n- বুলেট তালিকা   1. সংখ্যার তালিকা   i. রোমান তালিকা   ক. বাংলা তালিকা (প্রতি লাইনে একটি)\n| ঘর | ঘর | দিয়ে সারণি (প্রতি লাইনে একটি সারি, প্রতি সারিতে সমান ঘর)\nব্যাকস্ল্যাশ পরের অক্ষরটি যেমন আছে তেমন লেখে: \\* \\\$ \\\\';
+
+  @override
+  String adminTranslationHeading(String language) {
+    return 'অনুবাদ ($language)';
+  }
+
+  @override
+  String get adminTranslationHint => 'ঐচ্ছিক। অনুবাদ না চাইলে সব ঘর খালি রাখুন।';
+
+  @override
+  String get adminTranslationUnsupported =>
+      'এই অনুবাদে এমন বিন্যাস আছে যা এখানে এখনও সম্পাদনা করা যায় না। এটি যেমন আছে তেমনই থাকবে।';
 }

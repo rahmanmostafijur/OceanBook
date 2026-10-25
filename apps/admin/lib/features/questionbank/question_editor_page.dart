@@ -16,6 +16,7 @@ import 'question_classification.dart';
 import 'question_detail_page.dart' show adminQuestionProvider;
 import 'question_labels.dart';
 import 'questions_page.dart' show adminQuestionsProvider;
+import 'translation_fields.dart';
 
 const editableTypes = [
   QuestionType.mcqSingle,
@@ -73,6 +74,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   final _guidance = TextEditingController();
   BlankAnswers _blanks = BlankAnswers.empty();
   MatchingDraft? _matching;
+  TranslationDraft _translation = TranslationDraft.empty('en');
   final _explanation = TextEditingController();
   final _marks = TextEditingController(text: '1');
   final _entitlement = TextEditingController();
@@ -106,6 +108,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   bool get _isShortAnswer => _type == QuestionType.shortAnswer;
   bool get _isFillBlank => _type == QuestionType.fillBlank;
   bool get _isMatching => _type == QuestionType.matching;
+  String get _otherLocale => _locale == 'bn' ? 'en' : 'bn';
   bool get _hasOptions => _optionTypes.contains(_type);
 
   @override
@@ -133,6 +136,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     }
     _blanks.dispose();
     _matching?.dispose();
+    _translation.dispose();
     super.dispose();
   }
 
@@ -194,6 +198,14 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     _guidance.text = guidance ?? '';
     if (blanks != null) _blanks = blanks;
     _matching = matching;
+    _translation = TranslationDraft.fromRaw(
+      raw,
+      locale == 'bn' ? 'en' : 'bn',
+      allowBlanks: fill,
+    );
+    _translation
+      ..seedOptions(options, (raw['options'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>())
+      ..seedParts(parts, (raw['parts'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>());
     _type = q.type;
     _locale = locale;
     _stem.text = stem ?? '';
@@ -242,6 +254,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       return;
     }
     _stimulusDocs = stimulus.translations;
+    _translation.seedStimulus(stimulus.translations[_otherLocale]);
     _stimulusText = text;
     _stimulus.text = text;
   }
@@ -253,6 +266,8 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     _blanks = BlankAnswers.empty();
     _matching?.dispose();
     _matching = _isMatching ? MatchingDraft.empty() : null;
+    _translation.dispose();
+    _translation = TranslationDraft.empty(_otherLocale, allowBlanks: _isFillBlank);
   }
 
   void _resetParts() {
@@ -332,6 +347,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       current['explanation'] = docFromText(_explanation.text);
     }
     translations[_locale] = current;
+    final allTranslations = _translation.applyTo(translations, shortAnswer: _isShortAnswer);
 
     final rawOptions = (raw['options'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>();
     Map<String, Object?>? rawFor(int i, String label) =>
@@ -377,9 +393,9 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       'marks': _isCreative ? totalPartMarks(_parts).toStringAsFixed(2) : _marks.text.trim(),
       'access_level': _access,
       'required_entitlement_key': entitled ? _entitlement.text.trim() : null,
-      'translations': translations,
-      'options': options,
-      'parts': parts,
+      'translations': allTranslations,
+      'options': _translation.applyToOptions(_options, options),
+      'parts': _translation.applyToParts(_parts, parts),
       if (_isFillBlank)
         'answer_spec': _blanks.toSpec((raw['answer_spec'] as Map?)?.cast<String, Object?>() ?? const {}),
       if (_isMatching) 'answer_spec': _matching!.toSpec(),
@@ -424,8 +440,9 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   Future<String?> _saveStimulus(AdminQuestionRepository repo) async {
     if (!_isCreative) return null;
     final existingId = _existing?.stimulusId;
-    if (existingId != null && _stimulus.text == _stimulusText) return existingId;
-    final saved = await repo.createStimulus(_locale, {..._stimulusDocs, _locale: docFromText(_stimulus.text)});
+    if (existingId != null && _stimulus.text == _stimulusText && !_translation.stimulusChanged) return existingId;
+    final docs = _translation.applyToStimulus({..._stimulusDocs, _locale: docFromText(_stimulus.text)});
+    final saved = await repo.createStimulus(_locale, docs);
     return saved.id;
   }
 
@@ -485,6 +502,13 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
                         () => _options.add(OptionDraft(label: answerLabels[_locale]![_options.length], text: '')),
                       ),
                     ),
+                  TranslationSection(
+                    draft: _translation,
+                    options: _options,
+                    parts: _parts,
+                    isCreative: _isCreative,
+                    isShortAnswer: _isShortAnswer,
+                  ),
                   QuestionClassification(
                     levels: _levels,
                     subjects: _subjects,

@@ -135,7 +135,13 @@ void main() {
 
   testWidgets('editing changes the Bangla text but keeps other translations and option content', (tester) async {
     final questions = FakeAdminQuestions(question: fakeAdminQuestion(status: 'draft'));
-    await pumpAdmin(tester, restored: staffUser, questions: questions, location: '/questions/q1');
+    await pumpAdmin(
+      tester,
+      size: const Size(1440, 2200),
+      restored: staffUser,
+      questions: questions,
+      location: '/questions/q1',
+    );
     await tester.tap(find.byKey(const Key('edit-question')));
     await tester.pumpAndSettle();
 
