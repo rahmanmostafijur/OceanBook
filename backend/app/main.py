@@ -19,6 +19,7 @@ from app.core.middleware import BodySizeLimitMiddleware, RequestContextMiddlewar
 from app.core.resources import Resources
 from app.identity.api import admin, auth, me
 from app.identity.providers.registry import IdentityProviders
+from app.library import api as library_api
 from app.provenance import api as provenance_api
 from app.questionbank.api import admin as questionbank_admin
 from app.questionbank.api import public as questionbank_public
@@ -95,6 +96,7 @@ def create_app(
     api = APIRouter(prefix=API_PREFIX)
     api.include_router(auth.router)
     api.include_router(me.router)
+    api.include_router(library_api.router)
     api.include_router(admin.router)
     api.include_router(catalog_public.router)
     api.include_router(catalog_admin.router)

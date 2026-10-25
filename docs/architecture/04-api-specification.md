@@ -142,6 +142,18 @@ Granular REST endpoints serve online use; the offline engine uses batch sync. Bo
 | POST | `/sync/push` | user | ≤ 200 operations, each with `op_id`; per-op results |
 | GET | `/sync/pull` | user | `?cursor=&limit=`; changes across synced tables since cursor |
 
+**Implemented early (2026-10-26, migration `0010`, `app/library`).** Before the rest of Phase 4, the online shelf-state and collection routes exist; reading progress, annotations and `/sync` do not yet.
+
+| Method | Path | Notes |
+|--------|------|-------|
+| GET | `/me/library` | Every live library book (≤ 2000), newest first, with catalog metadata (title, contributors, cover, primary category, default-edition language, page count and publisher, rating). Books no longer published are omitted |
+| PUT · DELETE | `/me/books/{book_id}` | `{shelf_status?, is_favorite?}`; an empty body adds the book as `want_to_read`. `reading` stamps `started_at` once, `finished` stamps `finished_at` (and a missing `started_at`), leaving `finished` clears `finished_at`. DELETE tombstones the row and the book's shelf items. `404` unpublished book, `409 LIBRARY_FULL` |
+| GET · POST | `/me/collections` | Shelves (≤ 100) with `book_ids`. POST takes an optional client id (a retry with the same id returns the shelf). `409 COLLECTION_NAME_TAKEN` (case-insensitive per user), `409 COLLECTION_LIMIT` |
+| PATCH · DELETE | `/me/collections/{id}` | `{name?, description?}` (`description: null` clears). Another user's id is a `404` |
+| PUT · DELETE | `/me/collections/{id}/items/{book_id}` | Idempotent add (`409 NOT_IN_LIBRARY` unless the book is in the library); remove is `404` when absent. Both return the shelf |
+
+All are `private, no-store`; writes share a per-user limit of 120 per minute.
+
 ### 2.6 Commerce
 
 | Method | Path | Auth | Notes |

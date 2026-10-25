@@ -108,3 +108,9 @@ type = "layers"
 containers = ["app.identity"]
 layers = ["api", "services", "repositories", "models"]
 exhaustive = false
+
+[[tool.importlinter.contracts]]
+name = "the catalog does not depend on the personal library"
+type = "forbidden"
+source_modules = ["app.catalog"]
+forbidden_modules = ["app.library"]

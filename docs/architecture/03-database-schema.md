@@ -617,6 +617,9 @@ CREATE TABLE collection_items (
 CREATE INDEX ix_collection_items_version ON collection_items (user_id, server_version);
 ```
 
+> **Implemented 2026-10-26 (migration `0010`).** `user_books` also has `deleted_at timestamptz`, a tombstone, so removing a book from the library can reach other devices through sync (the table above had none). `collection_items` has no `updated_at`, so its trigger function (`set_item_server_version()`) sets only `server_version`. Collection names are limited to 80 characters and descriptions to 280.
+
+
 ## 6. Commerce and Access
 
 > **Revised 2026-10-01:** Entitlement source types are renamed/extended and `entitlement_events` becomes the only write path (§8). See [12-phase0-revisions](12-phase0-revisions.md).
