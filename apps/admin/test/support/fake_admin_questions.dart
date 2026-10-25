@@ -82,6 +82,9 @@ class FakeAdminQuestions implements AdminQuestionRepository {
   FakeAdminQuestions({AdminQuestion? question}) : current = question ?? fakeAdminQuestion();
 
   AdminQuestion current;
+
+  /// When set, the question list returns these rows instead of the single default one.
+  List<AdminQuestionRow>? questionRows;
   Object? actionError;
   final List<String> calls = [];
   Object? saveError;
@@ -108,10 +111,12 @@ class FakeAdminQuestions implements AdminQuestionRepository {
     String? status,
     QuestionType? type,
     bool needsReview = false,
+    String? subjectId,
     int page = 1,
     int pageSize = 25,
   }) async {
     calls.add('questions:${status ?? ''}:${type?.wire ?? ''}:$needsReview:$page');
+    if (questionRows != null) return Paged(rows: questionRows!, total: questionRows!.length);
     return Paged(
       rows: [
         AdminQuestionRow(
@@ -160,6 +165,53 @@ class FakeAdminQuestions implements AdminQuestionRepository {
     calls.add('${action.name}:${comment ?? ''}:$acknowledgeDuplicates');
     if (actionError != null) throw actionError!;
     return current;
+  }
+
+  /// The paper the detail, edit and action calls work on, and what the last create/update sent.
+  AdminPaper currentPaper = fakePaper();
+  Object? paperError;
+  Map<String, Object?>? savedPaper;
+  List<AdminPaperItem>? savedItems;
+
+  @override
+  Future<AdminPaper> paper(String id) async => currentPaper;
+
+  @override
+  Future<AdminPaper> createPaper(Map<String, Object?> body) async {
+    if (paperError != null) throw paperError!;
+    calls.add('paper-create');
+    savedPaper = body;
+    return currentPaper;
+  }
+
+  @override
+  Future<AdminPaper> updatePaper(String id, Map<String, Object?> patch) async {
+    if (paperError != null) throw paperError!;
+    calls.add('paper-update:$id');
+    savedPaper = patch;
+    return currentPaper;
+  }
+
+  @override
+  Future<List<AdminPaperItem>> setPaperItems(String id, List<AdminPaperItem> items) async {
+    if (paperError != null) throw paperError!;
+    calls.add('paper-items:$id');
+    savedItems = items;
+    return items;
+  }
+
+  @override
+  Future<AdminPaper> publishPaper(String id) async {
+    if (paperError != null) throw paperError!;
+    calls.add('paper-publish:$id');
+    return currentPaper;
+  }
+
+  @override
+  Future<AdminPaper> archivePaper(String id, String reason) async {
+    if (paperError != null) throw paperError!;
+    calls.add('paper-archive:$id:$reason');
+    return currentPaper;
   }
 
   @override
@@ -242,4 +294,20 @@ AdminStimulus fakeStimulusWithImage() => const AdminStimulus(
       ],
     },
   },
+);
+
+/// A draft HSC Physics paper holding one question, as the server returns it.
+AdminPaper fakePaper({String status = 'draft', List<AdminPaperItem>? items}) => AdminPaper(
+  id: 'p1',
+  examYear: 2022,
+  examKind: 'board_final',
+  section: 'mcq',
+  status: status,
+  boardCount: 1,
+  itemCount: (items ?? const [AdminPaperItem(questionId: 'q1', itemNumber: '1')]).length,
+  educationLevelId: 'l1',
+  subjectId: 's1',
+  boardIds: const ['b1'],
+  totalMarks: 30,
+  items: items ?? const [AdminPaperItem(questionId: 'q1', itemNumber: '1')],
 );

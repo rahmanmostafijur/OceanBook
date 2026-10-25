@@ -53,6 +53,17 @@ class FakeAdminCurriculum implements AdminCurriculumRepository {
   Future<List<CurriculumOption>> levels() async => const [hscLevel];
 
   @override
+  Future<List<CurriculumOption>> boards() async => const [
+    CurriculumOption(id: 'b1', key: 'dhaka', name: LocalizedText({'bn': 'ঢাকা', 'en': 'Dhaka'})),
+    CurriculumOption(id: 'b2', key: 'rajshahi', name: LocalizedText({'bn': 'রাজশাহী', 'en': 'Rajshahi'})),
+  ];
+
+  @override
+  Future<List<CurriculumOption>> instructionMedia() async => const [
+    CurriculumOption(id: 'm1', key: 'bangla', name: LocalizedText({'bn': 'বাংলা', 'en': 'Bangla medium'})),
+  ];
+
+  @override
   Future<List<CurriculumOption>> curricula() async => const [
     CurriculumOption(id: 'cur1', key: 'nctb_2012', name: LocalizedText({'bn': 'এনসিটিবি ২০১২', 'en': 'NCTB 2012'})),
   ];

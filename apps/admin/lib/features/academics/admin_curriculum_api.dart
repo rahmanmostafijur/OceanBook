@@ -155,6 +155,8 @@ abstract interface class AdminCurriculumRepository {
   Future<List<CurriculumOption>> levels();
   Future<List<CurriculumOption>> curricula();
   Future<List<CurriculumOption>> groups(String levelId);
+  Future<List<CurriculumOption>> boards();
+  Future<List<CurriculumOption>> instructionMedia();
   Future<void> createSubject({
     required String curriculumId,
     required String levelId,
@@ -192,6 +194,13 @@ class AdminCurriculumApi implements AdminCurriculumRepository {
   @override
   Future<List<CurriculumOption>> curricula() async =>
       (await api.get('/admin/academics/curricula', decode: _options)).data;
+
+  @override
+  Future<List<CurriculumOption>> boards() async => (await api.get('/admin/academics/boards', decode: _options)).data;
+
+  @override
+  Future<List<CurriculumOption>> instructionMedia() async =>
+      (await api.get('/admin/academics/instruction-media', decode: _options)).data;
 
   @override
   Future<List<CurriculumOption>> groups(String levelId) async => (await api.get(

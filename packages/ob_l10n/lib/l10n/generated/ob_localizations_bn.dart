@@ -1338,4 +1338,67 @@ class ObLocalizationsBn extends ObLocalizations {
   String adminTotalMarks(String marks) {
     return 'মোট নম্বর: $marks';
   }
+
+  @override
+  String get adminNewPaper => 'নতুন প্রশ্নপত্র';
+
+  @override
+  String get adminEditPaper => 'প্রশ্নপত্র সম্পাদনা';
+
+  @override
+  String get adminFieldExamYear => 'পরীক্ষার বছর';
+
+  @override
+  String get adminFieldExamKind => 'পরীক্ষার ধরন';
+
+  @override
+  String get adminFieldSection => 'অংশ';
+
+  @override
+  String get adminSectionFull => 'পূর্ণাঙ্গ প্রশ্নপত্র';
+
+  @override
+  String get adminSectionMcq => 'বহুনির্বাচনি';
+
+  @override
+  String get adminSectionCq => 'সৃজনশীল';
+
+  @override
+  String get adminFieldPaperTitle => 'শিরোনাম (ঐচ্ছিক)';
+
+  @override
+  String get adminFieldPaperMarks => 'মোট নম্বর (ঐচ্ছিক)';
+
+  @override
+  String get adminFieldDuration => 'সময় (মিনিট, ঐচ্ছিক)';
+
+  @override
+  String get adminFieldBoards => 'বোর্ড';
+
+  @override
+  String get adminFieldGroup => 'বিভাগ';
+
+  @override
+  String get adminFieldMedium => 'মাধ্যম';
+
+  @override
+  String get adminPaperItems => 'এই প্রশ্নপত্রের প্রশ্ন';
+
+  @override
+  String get adminChooseQuestions => 'প্রশ্ন বাছাই করুন';
+
+  @override
+  String get adminChooseQuestionsHint => 'এই প্রশ্নপত্রের বিষয়ের প্রকাশিত প্রশ্ন';
+
+  @override
+  String get adminNoPublishedQuestions => 'এই বিষয়ে এখনও কোনো প্রকাশিত প্রশ্ন নেই।';
+
+  @override
+  String get adminNoPaperItems => 'এখনও কোনো প্রশ্ন যোগ করা হয়নি';
+
+  @override
+  String get adminItemNumber => 'নং';
+
+  @override
+  String get adminPaperLocked => 'শুধু খসড়া প্রশ্নপত্র সম্পাদনা করা যায়।';
 }

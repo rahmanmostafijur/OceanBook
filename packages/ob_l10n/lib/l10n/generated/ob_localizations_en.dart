@@ -1346,4 +1346,67 @@ class ObLocalizationsEn extends ObLocalizations {
   String adminTotalMarks(String marks) {
     return 'Total marks: $marks';
   }
+
+  @override
+  String get adminNewPaper => 'New paper';
+
+  @override
+  String get adminEditPaper => 'Edit paper';
+
+  @override
+  String get adminFieldExamYear => 'Exam year';
+
+  @override
+  String get adminFieldExamKind => 'Exam type';
+
+  @override
+  String get adminFieldSection => 'Section';
+
+  @override
+  String get adminSectionFull => 'Full paper';
+
+  @override
+  String get adminSectionMcq => 'MCQ';
+
+  @override
+  String get adminSectionCq => 'Creative (CQ)';
+
+  @override
+  String get adminFieldPaperTitle => 'Title (optional)';
+
+  @override
+  String get adminFieldPaperMarks => 'Total marks (optional)';
+
+  @override
+  String get adminFieldDuration => 'Duration in minutes (optional)';
+
+  @override
+  String get adminFieldBoards => 'Boards';
+
+  @override
+  String get adminFieldGroup => 'Group';
+
+  @override
+  String get adminFieldMedium => 'Medium';
+
+  @override
+  String get adminPaperItems => 'Questions in this paper';
+
+  @override
+  String get adminChooseQuestions => 'Choose questions';
+
+  @override
+  String get adminChooseQuestionsHint => 'Published questions of this paper\'s subject';
+
+  @override
+  String get adminNoPublishedQuestions => 'This subject has no published questions yet.';
+
+  @override
+  String get adminNoPaperItems => 'No questions added yet';
+
+  @override
+  String get adminItemNumber => 'No.';
+
+  @override
+  String get adminPaperLocked => 'Only draft papers can be edited.';
 }

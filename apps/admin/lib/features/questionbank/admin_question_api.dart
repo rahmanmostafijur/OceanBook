@@ -184,6 +184,29 @@ class AdminQuestion {
 }
 
 @immutable
+class AdminPaperItem {
+  const AdminPaperItem({required this.questionId, required this.itemNumber, this.marks});
+
+  factory AdminPaperItem.fromJson(Map<String, Object?> json) => AdminPaperItem(
+    questionId: _req(json, 'question_id'),
+    itemNumber: _req(json, 'item_number'),
+    marks: json['marks'] == null ? null : double.parse('${json['marks']}'),
+  );
+
+  final String questionId;
+  final String itemNumber;
+
+  /// Marks for this question in this paper, when they differ from the question's own.
+  final double? marks;
+
+  Map<String, Object?> toJson() => {
+    'question_id': questionId,
+    'item_number': itemNumber,
+    if (marks != null) 'marks': marks!.toStringAsFixed(2),
+  };
+}
+
+@immutable
 class AdminPaper {
   const AdminPaper({
     required this.id,
@@ -194,18 +217,42 @@ class AdminPaper {
     required this.boardCount,
     required this.itemCount,
     this.title,
+    this.educationLevelId,
+    this.subjectId,
+    this.academicGroupId,
+    this.instructionMediumId,
+    this.totalMarks,
+    this.durationMinutes,
+    this.boardIds = const [],
+    this.accessLevel = 'free',
+    this.requiredEntitlementKey,
+    this.items = const [],
   });
 
-  factory AdminPaper.fromJson(Map<String, Object?> json) => AdminPaper(
-    id: _req(json, 'id'),
-    examYear: _req(json, 'exam_year'),
-    examKind: _req(json, 'exam_kind'),
-    section: _req(json, 'section'),
-    status: _req(json, 'status'),
-    title: json['title'] as String?,
-    boardCount: ((json['board_ids'] as List?) ?? const []).length,
-    itemCount: ((json['items'] as List?) ?? const []).length,
-  );
+  factory AdminPaper.fromJson(Map<String, Object?> json) {
+    final boardIds = [for (final b in (json['board_ids'] as List?) ?? const <Object?>[]) '$b'];
+    final items = _list((json['items'] as List?) ?? const <Object?>[], AdminPaperItem.fromJson);
+    return AdminPaper(
+      id: _req(json, 'id'),
+      examYear: _req(json, 'exam_year'),
+      examKind: _req(json, 'exam_kind'),
+      section: _req(json, 'section'),
+      status: _req(json, 'status'),
+      title: json['title'] as String?,
+      boardCount: boardIds.length,
+      itemCount: items.length,
+      educationLevelId: json['education_level_id'] as String?,
+      subjectId: json['subject_id'] as String?,
+      academicGroupId: json['academic_group_id'] as String?,
+      instructionMediumId: json['instruction_medium_id'] as String?,
+      totalMarks: json['total_marks'] == null ? null : double.parse('${json['total_marks']}'),
+      durationMinutes: json['duration_minutes'] as int?,
+      boardIds: boardIds,
+      accessLevel: (json['access_level'] as String?) ?? 'free',
+      requiredEntitlementKey: json['required_entitlement_key'] as String?,
+      items: items,
+    );
+  }
 
   final String id;
   final int examYear;
@@ -215,6 +262,16 @@ class AdminPaper {
   final String? title;
   final int boardCount;
   final int itemCount;
+  final String? educationLevelId;
+  final String? subjectId;
+  final String? academicGroupId;
+  final String? instructionMediumId;
+  final double? totalMarks;
+  final int? durationMinutes;
+  final List<String> boardIds;
+  final String accessLevel;
+  final String? requiredEntitlementKey;
+  final List<AdminPaperItem> items;
 }
 
 /// The reviewer's decision, or another workflow step. Reason/comment-bearing ones are audited server-side.
@@ -254,6 +311,7 @@ abstract interface class AdminQuestionRepository {
     String? status,
     QuestionType? type,
     bool needsReview = false,
+    String? subjectId,
     int page = 1,
     int pageSize = 25,
   });
@@ -266,6 +324,16 @@ abstract interface class AdminQuestionRepository {
   /// Stimuli of live questions cannot be edited, so a changed passage is always saved as a new one.
   Future<AdminStimulus> createStimulus(String sourceLocale, Map<String, Object?> translations);
   Future<Paged<AdminPaper>> papers({String? status, int page = 1, int pageSize = 25});
+  Future<AdminPaper> paper(String id);
+  Future<AdminPaper> createPaper(Map<String, Object?> body);
+
+  /// Only the fields in [patch] change; the server accepts edits to drafts only.
+  Future<AdminPaper> updatePaper(String id, Map<String, Object?> patch);
+
+  /// Replaces the paper's whole list of questions.
+  Future<List<AdminPaperItem>> setPaperItems(String id, List<AdminPaperItem> items);
+  Future<AdminPaper> publishPaper(String id);
+  Future<AdminPaper> archivePaper(String id, String reason);
 }
 
 class AdminQuestionApi implements AdminQuestionRepository {
@@ -286,6 +354,7 @@ class AdminQuestionApi implements AdminQuestionRepository {
     String? status,
     QuestionType? type,
     bool needsReview = false,
+    String? subjectId,
     int page = 1,
     int pageSize = 25,
   }) async {
@@ -294,6 +363,7 @@ class AdminQuestionApi implements AdminQuestionRepository {
       query: {
         'status': status,
         'type': type?.wire,
+        'subject_id': subjectId,
         'needs_review': needsReview ? true : null,
         'page': page,
         'page_size': pageSize,
@@ -360,6 +430,36 @@ class AdminQuestionApi implements AdminQuestionRepository {
     );
     return Paged(rows: response.data, total: _total(response, response.data.length));
   }
+
+  AdminPaper _paper(Object? json) => AdminPaper.fromJson(json! as Map<String, Object?>);
+
+  @override
+  Future<AdminPaper> paper(String id) async => (await api.get('/admin/question-papers/$id', decode: _paper)).data;
+
+  @override
+  Future<AdminPaper> createPaper(Map<String, Object?> body) async =>
+      (await api.post('/admin/question-papers', body: body, decode: _paper)).data;
+
+  @override
+  Future<AdminPaper> updatePaper(String id, Map<String, Object?> patch) async =>
+      (await api.patch('/admin/question-papers/$id', body: patch, decode: _paper)).data;
+
+  @override
+  Future<List<AdminPaperItem>> setPaperItems(String id, List<AdminPaperItem> items) async => (await api.put(
+    '/admin/question-papers/$id/items',
+    body: {
+      'items': [for (final i in items) i.toJson()],
+    },
+    decode: (j) => _list(j, AdminPaperItem.fromJson),
+  )).data;
+
+  @override
+  Future<AdminPaper> publishPaper(String id) async =>
+      (await api.post('/admin/question-papers/$id/publish', decode: _paper)).data;
+
+  @override
+  Future<AdminPaper> archivePaper(String id, String reason) async =>
+      (await api.post('/admin/question-papers/$id/archive', body: {'reason': reason}, decode: _paper)).data;
 }
 
 final adminQuestionRepositoryProvider = Provider<AdminQuestionRepository>(

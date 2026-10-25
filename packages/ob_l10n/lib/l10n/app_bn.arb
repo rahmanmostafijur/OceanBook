@@ -429,5 +429,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "adminNewPaper": "নতুন প্রশ্নপত্র",
+  "adminEditPaper": "প্রশ্নপত্র সম্পাদনা",
+  "adminFieldExamYear": "পরীক্ষার বছর",
+  "adminFieldExamKind": "পরীক্ষার ধরন",
+  "adminFieldSection": "অংশ",
+  "adminSectionFull": "পূর্ণাঙ্গ প্রশ্নপত্র",
+  "adminSectionMcq": "বহুনির্বাচনি",
+  "adminSectionCq": "সৃজনশীল",
+  "adminFieldPaperTitle": "শিরোনাম (ঐচ্ছিক)",
+  "adminFieldPaperMarks": "মোট নম্বর (ঐচ্ছিক)",
+  "adminFieldDuration": "সময় (মিনিট, ঐচ্ছিক)",
+  "adminFieldBoards": "বোর্ড",
+  "adminFieldGroup": "বিভাগ",
+  "adminFieldMedium": "মাধ্যম",
+  "adminPaperItems": "এই প্রশ্নপত্রের প্রশ্ন",
+  "adminChooseQuestions": "প্রশ্ন বাছাই করুন",
+  "adminChooseQuestionsHint": "এই প্রশ্নপত্রের বিষয়ের প্রকাশিত প্রশ্ন",
+  "adminNoPublishedQuestions": "এই বিষয়ে এখনও কোনো প্রকাশিত প্রশ্ন নেই।",
+  "adminNoPaperItems": "এখনও কোনো প্রশ্ন যোগ করা হয়নি",
+  "adminItemNumber": "নং",
+  "adminPaperLocked": "শুধু খসড়া প্রশ্নপত্র সম্পাদনা করা যায়।"
 }

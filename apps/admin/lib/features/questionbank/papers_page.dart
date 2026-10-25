@@ -1,6 +1,7 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ob_l10n/ob_l10n.dart';
 
 import '../../core/messages.dart';
@@ -55,18 +56,28 @@ class PapersPage extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: DropdownMenu<String?>(
-              key: const Key('papers-status'),
-              initialSelection: query.status,
-              label: Text(l10n.adminColumnStatus),
-              onSelected: (status) => setQuery(_PaperQuery(status: status)),
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: null, label: l10n.adminAllStatuses),
-                for (final s in _statuses) DropdownMenuEntry(value: s, label: statusLabel(l10n, s)),
-              ],
-            ),
+          Wrap(
+            spacing: AppSpacing.md,
+            runSpacing: AppSpacing.sm,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              FilledButton.icon(
+                key: const Key('new-paper'),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.adminNewPaper),
+                onPressed: () => context.go('/question-papers/new'),
+              ),
+              DropdownMenu<String?>(
+                key: const Key('papers-status'),
+                initialSelection: query.status,
+                label: Text(l10n.adminColumnStatus),
+                onSelected: (status) => setQuery(_PaperQuery(status: status)),
+                dropdownMenuEntries: [
+                  DropdownMenuEntry(value: null, label: l10n.adminAllStatuses),
+                  for (final s in _statuses) DropdownMenuEntry(value: s, label: statusLabel(l10n, s)),
+                ],
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.md),
           Expanded(
@@ -119,6 +130,7 @@ class _PapersTable extends StatelessWidget {
                 rows: [
                   for (final paper in page.rows)
                     DataRow(
+                      onSelectChanged: (_) => context.go('/question-papers/${paper.id}'),
                       cells: [
                         DataCell(Text('${paper.examYear}')),
                         DataCell(Text(paper.title ?? examKindLabel(l10n, paper.examKind))),

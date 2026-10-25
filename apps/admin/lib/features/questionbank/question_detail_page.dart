@@ -57,7 +57,7 @@ class _QuestionViewState extends ConsumerState<_QuestionView> {
     final l10n = ObLocalizations.of(context);
     String? comment;
     if (action.needsComment) {
-      comment = await showDialog<String>(context: context, builder: (_) => const _CommentDialog());
+      comment = await showDialog<String>(context: context, builder: (_) => const CommentDialog());
       if (comment == null) return;
     }
     setState(() {
@@ -280,14 +280,14 @@ class _AdminOption extends StatelessWidget {
 }
 
 /// Reviewer comment / archive reason. Owns its controller so the field outlives the closing animation.
-class _CommentDialog extends StatefulWidget {
-  const _CommentDialog();
+class CommentDialog extends StatefulWidget {
+  const CommentDialog({super.key});
 
   @override
-  State<_CommentDialog> createState() => _CommentDialogState();
+  State<CommentDialog> createState() => CommentDialogState();
 }
 
-class _CommentDialogState extends State<_CommentDialog> {
+class CommentDialogState extends State<CommentDialog> {
   final _controller = TextEditingController();
   bool _tooShort = false;
 

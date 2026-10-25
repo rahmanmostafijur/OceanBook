@@ -2629,6 +2629,132 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Total marks: {marks}'**
   String adminTotalMarks(String marks);
+
+  /// No description provided for @adminNewPaper.
+  ///
+  /// In en, this message translates to:
+  /// **'New paper'**
+  String get adminNewPaper;
+
+  /// No description provided for @adminEditPaper.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit paper'**
+  String get adminEditPaper;
+
+  /// No description provided for @adminFieldExamYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam year'**
+  String get adminFieldExamYear;
+
+  /// No description provided for @adminFieldExamKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam type'**
+  String get adminFieldExamKind;
+
+  /// No description provided for @adminFieldSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Section'**
+  String get adminFieldSection;
+
+  /// No description provided for @adminSectionFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full paper'**
+  String get adminSectionFull;
+
+  /// No description provided for @adminSectionMcq.
+  ///
+  /// In en, this message translates to:
+  /// **'MCQ'**
+  String get adminSectionMcq;
+
+  /// No description provided for @adminSectionCq.
+  ///
+  /// In en, this message translates to:
+  /// **'Creative (CQ)'**
+  String get adminSectionCq;
+
+  /// No description provided for @adminFieldPaperTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title (optional)'**
+  String get adminFieldPaperTitle;
+
+  /// No description provided for @adminFieldPaperMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Total marks (optional)'**
+  String get adminFieldPaperMarks;
+
+  /// No description provided for @adminFieldDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration in minutes (optional)'**
+  String get adminFieldDuration;
+
+  /// No description provided for @adminFieldBoards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get adminFieldBoards;
+
+  /// No description provided for @adminFieldGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get adminFieldGroup;
+
+  /// No description provided for @adminFieldMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get adminFieldMedium;
+
+  /// No description provided for @adminPaperItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions in this paper'**
+  String get adminPaperItems;
+
+  /// No description provided for @adminChooseQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose questions'**
+  String get adminChooseQuestions;
+
+  /// No description provided for @adminChooseQuestionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Published questions of this paper\'s subject'**
+  String get adminChooseQuestionsHint;
+
+  /// No description provided for @adminNoPublishedQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'This subject has no published questions yet.'**
+  String get adminNoPublishedQuestions;
+
+  /// No description provided for @adminNoPaperItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions added yet'**
+  String get adminNoPaperItems;
+
+  /// No description provided for @adminItemNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'No.'**
+  String get adminItemNumber;
+
+  /// No description provided for @adminPaperLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Only draft papers can be edited.'**
+  String get adminPaperLocked;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

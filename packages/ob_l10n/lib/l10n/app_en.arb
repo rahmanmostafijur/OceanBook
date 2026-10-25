@@ -550,5 +550,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "adminNewPaper": "New paper",
+  "adminEditPaper": "Edit paper",
+  "adminFieldExamYear": "Exam year",
+  "adminFieldExamKind": "Exam type",
+  "adminFieldSection": "Section",
+  "adminSectionFull": "Full paper",
+  "adminSectionMcq": "MCQ",
+  "adminSectionCq": "Creative (CQ)",
+  "adminFieldPaperTitle": "Title (optional)",
+  "adminFieldPaperMarks": "Total marks (optional)",
+  "adminFieldDuration": "Duration in minutes (optional)",
+  "adminFieldBoards": "Boards",
+  "adminFieldGroup": "Group",
+  "adminFieldMedium": "Medium",
+  "adminPaperItems": "Questions in this paper",
+  "adminChooseQuestions": "Choose questions",
+  "adminChooseQuestionsHint": "Published questions of this paper's subject",
+  "adminNoPublishedQuestions": "This subject has no published questions yet.",
+  "adminNoPaperItems": "No questions added yet",
+  "adminItemNumber": "No.",
+  "adminPaperLocked": "Only draft papers can be edited."
 }
