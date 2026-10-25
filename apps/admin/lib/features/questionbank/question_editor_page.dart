@@ -9,11 +9,17 @@ import '../../core/messages.dart';
 import '../academics/admin_curriculum_api.dart';
 import 'admin_question_api.dart';
 import 'content_text.dart';
+import 'creative_parts.dart';
 import 'question_detail_page.dart' show adminQuestionProvider;
 import 'question_labels.dart';
 import 'questions_page.dart' show adminQuestionsProvider;
 
-const editableTypes = [QuestionType.mcqSingle, QuestionType.mcqMulti, QuestionType.trueFalse];
+const editableTypes = [
+  QuestionType.mcqSingle,
+  QuestionType.mcqMulti,
+  QuestionType.trueFalse,
+  QuestionType.creative,
+];
 const _fieldWidth = 220.0;
 const _minOptions = 2;
 const _maxSingleOptions = 6;
@@ -28,8 +34,9 @@ const _trueFalseText = {
 };
 
 /// Creates a question, or edits one when [questionId] is given. Covers the option-based types (single
-/// and multiple choice, true/false) in one source language, with plain text and `$maths$`. Anything
-/// else (other types, images, formatting) is shown as not editable here rather than risk losing content.
+/// and multiple choice, true/false) and creative questions (stimulus plus parts) in one source language,
+/// with plain text and `$maths$`. Anything else (other types, images, formatting) is shown as not
+/// editable here rather than risk losing content.
 class QuestionEditorPage extends ConsumerWidget {
   const QuestionEditorPage({this.questionId, super.key});
 
@@ -80,11 +87,15 @@ class _EditorForm extends ConsumerStatefulWidget {
 class _EditorFormState extends ConsumerState<_EditorForm> {
   final _form = GlobalKey<FormState>();
   final _stem = TextEditingController();
+  final _stimulus = TextEditingController();
   final _explanation = TextEditingController();
   final _marks = TextEditingController(text: '1');
   final _entitlement = TextEditingController();
   final _note = TextEditingController();
   final List<_OptionDraft> _options = [];
+  final List<PartDraft> _parts = [];
+  Map<String, Object?> _stimulusDocs = const {};
+  String? _stimulusText;
   QuestionType _type = QuestionType.mcqSingle;
   String _locale = 'bn';
   int? _difficulty;
@@ -105,13 +116,14 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   AdminQuestion? get _existing => widget.question;
   bool get _creating => _existing == null;
   bool get _isTrueFalse => _type == QuestionType.trueFalse;
+  bool get _isCreative => _type == QuestionType.creative;
 
   @override
   void initState() {
     super.initState();
     _seedFromQuestion();
     if (_supported) {
-      if (_creating) _resetOptions();
+      if (_creating) _resetDrafts();
       _load();
     } else {
       _loading = false;
@@ -120,11 +132,14 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
 
   @override
   void dispose() {
-    for (final c in [_stem, _explanation, _marks, _entitlement, _note]) {
+    for (final c in [_stem, _stimulus, _explanation, _marks, _entitlement, _note]) {
       c.dispose();
     }
     for (final o in _options) {
       o.dispose();
+    }
+    for (final p in _parts) {
+      p.dispose();
     }
     super.dispose();
   }
@@ -146,12 +161,29 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         _OptionDraft(label: o['label']! as String, text: text ?? '', correct: (o['is_correct'] as bool?) ?? false),
       );
     }
+    final parts = <PartDraft>[];
+    var partsOk = true;
+    for (final p in (raw['parts'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>()) {
+      final prompt = textFromDoc(((p['prompt'] as Map?)?[locale]) as Map<String, Object?>?);
+      if (prompt == null || (p['cognitive_level'] as String?) == null) partsOk = false;
+      parts.add(
+        PartDraft(
+          label: p['label']! as String,
+          prompt: prompt ?? '',
+          marks: formatMarks(double.parse('${p['marks']}')),
+          level: (p['cognitive_level'] as String?) ?? cognitiveLevels.first,
+        ),
+      );
+    }
+    final creative = q.type == QuestionType.creative;
     _supported =
         editableTypes.contains(q.type) &&
         stem != null &&
         explanation != null &&
         optionsOk &&
-        (raw['parts'] as List? ?? const []).isEmpty;
+        partsOk &&
+        creative == parts.isNotEmpty;
+    _parts.addAll(parts);
     _type = q.type;
     _locale = locale;
     _stem.text = stem ?? '';
@@ -167,7 +199,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     _topicId = raw['topic_id'] as String?;
   }
 
-  String _trimMarks(double marks) => marks == marks.roundToDouble() ? '${marks.round()}' : '$marks';
+  String _trimMarks(double marks) => formatMarks(marks);
 
   Future<void> _load() async {
     final repo = ref.read(adminCurriculumRepositoryProvider);
@@ -176,6 +208,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       _levels = results[0] as List<CurriculumOption>;
       _subjects = results[1] as List<CurriculumSubject>;
       if (_subjectId != null) _chapters = await repo.chapters(_subjectId!);
+      await _loadStimulus();
       if (mounted) setState(() => _loading = false);
     } on Object catch (error) {
       if (!mounted) return;
@@ -186,11 +219,47 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     }
   }
 
+  /// The passage of an existing creative question. One the plain-text format cannot reproduce keeps the
+  /// whole question read-only, like any other content the editor would otherwise lose.
+  Future<void> _loadStimulus() async {
+    final id = _existing?.stimulusId;
+    if (!_isCreative || id == null) return;
+    final stimulus = await ref.read(adminQuestionRepositoryProvider).stimulus(id);
+    final doc = stimulus.translations[_locale] as Map<String, Object?>?;
+    final text = doc == null ? null : textFromDoc(doc);
+    if (text == null) {
+      _supported = false;
+      return;
+    }
+    _stimulusDocs = stimulus.translations;
+    _stimulusText = text;
+    _stimulus.text = text;
+  }
+
+  void _resetDrafts() {
+    _resetOptions();
+    _resetParts();
+  }
+
+  void _resetParts() {
+    for (final p in _parts) {
+      p.dispose();
+    }
+    _parts.clear();
+    if (!_isCreative) return;
+    for (var i = 0; i < defaultPartMarks.length; i++) {
+      _parts.add(
+        PartDraft(label: _labels[_locale]![i], prompt: '', marks: defaultPartMarks[i], level: cognitiveLevels[i]),
+      );
+    }
+  }
+
   void _resetOptions() {
     for (final o in _options) {
       o.dispose();
     }
     _options.clear();
+    if (_isCreative) return;
     final count = _isTrueFalse ? 2 : 4;
     for (var i = 0; i < count; i++) {
       _options.add(
@@ -258,6 +327,22 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         },
     ];
     final entitled = _access == 'entitled';
+    final rawParts = (raw['parts'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>();
+    Map<String, Object?>? rawPartFor(int i, String label) =>
+        rawParts.where((r) => r['label'] == label).firstOrNull ?? (i < rawParts.length ? rawParts[i] : null);
+    final parts = [
+      for (final (i, p) in _parts.indexed)
+        {
+          ...?rawPartFor(i, p.label.text.trim()),
+          'label': p.label.text.trim(),
+          'cognitive_level': p.level,
+          'marks': p.marks.text.trim(),
+          'prompt': {
+            ...?(rawPartFor(i, p.label.text.trim())?['prompt'] as Map?)?.cast<String, Object?>(),
+            _locale: docFromText(p.prompt.text),
+          },
+        },
+    ];
     return {
       ...raw,
       'type': _type.wire,
@@ -267,17 +352,18 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       'chapter_id': _chapterId,
       'topic_id': _chapterId == null ? null : _topicId,
       'difficulty': _difficulty,
-      'marks': _marks.text.trim(),
+      'marks': _isCreative ? totalPartMarks(_parts).toStringAsFixed(2) : _marks.text.trim(),
       'access_level': _access,
       'required_entitlement_key': entitled ? _entitlement.text.trim() : null,
       'translations': translations,
       'options': options,
+      'parts': parts,
     };
   }
 
   Future<void> _save() async {
     final valid = _form.currentState!.validate();
-    final optionsOk = _correctCountValid();
+    final optionsOk = _isCreative || _correctCountValid();
     setState(() => _optionsInvalid = !optionsOk);
     if (!valid || !optionsOk) return;
     setState(() {
@@ -288,9 +374,11 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     final repo = ref.read(adminQuestionRepositoryProvider);
     final note = _note.text.trim().isEmpty ? null : _note.text.trim();
     try {
+      final stimulusId = await _saveStimulus(repo);
+      final content = {..._buildContent(), if (_isCreative) 'stimulus_id': stimulusId};
       final saved = _creating
-          ? await repo.createQuestion(_buildContent(), changeNote: note)
-          : await repo.updateQuestion(_existing!.id, _buildContent(), changeNote: note);
+          ? await repo.createQuestion(content, changeNote: note)
+          : await repo.updateQuestion(_existing!.id, content, changeNote: note);
       ref
         ..invalidate(adminQuestionsProvider)
         ..invalidate(adminQuestionProvider(saved.id));
@@ -302,6 +390,16 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         _error = adminFailureMessage(l10n, error);
       });
     }
+  }
+
+  /// A stimulus used by live questions cannot be changed, so an edited passage becomes a new stimulus
+  /// (keeping the other translations) and the question points to it. Unchanged text keeps the old one.
+  Future<String?> _saveStimulus(AdminQuestionRepository repo) async {
+    if (!_isCreative) return null;
+    final existingId = _existing?.stimulusId;
+    if (existingId != null && _stimulus.text == _stimulusText) return existingId;
+    final saved = await repo.createStimulus(_locale, {..._stimulusDocs, _locale: docFromText(_stimulus.text)});
+    return saved.id;
   }
 
   @override
@@ -336,7 +434,15 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
                   const SizedBox(height: AppSpacing.md),
                   ..._basics(l10n),
                   ..._contentFields(l10n),
-                  ..._optionFields(l10n),
+                  if (_isCreative)
+                    CreativePartsEditor(
+                      parts: _parts,
+                      onAdd: _addPart,
+                      onRemove: _removePart,
+                      onChanged: () => setState(() {}),
+                    )
+                  else
+                    ..._optionFields(l10n),
                   ..._classification(l10n),
                   ..._footer(l10n),
                 ],
@@ -347,6 +453,20 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       ),
     );
   }
+
+  void _addPart() => setState(() {
+    final labels = _labels[_locale]!;
+    _parts.add(
+      PartDraft(
+        label: labels[_parts.length.clamp(0, labels.length - 1)],
+        prompt: '',
+        marks: '1',
+        level: cognitiveLevels.first,
+      ),
+    );
+  });
+
+  void _removePart(int index) => setState(() => _parts.removeAt(index).dispose());
 
   String? _required(ObLocalizations l10n, String? v) => isValidContentText(v ?? '') ? null : l10n.errorValidation;
 
@@ -361,7 +481,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         ],
         onChanged: (t) => setState(() {
           _type = t!;
-          _resetOptions();
+          _resetDrafts();
         }),
       ),
       const SizedBox(height: AppSpacing.sm),
@@ -375,7 +495,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         ],
         onChanged: (v) => setState(() {
           _locale = v!;
-          _resetOptions();
+          _resetDrafts();
         }),
       ),
       const SizedBox(height: AppSpacing.sm),
@@ -391,6 +511,21 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       decoration: InputDecoration(labelText: l10n.adminFieldStem, helperText: l10n.adminMathHint, helperMaxLines: 2),
       validator: (v) => _required(l10n, v),
     ),
+    if (_isCreative) ...[
+      const SizedBox(height: AppSpacing.sm),
+      TextFormField(
+        key: const Key('question-stimulus'),
+        controller: _stimulus,
+        minLines: 3,
+        maxLines: 10,
+        decoration: InputDecoration(
+          labelText: l10n.adminFieldStimulus,
+          helperText: l10n.adminMathHint,
+          helperMaxLines: 2,
+        ),
+        validator: (v) => _required(l10n, v),
+      ),
+    ],
     const SizedBox(height: AppSpacing.sm),
     TextFormField(
       key: const Key('question-explanation'),
@@ -555,19 +690,20 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       spacing: AppSpacing.sm,
       runSpacing: AppSpacing.sm,
       children: [
-        SizedBox(
-          width: _fieldWidth,
-          child: TextFormField(
-            key: const Key('question-marks'),
-            controller: _marks,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: l10n.adminFieldMarks),
-            validator: (v) {
-              final marks = double.tryParse(v?.trim() ?? '');
-              return marks == null || marks <= 0 || marks > 999 ? l10n.errorValidation : null;
-            },
+        if (!_isCreative)
+          SizedBox(
+            width: _fieldWidth,
+            child: TextFormField(
+              key: const Key('question-marks'),
+              controller: _marks,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.adminFieldMarks),
+              validator: (v) {
+                final marks = double.tryParse(v?.trim() ?? '');
+                return marks == null || marks <= 0 || marks > 999 ? l10n.errorValidation : null;
+              },
+            ),
           ),
-        ),
         SizedBox(
           width: _fieldWidth,
           child: DropdownButtonFormField<int?>(

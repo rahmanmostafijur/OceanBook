@@ -1305,4 +1305,45 @@ class ObLocalizationsEn extends ObLocalizations {
 
     return '$percentString%';
   }
+
+  @override
+  String get adminFieldStimulus => 'Stimulus (passage)';
+
+  @override
+  String get adminPartsHeading => 'Parts';
+
+  @override
+  String get adminPartLabel => 'Label';
+
+  @override
+  String get adminPartPrompt => 'Part question';
+
+  @override
+  String get adminPartMarks => 'Marks';
+
+  @override
+  String get adminPartLevel => 'Cognitive level';
+
+  @override
+  String get adminAddPart => 'Add part';
+
+  @override
+  String get adminRemovePart => 'Remove part';
+
+  @override
+  String get adminCognitiveKnowledge => 'Knowledge';
+
+  @override
+  String get adminCognitiveComprehension => 'Comprehension';
+
+  @override
+  String get adminCognitiveApplication => 'Application';
+
+  @override
+  String get adminCognitiveHigherOrder => 'Higher order';
+
+  @override
+  String adminTotalMarks(String marks) {
+    return 'Total marks: $marks';
+  }
 }

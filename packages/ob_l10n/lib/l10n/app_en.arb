@@ -258,8 +258,8 @@
   "adminReasonHint": "Recorded in the audit log",
   "adminSourceLanguage": "Source language",
   "adminAccessFree": "Free",
-  "adminAccessRegistered": "Registered users",
-  "adminAccessEntitled": "Premium (entitlement)",
+  "adminAccessRegistered": "Signed-in users",
+  "adminAccessEntitled": "Entitled",
   "adminTranslations": "Translations",
   "adminEditions": "Editions",
   "adminContributors": "Contributors",
@@ -498,9 +498,6 @@
   "adminFieldDifficulty": "Difficulty",
   "adminDifficultyNone": "Not set",
   "adminFieldAccess": "Access",
-  "adminAccessFree": "Free",
-  "adminAccessRegistered": "Signed-in users",
-  "adminAccessEntitled": "Entitled",
   "adminEntitlementKey": "Entitlement key",
   "adminFieldSubject": "Subject",
   "adminFieldChapter": "Chapter (optional)",
@@ -531,6 +528,26 @@
       "percent": {
         "type": "int",
         "format": "decimalPattern"
+      }
+    }
+  },
+  "adminFieldStimulus": "Stimulus (passage)",
+  "adminPartsHeading": "Parts",
+  "adminPartLabel": "Label",
+  "adminPartPrompt": "Part question",
+  "adminPartMarks": "Marks",
+  "adminPartLevel": "Cognitive level",
+  "adminAddPart": "Add part",
+  "adminRemovePart": "Remove part",
+  "adminCognitiveKnowledge": "Knowledge",
+  "adminCognitiveComprehension": "Comprehension",
+  "adminCognitiveApplication": "Application",
+  "adminCognitiveHigherOrder": "Higher order",
+  "adminTotalMarks": "Total marks: {marks}",
+  "@adminTotalMarks": {
+    "placeholders": {
+      "marks": {
+        "type": "String"
       }
     }
   }

@@ -2551,6 +2551,84 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'{percent}%'**
   String readerFontPercent(int percent);
+
+  /// No description provided for @adminFieldStimulus.
+  ///
+  /// In en, this message translates to:
+  /// **'Stimulus (passage)'**
+  String get adminFieldStimulus;
+
+  /// No description provided for @adminPartsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Parts'**
+  String get adminPartsHeading;
+
+  /// No description provided for @adminPartLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get adminPartLabel;
+
+  /// No description provided for @adminPartPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Part question'**
+  String get adminPartPrompt;
+
+  /// No description provided for @adminPartMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Marks'**
+  String get adminPartMarks;
+
+  /// No description provided for @adminPartLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cognitive level'**
+  String get adminPartLevel;
+
+  /// No description provided for @adminAddPart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add part'**
+  String get adminAddPart;
+
+  /// No description provided for @adminRemovePart.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove part'**
+  String get adminRemovePart;
+
+  /// No description provided for @adminCognitiveKnowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge'**
+  String get adminCognitiveKnowledge;
+
+  /// No description provided for @adminCognitiveComprehension.
+  ///
+  /// In en, this message translates to:
+  /// **'Comprehension'**
+  String get adminCognitiveComprehension;
+
+  /// No description provided for @adminCognitiveApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Application'**
+  String get adminCognitiveApplication;
+
+  /// No description provided for @adminCognitiveHigherOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher order'**
+  String get adminCognitiveHigherOrder;
+
+  /// No description provided for @adminTotalMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Total marks: {marks}'**
+  String adminTotalMarks(String marks);
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

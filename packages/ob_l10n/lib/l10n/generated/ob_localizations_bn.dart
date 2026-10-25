@@ -1297,4 +1297,45 @@ class ObLocalizationsBn extends ObLocalizations {
 
     return '$percentString%';
   }
+
+  @override
+  String get adminFieldStimulus => 'উদ্দীপক';
+
+  @override
+  String get adminPartsHeading => 'প্রশ্নের অংশ';
+
+  @override
+  String get adminPartLabel => 'চিহ্ন';
+
+  @override
+  String get adminPartPrompt => 'অংশের প্রশ্ন';
+
+  @override
+  String get adminPartMarks => 'নম্বর';
+
+  @override
+  String get adminPartLevel => 'জ্ঞানের স্তর';
+
+  @override
+  String get adminAddPart => 'অংশ যোগ করুন';
+
+  @override
+  String get adminRemovePart => 'অংশ মুছুন';
+
+  @override
+  String get adminCognitiveKnowledge => 'জ্ঞানমূলক';
+
+  @override
+  String get adminCognitiveComprehension => 'অনুধাবনমূলক';
+
+  @override
+  String get adminCognitiveApplication => 'প্রয়োগমূলক';
+
+  @override
+  String get adminCognitiveHigherOrder => 'উচ্চতর দক্ষতা';
+
+  @override
+  String adminTotalMarks(String marks) {
+    return 'মোট নম্বর: $marks';
+  }
 }

@@ -198,9 +198,9 @@
   "adminReason": "কারণ",
   "adminReasonHint": "অডিট লগে সংরক্ষিত হবে",
   "adminSourceLanguage": "মূল ভাষা",
-  "adminAccessFree": "ফ্রি",
-  "adminAccessRegistered": "নিবন্ধিত ব্যবহারকারী",
-  "adminAccessEntitled": "প্রিমিয়াম (এনটাইটেলমেন্ট)",
+  "adminAccessFree": "বিনামূল্যে",
+  "adminAccessRegistered": "লগইন করা ব্যবহারকারী",
+  "adminAccessEntitled": "অধিকারপ্রাপ্ত",
   "adminTranslations": "অনুবাদ",
   "adminEditions": "সংস্করণসমূহ",
   "adminContributors": "লেখক ও সহযোগী",
@@ -397,9 +397,6 @@
   "adminFieldDifficulty": "কাঠিন্য",
   "adminDifficultyNone": "নির্ধারিত নয়",
   "adminFieldAccess": "প্রবেশাধিকার",
-  "adminAccessFree": "বিনামূল্যে",
-  "adminAccessRegistered": "লগইন করা ব্যবহারকারী",
-  "adminAccessEntitled": "অধিকারপ্রাপ্ত",
   "adminEntitlementKey": "অধিকার কী",
   "adminFieldSubject": "বিষয়",
   "adminFieldChapter": "অধ্যায় (ঐচ্ছিক)",
@@ -412,5 +409,25 @@
   "adminSkipToContent": "মূল বিষয়বস্তুতে যান",
   "actionClose": "বন্ধ করুন",
   "adminPageOf": "{page} / {total}",
-  "readerFontPercent": "{percent}%"
+  "readerFontPercent": "{percent}%",
+  "adminFieldStimulus": "উদ্দীপক",
+  "adminPartsHeading": "প্রশ্নের অংশ",
+  "adminPartLabel": "চিহ্ন",
+  "adminPartPrompt": "অংশের প্রশ্ন",
+  "adminPartMarks": "নম্বর",
+  "adminPartLevel": "জ্ঞানের স্তর",
+  "adminAddPart": "অংশ যোগ করুন",
+  "adminRemovePart": "অংশ মুছুন",
+  "adminCognitiveKnowledge": "জ্ঞানমূলক",
+  "adminCognitiveComprehension": "অনুধাবনমূলক",
+  "adminCognitiveApplication": "প্রয়োগমূলক",
+  "adminCognitiveHigherOrder": "উচ্চতর দক্ষতা",
+  "adminTotalMarks": "মোট নম্বর: {marks}",
+  "@adminTotalMarks": {
+    "placeholders": {
+      "marks": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -75,6 +75,24 @@ class AdminPart {
   final Map<String, Object?> prompt;
 }
 
+/// A shared passage (উদ্দীপক) a creative question is built on.
+@immutable
+class AdminStimulus {
+  const AdminStimulus({required this.id, required this.sourceLocale, required this.translations});
+
+  factory AdminStimulus.fromJson(Map<String, Object?> json) => AdminStimulus(
+    id: _req(json, 'id'),
+    sourceLocale: _req(json, 'source_locale'),
+    translations: (json['translations']! as Map).cast<String, Object?>(),
+  );
+
+  final String id;
+  final String sourceLocale;
+
+  /// ContentDoc JSON by locale.
+  final Map<String, Object?> translations;
+}
+
 @immutable
 class AdminQuestion {
   const AdminQuestion({
@@ -243,6 +261,10 @@ abstract interface class AdminQuestionRepository {
   Future<AdminQuestion> createQuestion(Map<String, Object?> content, {String? changeNote});
   Future<AdminQuestion> updateQuestion(String id, Map<String, Object?> content, {String? changeNote});
   Future<AdminQuestion> act(String id, QuestionAction action, {String? comment, bool acknowledgeDuplicates = false});
+  Future<AdminStimulus> stimulus(String id);
+
+  /// Stimuli of live questions cannot be edited, so a changed passage is always saved as a new one.
+  Future<AdminStimulus> createStimulus(String sourceLocale, Map<String, Object?> translations);
   Future<Paged<AdminPaper>> papers({String? status, int page = 1, int pageSize = 25});
 }
 
@@ -316,6 +338,18 @@ class AdminQuestionApi implements AdminQuestionRepository {
     };
     return (await api.post('/admin/questions/$id/${action.path}', body: body, decode: _question)).data;
   }
+
+  AdminStimulus _stimulus(Object? json) => AdminStimulus.fromJson(json! as Map<String, Object?>);
+
+  @override
+  Future<AdminStimulus> stimulus(String id) async => (await api.get('/admin/stimuli/$id', decode: _stimulus)).data;
+
+  @override
+  Future<AdminStimulus> createStimulus(String sourceLocale, Map<String, Object?> translations) async => (await api.post(
+    '/admin/stimuli',
+    body: {'source_locale': sourceLocale, 'translations': translations},
+    decode: _stimulus,
+  )).data;
 
   @override
   Future<Paged<AdminPaper>> papers({String? status, int page = 1, int pageSize = 25}) async {
