@@ -8,8 +8,11 @@ import 'package:ob_l10n/ob_l10n.dart';
 import '../../core/messages.dart';
 import '../academics/admin_curriculum_api.dart';
 import 'admin_question_api.dart';
+import 'answer_drafts.dart';
 import 'content_text.dart';
 import 'creative_parts.dart';
+import 'option_fields.dart';
+import 'question_classification.dart';
 import 'question_detail_page.dart' show adminQuestionProvider;
 import 'question_labels.dart';
 import 'questions_page.dart' show adminQuestionsProvider;
@@ -19,23 +22,16 @@ const editableTypes = [
   QuestionType.mcqMulti,
   QuestionType.trueFalse,
   QuestionType.creative,
+  QuestionType.shortAnswer,
+  QuestionType.fillBlank,
+  QuestionType.matching,
 ];
+const _optionTypes = [QuestionType.mcqSingle, QuestionType.mcqMulti, QuestionType.trueFalse];
 const _fieldWidth = 220.0;
-const _minOptions = 2;
-const _maxSingleOptions = 6;
-const _maxMultiOptions = 8;
-const _labels = {
-  'bn': ['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', 'জ'],
-  'en': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
-};
-const _trueFalseText = {
-  'bn': ['সত্য', 'মিথ্যা'],
-  'en': ['True', 'False'],
-};
 
 /// Creates a question, or edits one when [questionId] is given. Covers the option-based types (single
-/// and multiple choice, true/false) and creative questions (stimulus plus parts) in one source language,
-/// with plain text and `$maths$`. Anything else (other types, images, formatting) is shown as not
+/// and multiple choice, true/false), creative (stimulus plus parts), short answer, fill in the blank and
+/// matching questions in one source language, with plain text and `$maths$`. Anything else (other types, images, formatting) is shown as not
 /// editable here rather than risk losing content.
 class QuestionEditorPage extends ConsumerWidget {
   const QuestionEditorPage({this.questionId, super.key});
@@ -60,21 +56,6 @@ class QuestionEditorPage extends ConsumerWidget {
   }
 }
 
-class _OptionDraft {
-  _OptionDraft({required String label, required String text, this.correct = false})
-    : label = TextEditingController(text: label),
-      text = TextEditingController(text: text);
-
-  final TextEditingController label;
-  final TextEditingController text;
-  bool correct;
-
-  void dispose() {
-    label.dispose();
-    text.dispose();
-  }
-}
-
 class _EditorForm extends ConsumerStatefulWidget {
   const _EditorForm({this.question});
 
@@ -88,11 +69,15 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   final _form = GlobalKey<FormState>();
   final _stem = TextEditingController();
   final _stimulus = TextEditingController();
+  final _modelAnswer = TextEditingController();
+  final _guidance = TextEditingController();
+  BlankAnswers _blanks = BlankAnswers.empty();
+  MatchingDraft? _matching;
   final _explanation = TextEditingController();
   final _marks = TextEditingController(text: '1');
   final _entitlement = TextEditingController();
   final _note = TextEditingController();
-  final List<_OptionDraft> _options = [];
+  final List<OptionDraft> _options = [];
   final List<PartDraft> _parts = [];
   Map<String, Object?> _stimulusDocs = const {};
   String? _stimulusText;
@@ -111,12 +96,17 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   bool _supported = true;
   bool _busy = false;
   bool _optionsInvalid = false;
+  bool _blanksInvalid = false;
   String? _error;
 
   AdminQuestion? get _existing => widget.question;
   bool get _creating => _existing == null;
   bool get _isTrueFalse => _type == QuestionType.trueFalse;
   bool get _isCreative => _type == QuestionType.creative;
+  bool get _isShortAnswer => _type == QuestionType.shortAnswer;
+  bool get _isFillBlank => _type == QuestionType.fillBlank;
+  bool get _isMatching => _type == QuestionType.matching;
+  bool get _hasOptions => _optionTypes.contains(_type);
 
   @override
   void initState() {
@@ -132,7 +122,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
 
   @override
   void dispose() {
-    for (final c in [_stem, _stimulus, _explanation, _marks, _entitlement, _note]) {
+    for (final c in [_stem, _stimulus, _modelAnswer, _guidance, _explanation, _marks, _entitlement, _note]) {
       c.dispose();
     }
     for (final o in _options) {
@@ -141,6 +131,8 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     for (final p in _parts) {
       p.dispose();
     }
+    _blanks.dispose();
+    _matching?.dispose();
     super.dispose();
   }
 
@@ -150,15 +142,16 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     final raw = q.rawContent;
     final locale = q.sourceLocale;
     final translation = ((raw['translations'] as Map?)?[locale] as Map?)?.cast<String, Object?>();
-    final stem = textFromDoc(translation?['stem'] as Map<String, Object?>?);
+    final fill = q.type == QuestionType.fillBlank;
+    final stem = textFromDoc(translation?['stem'] as Map<String, Object?>?, allowBlanks: fill);
     final explanation = textFromDoc(translation?['explanation'] as Map<String, Object?>?);
-    final options = <_OptionDraft>[];
+    final options = <OptionDraft>[];
     var optionsOk = true;
     for (final o in (raw['options'] as List? ?? const <Object?>[]).cast<Map<String, Object?>>()) {
       final text = textFromDoc(((o['content'] as Map?)?[locale]) as Map<String, Object?>?);
       if (text == null) optionsOk = false;
       options.add(
-        _OptionDraft(label: o['label']! as String, text: text ?? '', correct: (o['is_correct'] as bool?) ?? false),
+        OptionDraft(label: o['label']! as String, text: text ?? '', correct: (o['is_correct'] as bool?) ?? false),
       );
     }
     final parts = <PartDraft>[];
@@ -176,7 +169,20 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       );
     }
     final creative = q.type == QuestionType.creative;
+    final modelAnswer = textFromDoc(translation?['model_answer'] as Map<String, Object?>?);
+    final guidance = textFromDoc(translation?['marking_guidance'] as Map<String, Object?>?);
+    final spec = (raw['answer_spec'] as Map?)?.cast<String, Object?>() ?? const <String, Object?>{};
+    final blanks = fill ? BlankAnswers.fromSpec(spec) : null;
+    final matching = q.type == QuestionType.matching ? MatchingDraft.fromSpec(spec) : null;
+    final specOk = switch (q.type) {
+      QuestionType.fillBlank => blanks != null,
+      QuestionType.matching => matching != null,
+      _ => spec.isEmpty,
+    };
     _supported =
+        specOk &&
+        modelAnswer != null &&
+        guidance != null &&
         editableTypes.contains(q.type) &&
         stem != null &&
         explanation != null &&
@@ -184,6 +190,10 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
         partsOk &&
         creative == parts.isNotEmpty;
     _parts.addAll(parts);
+    _modelAnswer.text = modelAnswer ?? '';
+    _guidance.text = guidance ?? '';
+    if (blanks != null) _blanks = blanks;
+    _matching = matching;
     _type = q.type;
     _locale = locale;
     _stem.text = stem ?? '';
@@ -239,6 +249,10 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   void _resetDrafts() {
     _resetOptions();
     _resetParts();
+    _blanks.dispose();
+    _blanks = BlankAnswers.empty();
+    _matching?.dispose();
+    _matching = _isMatching ? MatchingDraft.empty() : null;
   }
 
   void _resetParts() {
@@ -249,7 +263,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     if (!_isCreative) return;
     for (var i = 0; i < defaultPartMarks.length; i++) {
       _parts.add(
-        PartDraft(label: _labels[_locale]![i], prompt: '', marks: defaultPartMarks[i], level: cognitiveLevels[i]),
+        PartDraft(label: answerLabels[_locale]![i], prompt: '', marks: defaultPartMarks[i], level: cognitiveLevels[i]),
       );
     }
   }
@@ -259,11 +273,11 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       o.dispose();
     }
     _options.clear();
-    if (_isCreative) return;
+    if (!_hasOptions) return;
     final count = _isTrueFalse ? 2 : 4;
     for (var i = 0; i < count; i++) {
       _options.add(
-        _OptionDraft(label: _labels[_locale]![i], text: _isTrueFalse ? _trueFalseText[_locale]![i] : ''),
+        OptionDraft(label: answerLabels[_locale]![i], text: _isTrueFalse ? trueFalseText[_locale]![i] : ''),
       );
     }
   }
@@ -303,7 +317,15 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
     final raw = _existing?.rawContent ?? const <String, Object?>{};
     final translations = {...?(raw['translations'] as Map?)?.cast<String, Object?>()};
     final current = {...?(translations[_locale] as Map?)?.cast<String, Object?>()};
-    current['stem'] = docFromText(_stem.text);
+    current['stem'] = docFromText(_stem.text, allowBlanks: _isFillBlank);
+    if (_isShortAnswer) current['model_answer'] = docFromText(_modelAnswer.text);
+    if (_isShortAnswer) {
+      if (_guidance.text.trim().isEmpty) {
+        current.remove('marking_guidance');
+      } else {
+        current['marking_guidance'] = docFromText(_guidance.text);
+      }
+    }
     if (_explanation.text.trim().isEmpty) {
       current.remove('explanation');
     } else {
@@ -358,14 +380,19 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       'translations': translations,
       'options': options,
       'parts': parts,
+      if (_isFillBlank)
+        'answer_spec': _blanks.toSpec((raw['answer_spec'] as Map?)?.cast<String, Object?>() ?? const {}),
+      if (_isMatching) 'answer_spec': _matching!.toSpec(),
     };
   }
 
   Future<void> _save() async {
     final valid = _form.currentState!.validate();
-    final optionsOk = _isCreative || _correctCountValid();
+    final optionsOk = !_hasOptions || _correctCountValid();
+    final blanksOk = !_isFillBlank || BlankAnswers.markersValid(_stem.text);
+    setState(() => _blanksInvalid = !blanksOk);
     setState(() => _optionsInvalid = !optionsOk);
-    if (!valid || !optionsOk) return;
+    if (!valid || !optionsOk || !blanksOk) return;
     setState(() {
       _busy = true;
       _error = null;
@@ -434,16 +461,49 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
                   const SizedBox(height: AppSpacing.md),
                   ..._basics(l10n),
                   ..._contentFields(l10n),
-                  if (_isCreative)
+                  if (_isMatching)
+                    MatchingEditor(draft: _matching!, onChanged: () => setState(() {}))
+                  else if (_isCreative)
                     CreativePartsEditor(
                       parts: _parts,
                       onAdd: _addPart,
                       onRemove: _removePart,
                       onChanged: () => setState(() {}),
                     )
-                  else
-                    ..._optionFields(l10n),
-                  ..._classification(l10n),
+                  else if (_hasOptions)
+                    OptionsEditor(
+                      options: _options,
+                      type: _type,
+                      locale: _locale,
+                      invalid: _optionsInvalid,
+                      onCorrect: _setCorrect,
+                      onRemove: (i) => setState(() {
+                        _options.removeAt(i).dispose();
+                        _optionsInvalid = false;
+                      }),
+                      onAdd: () => setState(
+                        () => _options.add(OptionDraft(label: answerLabels[_locale]![_options.length], text: '')),
+                      ),
+                    ),
+                  QuestionClassification(
+                    levels: _levels,
+                    subjects: _subjects,
+                    chapters: _chapters,
+                    levelId: _levelId,
+                    subjectId: _subjectId,
+                    chapterId: _chapterId,
+                    topicId: _topicId,
+                    onLevel: (v) => setState(() {
+                      _levelId = v;
+                      _pickSubject(null);
+                    }),
+                    onSubject: _pickSubject,
+                    onChapter: (v) => setState(() {
+                      _chapterId = v;
+                      _topicId = null;
+                    }),
+                    onTopic: (v) => setState(() => _topicId = v),
+                  ),
                   ..._footer(l10n),
                 ],
               ),
@@ -455,7 +515,7 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
   }
 
   void _addPart() => setState(() {
-    final labels = _labels[_locale]!;
+    final labels = answerLabels[_locale]!;
     _parts.add(
       PartDraft(
         label: labels[_parts.length.clamp(0, labels.length - 1)],
@@ -508,9 +568,52 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       controller: _stem,
       minLines: 3,
       maxLines: 8,
-      decoration: InputDecoration(labelText: l10n.adminFieldStem, helperText: l10n.adminMathHint, helperMaxLines: 2),
+      decoration: InputDecoration(
+        labelText: l10n.adminFieldStem,
+        helperText: _isFillBlank ? '${l10n.adminMathHint} ${l10n.adminBlankHint}' : l10n.adminMathHint,
+        helperMaxLines: 3,
+      ),
+      onChanged: _isFillBlank ? (v) => setState(() => _blanks.syncWith(v)) : null,
       validator: (v) => _required(l10n, v),
     ),
+    if (_isFillBlank) ...[
+      if (_blanksInvalid)
+        Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.xs),
+          child: Semantics(
+            liveRegion: true,
+            child: Text(
+              l10n.adminBlankMarkersInvalid,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ),
+      BlankAnswersEditor(blanks: _blanks),
+    ],
+    if (_isShortAnswer) ...[
+      const SizedBox(height: AppSpacing.sm),
+      TextFormField(
+        key: const Key('question-model-answer'),
+        controller: _modelAnswer,
+        minLines: 2,
+        maxLines: 8,
+        decoration: InputDecoration(
+          labelText: l10n.adminModelAnswer,
+          helperText: l10n.adminMathHint,
+          helperMaxLines: 2,
+        ),
+        validator: (v) => _required(l10n, v),
+      ),
+      const SizedBox(height: AppSpacing.sm),
+      TextFormField(
+        key: const Key('question-guidance'),
+        controller: _guidance,
+        minLines: 2,
+        maxLines: 6,
+        decoration: InputDecoration(labelText: l10n.adminMarkingGuidance),
+        validator: (v) => (v?.trim().isEmpty ?? true) || isValidContentText(v!) ? null : l10n.errorValidation,
+      ),
+    ],
     if (_isCreative) ...[
       const SizedBox(height: AppSpacing.sm),
       TextFormField(
@@ -536,153 +639,6 @@ class _EditorFormState extends ConsumerState<_EditorForm> {
       validator: (v) => (v?.trim().isEmpty ?? true) || isValidContentText(v!) ? null : l10n.errorValidation,
     ),
   ];
-
-  List<Widget> _optionFields(ObLocalizations l10n) {
-    final max = _type == QuestionType.mcqMulti ? _maxMultiOptions : _maxSingleOptions;
-    return [
-      const SizedBox(height: AppSpacing.lg),
-      Semantics(header: true, child: Text(l10n.adminOptionsHeading, style: Theme.of(context).textTheme.titleMedium)),
-      for (final (i, o) in _options.indexed)
-        Padding(
-          key: ObjectKey(o),
-          padding: const EdgeInsets.only(top: AppSpacing.sm),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 72,
-                child: TextFormField(
-                  key: Key('option-label-$i'),
-                  controller: o.label,
-                  decoration: InputDecoration(labelText: l10n.adminOptionLabel),
-                  validator: (v) => (v?.trim().isEmpty ?? true) || v!.trim().length > 8 ? l10n.errorValidation : null,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: TextFormField(
-                  key: Key('option-text-$i'),
-                  controller: o.text,
-                  decoration: InputDecoration(labelText: l10n.adminOptionText),
-                  validator: (v) => _required(l10n, v),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              Semantics(
-                label: l10n.adminOptionCorrect,
-                child: Checkbox(
-                  key: Key('option-correct-$i'),
-                  value: o.correct,
-                  onChanged: (v) => _setCorrect(i, v ?? false),
-                ),
-              ),
-              if (!_isTrueFalse)
-                IconButton(
-                  key: Key('option-remove-$i'),
-                  tooltip: l10n.adminRemoveOption,
-                  icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: _options.length <= _minOptions
-                      ? null
-                      : () => setState(() {
-                          _options.removeAt(i).dispose();
-                          _optionsInvalid = false;
-                        }),
-                ),
-            ],
-          ),
-        ),
-      if (_optionsInvalid)
-        Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.xs),
-          child: Semantics(
-            liveRegion: true,
-            child: Text(
-              _type == QuestionType.mcqMulti ? l10n.adminCorrectAtLeastOne : l10n.adminCorrectExactlyOne,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        ),
-      if (!_isTrueFalse && _options.length < max)
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: TextButton.icon(
-            key: const Key('option-add'),
-            icon: const Icon(Icons.add),
-            label: Text(l10n.adminAddOption),
-            onPressed: () => setState(
-              () => _options.add(_OptionDraft(label: _labels[_locale]![_options.length], text: '')),
-            ),
-          ),
-        ),
-    ];
-  }
-
-  List<Widget> _classification(ObLocalizations l10n) {
-    final locale = Localizations.localeOf(context).languageCode;
-    final subjects = _subjects.where((s) => s.educationLevelId == _levelId).toList();
-    final topics = _chapters.where((c) => c.id == _chapterId).expand((c) => c.topics).where((t) => t.isActive);
-    DropdownButtonFormField<String?> picker(
-      String key,
-      String label,
-      String? value,
-      List<(String, String)> items,
-      void Function(String?) onChanged, {
-      bool requiredValue = false,
-    }) => DropdownButtonFormField<String?>(
-      key: Key(key),
-      initialValue: items.any((e) => e.$1 == value) ? value : null,
-      isExpanded: true,
-      decoration: InputDecoration(labelText: label),
-      items: [
-        if (!requiredValue) DropdownMenuItem(value: null, child: Text(l10n.adminNoneOption)),
-        for (final (id, name) in items) DropdownMenuItem(value: id, child: Text(name)),
-      ],
-      onChanged: onChanged,
-      validator: requiredValue ? (v) => v == null ? l10n.errorValidation : null : null,
-    );
-    return [
-      const SizedBox(height: AppSpacing.lg),
-      picker(
-        'question-level',
-        l10n.adminLevel,
-        _levelId,
-        [for (final l in _levels) (l.id, l.name.resolve(locale))],
-        (v) => setState(() {
-          _levelId = v;
-          _pickSubject(null);
-        }),
-        requiredValue: true,
-      ),
-      const SizedBox(height: AppSpacing.sm),
-      picker(
-        'question-subject',
-        l10n.adminFieldSubject,
-        _subjectId,
-        [for (final s in subjects) (s.id, s.name.resolve(locale))],
-        _pickSubject,
-        requiredValue: true,
-      ),
-      const SizedBox(height: AppSpacing.sm),
-      picker(
-        'question-chapter',
-        l10n.adminFieldChapter,
-        _chapterId,
-        [for (final c in _chapters.where((c) => c.isActive)) (c.id, '${c.number}. ${c.name.resolve(locale)}')],
-        (v) => setState(() {
-          _chapterId = v;
-          _topicId = null;
-        }),
-      ),
-      const SizedBox(height: AppSpacing.sm),
-      picker(
-        'question-topic',
-        l10n.adminFieldTopic,
-        _topicId,
-        [for (final t in topics) (t.id, t.name.resolve(locale))],
-        (v) => setState(() => _topicId = v),
-      ),
-    ];
-  }
 
   List<Widget> _footer(ObLocalizations l10n) => [
     const SizedBox(height: AppSpacing.lg),

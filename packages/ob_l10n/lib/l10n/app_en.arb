@@ -571,5 +571,24 @@
   "adminNoPublishedQuestions": "This subject has no published questions yet.",
   "adminNoPaperItems": "No questions added yet",
   "adminItemNumber": "No.",
-  "adminPaperLocked": "Only draft papers can be edited."
+  "adminPaperLocked": "Only draft papers can be edited.",
+  "adminModelAnswer": "Model answer",
+  "adminMarkingGuidance": "Marking guidance (optional)",
+  "adminBlankHint": "Mark each gap in the question text as [[1]], [[2]] and so on.",
+  "adminBlankAnswers": "Accepted answers for gap {number}",
+  "adminBlankAnswersHint": "One accepted answer per line",
+  "adminBlankMarkersInvalid": "Use the gap markers [[1]], [[2]] ... in order, without skipping a number.",
+  "adminMatchingLeft": "Left column",
+  "adminMatchingRight": "Right column",
+  "adminMatchingItem": "Item",
+  "adminMatchesWith": "Matches",
+  "adminAddItem": "Add item",
+  "adminRemoveItem": "Remove item",
+  "@adminBlankAnswers": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

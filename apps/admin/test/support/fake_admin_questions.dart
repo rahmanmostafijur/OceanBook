@@ -311,3 +311,57 @@ AdminPaper fakePaper({String status = 'draft', List<AdminPaperItem>? items}) => 
   totalMarks: 30,
   items: items ?? const [AdminPaperItem(questionId: 'q1', itemNumber: '1')],
 );
+
+/// A question of an answer-spec type ([type], plus the keys of [extra] on top of the base snapshot).
+AdminQuestion fakeTypedQuestion(QuestionType type, Map<String, Object?> extra, {String stem = 'Stem text'}) {
+  final base = fakeRawContent(stem: _doc(stem));
+  final raw = {...base, 'type': type.wire, 'options': <Object?>[], ...extra};
+  return AdminQuestion(
+    rawContent: raw,
+    id: 'q1',
+    type: type,
+    status: 'draft',
+    revisionStatus: 'draft',
+    version: 0,
+    latestRevision: 1,
+    marks: 1,
+    sourceLocale: 'bn',
+    stem: _doc(stem),
+    options: const [],
+    parts: const [],
+    issues: const [],
+  );
+}
+
+Map<String, Object?> fakeBlankStem() => {
+  'type': 'doc',
+  'v': 1,
+  'blocks': [
+    {
+      'type': 'paragraph',
+      'inlines': [
+        {'type': 'text', 'text': 'Water boils at '},
+        {'type': 'blank', 'index': 0},
+        {'type': 'text', 'text': ' degrees.'},
+      ],
+    },
+  ],
+};
+
+AdminQuestion fakeFillBlankQuestion() {
+  final base = fakeRawContent(stem: fakeBlankStem());
+  return fakeTypedQuestion(
+    QuestionType.fillBlank,
+    {
+      'translations': base['translations'],
+      'answer_spec': {
+        'blanks': [
+          {
+            'accepted': ['100', 'one hundred'],
+            'case_sensitive': false,
+          },
+        ],
+      },
+    },
+  );
+}

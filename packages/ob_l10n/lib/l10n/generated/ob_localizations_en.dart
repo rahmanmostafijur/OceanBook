@@ -1409,4 +1409,42 @@ class ObLocalizationsEn extends ObLocalizations {
 
   @override
   String get adminPaperLocked => 'Only draft papers can be edited.';
+
+  @override
+  String get adminModelAnswer => 'Model answer';
+
+  @override
+  String get adminMarkingGuidance => 'Marking guidance (optional)';
+
+  @override
+  String get adminBlankHint => 'Mark each gap in the question text as [[1]], [[2]] and so on.';
+
+  @override
+  String adminBlankAnswers(int number) {
+    return 'Accepted answers for gap $number';
+  }
+
+  @override
+  String get adminBlankAnswersHint => 'One accepted answer per line';
+
+  @override
+  String get adminBlankMarkersInvalid => 'Use the gap markers [[1]], [[2]] ... in order, without skipping a number.';
+
+  @override
+  String get adminMatchingLeft => 'Left column';
+
+  @override
+  String get adminMatchingRight => 'Right column';
+
+  @override
+  String get adminMatchingItem => 'Item';
+
+  @override
+  String get adminMatchesWith => 'Matches';
+
+  @override
+  String get adminAddItem => 'Add item';
+
+  @override
+  String get adminRemoveItem => 'Remove item';
 }

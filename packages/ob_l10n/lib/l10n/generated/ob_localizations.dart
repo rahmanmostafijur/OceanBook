@@ -2755,6 +2755,78 @@ abstract class ObLocalizations {
   /// In en, this message translates to:
   /// **'Only draft papers can be edited.'**
   String get adminPaperLocked;
+
+  /// No description provided for @adminModelAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Model answer'**
+  String get adminModelAnswer;
+
+  /// No description provided for @adminMarkingGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Marking guidance (optional)'**
+  String get adminMarkingGuidance;
+
+  /// No description provided for @adminBlankHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark each gap in the question text as [[1]], [[2]] and so on.'**
+  String get adminBlankHint;
+
+  /// No description provided for @adminBlankAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted answers for gap {number}'**
+  String adminBlankAnswers(int number);
+
+  /// No description provided for @adminBlankAnswersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One accepted answer per line'**
+  String get adminBlankAnswersHint;
+
+  /// No description provided for @adminBlankMarkersInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the gap markers [[1]], [[2]] ... in order, without skipping a number.'**
+  String get adminBlankMarkersInvalid;
+
+  /// No description provided for @adminMatchingLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left column'**
+  String get adminMatchingLeft;
+
+  /// No description provided for @adminMatchingRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right column'**
+  String get adminMatchingRight;
+
+  /// No description provided for @adminMatchingItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get adminMatchingItem;
+
+  /// No description provided for @adminMatchesWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get adminMatchesWith;
+
+  /// No description provided for @adminAddItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get adminAddItem;
+
+  /// No description provided for @adminRemoveItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove item'**
+  String get adminRemoveItem;
 }
 
 class _ObLocalizationsDelegate extends LocalizationsDelegate<ObLocalizations> {

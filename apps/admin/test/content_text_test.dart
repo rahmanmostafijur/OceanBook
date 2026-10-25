@@ -87,4 +87,35 @@ void main() {
       expect(textFromDoc(null), '');
     });
   });
+
+  group('blanks', () {
+    test('turn [[n]] into blank inlines only when allowed', () {
+      final inlines = ((docFromText('a [[1]] b', allowBlanks: true)['blocks']! as List).single as Map)['inlines']!;
+      expect(inlines, [
+        {'type': 'text', 'text': 'a '},
+        {'type': 'blank', 'index': 0},
+        {'type': 'text', 'text': ' b'},
+      ]);
+      final plain = ((docFromText('a [[1]] b')['blocks']! as List).single as Map)['inlines']!;
+      expect(plain, [
+        {'type': 'text', 'text': 'a [[1]] b'},
+      ]);
+    });
+
+    test('round-trip through textFromDoc, and are refused without allowBlanks', () {
+      final doc = docFromText(r'x [[1]] and $y$ [[2]]', allowBlanks: true);
+      expect(textFromDoc(doc, allowBlanks: true), r'x [[1]] and $y$ [[2]]');
+      expect(textFromDoc(doc), isNull);
+    });
+
+    test('text that already looks like a gap marker is not editable as a blank question', () {
+      final doc = docFromText('literal [[1]]');
+      expect(textFromDoc(doc), 'literal [[1]]');
+      expect(textFromDoc(doc, allowBlanks: true), isNull);
+    });
+
+    test('blankNumbers lists the markers in order', () {
+      expect(blankNumbers('[[2]] and [[1]] and [[2]]'), [2, 1, 2]);
+    });
+  });
 }

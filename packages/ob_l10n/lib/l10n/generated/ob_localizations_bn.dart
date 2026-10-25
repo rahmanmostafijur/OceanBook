@@ -1401,4 +1401,43 @@ class ObLocalizationsBn extends ObLocalizations {
 
   @override
   String get adminPaperLocked => 'শুধু খসড়া প্রশ্নপত্র সম্পাদনা করা যায়।';
+
+  @override
+  String get adminModelAnswer => 'আদর্শ উত্তর';
+
+  @override
+  String get adminMarkingGuidance => 'নম্বর দেওয়ার নির্দেশনা (ঐচ্ছিক)';
+
+  @override
+  String get adminBlankHint => 'প্রশ্নের লেখায় প্রতিটি শূন্যস্থান [[1]], [[2]] এভাবে লিখুন।';
+
+  @override
+  String adminBlankAnswers(int number) {
+    return '$number নম্বর শূন্যস্থানের গ্রহণযোগ্য উত্তর';
+  }
+
+  @override
+  String get adminBlankAnswersHint => 'প্রতি লাইনে একটি উত্তর';
+
+  @override
+  String get adminBlankMarkersInvalid =>
+      'শূন্যস্থানের চিহ্ন [[1]], [[2]] ... ক্রমানুসারে দিন, কোনো সংখ্যা বাদ দেবেন না।';
+
+  @override
+  String get adminMatchingLeft => 'বাম কলাম';
+
+  @override
+  String get adminMatchingRight => 'ডান কলাম';
+
+  @override
+  String get adminMatchingItem => 'আইটেম';
+
+  @override
+  String get adminMatchesWith => 'মিল';
+
+  @override
+  String get adminAddItem => 'আইটেম যোগ করুন';
+
+  @override
+  String get adminRemoveItem => 'আইটেম মুছুন';
 }

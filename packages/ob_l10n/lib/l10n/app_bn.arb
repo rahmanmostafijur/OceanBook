@@ -450,5 +450,24 @@
   "adminNoPublishedQuestions": "এই বিষয়ে এখনও কোনো প্রকাশিত প্রশ্ন নেই।",
   "adminNoPaperItems": "এখনও কোনো প্রশ্ন যোগ করা হয়নি",
   "adminItemNumber": "নং",
-  "adminPaperLocked": "শুধু খসড়া প্রশ্নপত্র সম্পাদনা করা যায়।"
+  "adminPaperLocked": "শুধু খসড়া প্রশ্নপত্র সম্পাদনা করা যায়।",
+  "adminModelAnswer": "আদর্শ উত্তর",
+  "adminMarkingGuidance": "নম্বর দেওয়ার নির্দেশনা (ঐচ্ছিক)",
+  "adminBlankHint": "প্রশ্নের লেখায় প্রতিটি শূন্যস্থান [[1]], [[2]] এভাবে লিখুন।",
+  "adminBlankAnswers": "{number} নম্বর শূন্যস্থানের গ্রহণযোগ্য উত্তর",
+  "adminBlankAnswersHint": "প্রতি লাইনে একটি উত্তর",
+  "adminBlankMarkersInvalid": "শূন্যস্থানের চিহ্ন [[1]], [[2]] ... ক্রমানুসারে দিন, কোনো সংখ্যা বাদ দেবেন না।",
+  "adminMatchingLeft": "বাম কলাম",
+  "adminMatchingRight": "ডান কলাম",
+  "adminMatchingItem": "আইটেম",
+  "adminMatchesWith": "মিল",
+  "adminAddItem": "আইটেম যোগ করুন",
+  "adminRemoveItem": "আইটেম মুছুন",
+  "@adminBlankAnswers": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }
